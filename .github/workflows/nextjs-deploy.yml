@@ -20,13 +20,11 @@ jobs:
           node-version: 20
 
       - name: npm install client
-        working-directory: client
         run: npm install
 
       - name: client build
         #env:
         #  NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-        working-directory: client
         run: npm run build
 
       - name: deploy-client
@@ -38,5 +36,5 @@ jobs:
           remote-password: ${{ secrets.SERVER_PASSWORD }}
           remote-path: /var/www/notification
           remote-port: 22
-          local-path: client/out
+          local-path: out
           sync: full
