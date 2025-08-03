@@ -1,5 +1,5 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Image from "next/image"
+import styles from "./page.module.css"
 
 export default function Home() {
   return (
@@ -13,12 +13,7 @@ export default function Home() {
           height={38}
           priority
         />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+        <ol>가지마</ol>
 
         <div className={styles.ctas}>
           <a
@@ -91,5 +86,5 @@ export default function Home() {
         </a>
       </footer>
     </div>
-  );
+  )
 }
