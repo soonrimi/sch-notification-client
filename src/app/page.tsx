@@ -18,6 +18,12 @@ export default function Home() {
       <br/>
       학년
       <br/>
+      <input onChange={} /> <br/>
+      <select className={}
+      전체 학과
+      <input onChange={} /> <br/>
+      <input onChange={} /> <br/>
+
       <select className={styles.names}>
         <option value="dog">Dog</option>
         <option value="cat">Cat</option>
