@@ -22,7 +22,6 @@ export default function Home() {
       <select className={}
       전체 학과
       <input onChange={} /> <br/>
-      <input onChange={} /> <br/>
 
       <select className={styles.names}>
         <option value="dog">Dog</option>
