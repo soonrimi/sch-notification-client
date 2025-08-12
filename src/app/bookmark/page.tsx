@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import styles from '../page.module.css';
-import BottomNav from '../components/BottomNav';
+import BottomNav from '../Home/BottomNav';
 
 export default function Bookmark() {
   return (

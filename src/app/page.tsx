@@ -1,25 +1,13 @@
 'use client'
-import Image from "next/image";
-import styles from "./page.module.css";
-import { useState, useEffect} from "react";
-import HomeHeader from './components/HomeHeader';
-import HomeHeaderCategorys from "./components/HomeHeaderCategorys";
-import HomeContent from './components/HomeContent';
-import BottomNav from './components/BottomNav';
+import React from 'react';
 
 export default function NoticeList() {
+  const [getter, setter] = useState("/Home/page.tsx")
+
+  export function FistPage() {
+    router.push({setter});
+  }
   return (
-    <div className={styles.home_container}>
-      <div className={styles.home_header_position}>
-        <HomeHeader />
-        <HomeHeaderCategorys />
-      </div>
-      <div className={styles.home_content_position}>
-        <HomeContent />
-      </div>
-      <div>
-        <BottomNav />
-      </div>
-    </div>
-  );
+    FirstPage
+  )
 }

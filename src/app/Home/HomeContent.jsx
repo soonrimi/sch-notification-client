@@ -1,10 +1,7 @@
 "use client";
 import React, {useEffect, useState} from 'react';
 import styles from "../page.module.css";
-import Image from 'next/image';
 import HomeNotice from './HomeNotice';
-import App from 'next/app';
-import { title } from 'process';
 
 export default function HomeContent() {
     // const [notices, setNotices] = useState([]);
