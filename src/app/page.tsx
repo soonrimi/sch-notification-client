@@ -1,40 +1,25 @@
-"use client"
-
+'use client'
 import Image from "next/image";
 import styles from "./page.module.css";
-import { useState, useActionState} from "react";
+import { useState, useEffect} from "react";
+import HomeHeader from './components/HomeHeader';
+import HomeHeaderCategorys from "./components/HomeHeaderCategorys";
+import HomeContent from './components/HomeContent';
+import BottomNav from './components/BottomNav';
 
-export default function Home() {
-  const [getter, setter] = useState('')
-
-  function onChange(event: any) {
-    const value = event.target.value
-    setter(value)
-  }
-
+export default function NoticeList() {
   return (
-    <div className={styles.button}>
-      <p>asd</p>
-      <br/>
-      학년
-      <br/>
-      <input onChange={} /> <br/>
-      <select className={}
-      전체 학과
-      <input onChange={} /> <br/>
-
-      <select className={styles.names}>
-        <option value="dog">Dog</option>
-        <option value="cat">Cat</option>
-        <option value="hamster">Hamster</option>
-        <option value="parrot">Parrot</option>
-        <option value="spider">Spider</option>
-        <option value="goldfish">Goldfish</option>
-        </select><br/>
-      <input onChange={onChange} /> <br/>
-      ㅇㅇ학과<br/>
-      <button>이전</button>
-      <button className={styles.next_button}>다음</button>
+    <div className={styles.home_container}>
+      <div className={styles.home_header_position}>
+        <HomeHeader />
+        <HomeHeaderCategorys />
+      </div>
+      <div className={styles.home_content_position}>
+        <HomeContent />
+      </div>
+      <div>
+        <BottomNav />
+      </div>
     </div>
   );
 }
