@@ -2,7 +2,7 @@
 import { useState, useMemo } from "react";
 import styles from "./page.module.css";
 import { useMonthNavigation } from "./hooks/useMonthNavigation";
-import useCalendarCells from "./hooks/useCalendarCells";
+import useCalendarCells,{CalendarCell} from "./hooks/useCalendarCells";
 import EventItem from "./Components/EventItem";
 import { CalendarEvent } from "@/types/calendar";
 import DayKor from "./Components/DayKor";
@@ -62,11 +62,11 @@ export default function Calendar() {
           <DayKor />
           {weeks.map(
             (
-              row,
-              wIdx //주단위 렌더링
+              row: CalendarCell[],
+              wIdx:number //주단위 렌더링
             ) => (
               <div className={styles.calendar_body_line} key={wIdx}>
-                {row.map((cell, idx) => {
+                {row.map((cell: CalendarCell, idx:number) => {
                   //각 날짜 렌더링
                   const ymd = cell.ymd;
                   const dayEvents = eventsByYmd.get(ymd) ?? [];

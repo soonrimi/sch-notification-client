@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 import type React from "react";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 
 type Handlers = {
   onWheel: React.WheelEventHandler<HTMLDivElement>;

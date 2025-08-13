@@ -15,7 +15,7 @@ export default function EventItem({ event }: EventItemProps) {
   };
 
   const category = event.category ?? "etc";
-  let bgColor = thisMonthEventColors[category];
+  const bgColor = thisMonthEventColors[category];
 
   return (
     <div className={styles.event_item} style={{ backgroundColor: bgColor }}>
