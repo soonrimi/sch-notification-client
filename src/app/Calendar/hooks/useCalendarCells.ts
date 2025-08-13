@@ -32,8 +32,8 @@ export default function useCalendarCells(current: Dayjs): CalendarCell[][]{
     let rangeEnd=monthEnd;
     rangeEnd=rangeEnd.endOf("week");
 
-    const rows: any[] = [];
-    let week: any[] = [];
+    const rows: CalendarCell[][] = [];
+    let week: CalendarCell[] = [];
 
     for (let d = rangeStart; d.isSameOrBefore(rangeEnd, "day");d=d.add(1, "day")) {
       week.push({
