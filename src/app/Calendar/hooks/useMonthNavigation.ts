@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 import type React from "react";
-import moment from "moment";
+import { Dayjs } from "dayjs";
 
 type Handlers = {
   onWheel: React.WheelEventHandler<HTMLDivElement>;
@@ -18,7 +18,7 @@ type Options = {
 
 //월 전환 네비게이션(휠/스와이프/키보드)을 제공하는 훅
 export function useMonthNavigation(
-  setCurrent: React.Dispatch<React.SetStateAction<moment.Moment>>,
+  setCurrent: React.Dispatch<React.SetStateAction<Dayjs>>,
   opts: Options = {}
 ): Handlers {
   const WHEEL_THRESHOLD = opts.wheelThreshold ?? 100;
