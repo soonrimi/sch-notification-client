@@ -6,30 +6,30 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-api": "openapi-typescript-codegen --input http://localhost:7100/api-docs --output ./src/generated/api --client axios"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@fullcalendar/core": "^6.1.18",
-    "@fullcalendar/daygrid": "^6.1.18",
-    "@fullcalendar/react": "^6.1.18",
     "@mui/material": "^7.2.0",
     "@svgr/webpack": "^8.1.0",
     "axios": "^1.11.0",
+    "dayjs": "^1.11.13",
     "jotai": "^2.12.5",
-    "moment": "^2.30.1",
     "next": "15.4.5",
     "react": "19.1.1",
-    "react-calendar": "^6.0.0",
     "react-dom": "19.1.1"
   },
   "devDependencies": {
     "@types/node": "24.1.0",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
+    "css-loader": "^7.1.2",
     "eslint": "9.32.0",
+    "ts-loader": "^9.5.1",
     "eslint-config-next": "15.4.5",
+    "openapi-typescript-codegen": "^0.29.0",
     "typescript": "^5.9.2"
   }
 }
