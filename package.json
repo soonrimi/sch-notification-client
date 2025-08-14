@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-api": "npx openapi-typescript-codegen --input http://localhost:7100/api-docs --output ./src/generated/api --client axios"
+    "generate-api": "npx openapi-typescript-codegen --input http://notification.iubns.net:7100/api-docs --output ./src/generated/api --client axios"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
