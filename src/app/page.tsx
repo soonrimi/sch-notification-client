@@ -1,47 +1,25 @@
+"use client"
 import Image from "next/image"
 import styles from "./page.module.css"
+import { useState, useEffect } from "react"
+import HomeHeader from "./components/HomeHeader"
+import HomeHeaderCategorys from "./components/HomeHeaderCategorys"
+import HomeContent from "./components/HomeContent"
+import BottomNav from "./components/BottomNav"
 
-
-export default function Home() {
+export default function NoticeList() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/logo.svg"
-          alt="Soonrimi logo"
-          width={180}
-          height={38}
-          priority
-        />
-
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
+    <div className={styles.home_container}>
+      <div className={styles.home_header_position}>
+        <HomeHeader />
+        <HomeHeaderCategorys />
+      </div>
+      <div className={styles.home_content_position}>
+        <HomeContent />
+      </div>
+      <div>
+        <BottomNav />
+      </div>
     </div>
   )
 }
