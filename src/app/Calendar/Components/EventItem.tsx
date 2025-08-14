@@ -1,8 +1,8 @@
-import type { CalendarEvent } from "@/types/calendar";
-import styles from "./page.module.css";
+import type { CalendarEvent } from "@/types/calendar"
+import styles from "./page.module.css"
 
 interface EventItemProps {
-  event: CalendarEvent;
+  event: CalendarEvent
 }
 
 export default function EventItem({ event }: EventItemProps) {
@@ -12,14 +12,14 @@ export default function EventItem({ event }: EventItemProps) {
     evaluation: "#D1A4F3",
     seasonal: "#FFDF99",
     etc: "#B1B1B1",
-  };
+  }
 
-  const category = event.category ?? "etc";
-  const bgColor = thisMonthEventColors[category];
+  const category = event.category ?? "etc"
+  const bgColor = thisMonthEventColors[category]
 
   return (
     <div className={styles.event_item} style={{ backgroundColor: bgColor }}>
       {event.title}
     </div>
-  );
+  )
 }
