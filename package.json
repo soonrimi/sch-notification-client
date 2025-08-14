@@ -6,12 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-api": "npx openapi-typescript-codegen --input http://notification.iubns.net:7100/api-docs --output ./src/generated/api --client axios"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.1",
     "@mui/material": "^7.2.0",
+    "@svgr/webpack": "^8.1.0",
     "axios": "^1.11.0",
     "dayjs": "^1.11.13",
     "jotai": "^2.12.5",
@@ -20,11 +23,15 @@
     "react-dom": "19.1.1"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.22.0",
     "@types/node": "24.1.0",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
+    "css-loader": "^7.1.2",
     "eslint": "9.32.0",
     "eslint-config-next": "15.4.5",
+    "openapi-typescript-codegen": "^0.29.0",
+    "ts-loader": "^9.5.1",
     "typescript": "^5.9.2"
   }
 }
