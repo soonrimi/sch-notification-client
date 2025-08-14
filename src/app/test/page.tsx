@@ -1,7 +1,7 @@
 "use client"
 
-import axios from "@/api/axios"
 import { useEffect } from "react"
+import { HealthCheckService } from "@/generated/api/services/HealthCheckService"
 
 export default function TestPage() {
   useEffect(() => {
@@ -10,12 +10,12 @@ export default function TestPage() {
 
   async function connectServer() {
     try {
-      await axios.get("/api/health")
-      console.log("서버 연결 성공")
+      const { data } = await HealthCheckService.health()
+      console.log("서버 연결 성공:", data)
+      alert("서버 연결 성공!")
     } catch (error) {
       console.error("서버 연결 실패:", error)
       alert("서버 연결 실패. 콘솔을 확인하세요.")
-      return
     }
   }
 

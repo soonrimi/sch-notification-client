@@ -2,10 +2,10 @@ import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   // Static export 설정 (GitHub Actions에서 out 폴더 생성용)
-  output: 'export',
+  output: "export",
   trailingSlash: true,
   images: {
-    unoptimized: true
+    unoptimized: true,
   },
 
   // TypeScript 설정
