@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-api": "openapi-typescript-codegen --input http://localhost:7100/api-docs --output ./src/generated/api --client axios"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -23,8 +24,10 @@
     "@types/node": "24.1.0",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
+    "css-loader": "^7.1.2",
     "eslint": "9.32.0",
     "eslint-config-next": "15.4.5",
+    "openapi-typescript-codegen": "^0.29.0",
     "typescript": "^5.9.2"
   }
 }
