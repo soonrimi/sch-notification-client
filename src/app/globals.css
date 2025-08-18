@@ -3,7 +3,7 @@
   --foreground: #171717;
 }
 
-/* 나중에 바꾸기 */
+/*Todo 나중에 바꾸기 */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #ffffff;

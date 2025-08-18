@@ -1,13 +1,5 @@
-'use client'
-import React from 'react';
+import { redirect } from 'next/navigation';
 
-export default function NoticeList() {
-  const [getter, setter] = useState("/Home/page.tsx")
-
-  export function FistPage() {
-    router.push({setter});
-  }
-  return (
-    FirstPage
-  )
+export default function Page() {
+  redirect('/Home');
 }
