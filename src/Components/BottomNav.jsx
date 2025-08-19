@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import Image from 'next/image';
-import styles from '../page.module.css'
+import styles from './BottomNav.module.css'
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -46,12 +46,12 @@ export default function BottomNav () {
       <Link href='/calendar' className={styles.bottomnav_calendar}>
         <Image
           className={styles.bottomnav_calendar_icon}
-          src={pathname === "/calendar" ? "/icons/active_calendar_icon.png" : "/icons/calendar_icon.png"}
+          src={pathname === "/calendar/" ? "/icons/action_calender_icon.png" : "/icons/calendar_icon.png"}
           alt='달력'
           width={24}
           height={25}
         />
-        <span className={`${styles.bottomnav_calendar_text} ${pathname === "/calendar" ? styles.active_text : ""}`}>달력</span>
+        <span className={`${styles.bottomnav_calendar_text} ${pathname === "/calendar/" ? styles.active_text : ""}`}>달력</span>
       </Link>
     </div>
   );

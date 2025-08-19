@@ -4,11 +4,7 @@ import { Dayjs } from "dayjs";
 
 type Handlers = {
   onWheel: React.WheelEventHandler<HTMLDivElement>;
-  onTouchStart: React.TouchEventHandler<HTMLDivElement>;
-  onTouchMove: React.TouchEventHandler<HTMLDivElement>;
-  onTouchEnd: React.TouchEventHandler<HTMLDivElement>;
-  onKeyDown: React.KeyboardEventHandler<HTMLDivElement>;
-};
+}
 
 type Options = {
   wheelThreshold?: number;   // 기본 100
@@ -16,7 +12,7 @@ type Options = {
   cooldownMs?: number;       // 기본 250
 };
 
-//월 전환 네비게이션(휠/스와이프/키보드)을 제공하는 훅
+//월 전환 네비게이션(휠)을 제공하는 훅
 export function useMonthNavigation(
   setCurrent: React.Dispatch<React.SetStateAction<Dayjs>>,
   opts: Options = {}
@@ -47,30 +43,5 @@ export function useMonthNavigation(
     }
   };
 
-  const onTouchStart: React.TouchEventHandler<HTMLDivElement> = (e) => {
-    touchStartY.current = e.touches[0].clientY;
-  };
-
-  const onTouchMove: React.TouchEventHandler<HTMLDivElement> = (e) => {
-    if (touchStartY.current == null) return;
-    const dy = e.touches[0].clientY - touchStartY.current;
-    if (dy > SWIPE_THRESHOLD) {
-      changeMonth(-1); 
-      touchStartY.current = null;
-    } else if (dy < -SWIPE_THRESHOLD) {
-      changeMonth(1); 
-      touchStartY.current = null;
-    }
-  };
-
-  const onTouchEnd: React.TouchEventHandler<HTMLDivElement> = () => {
-    touchStartY.current = null;
-  };
-
-  const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
-    if (e.key === "ArrowUp") changeMonth(-1);
-    if (e.key === "ArrowDown") changeMonth(1);
-  };
-
-  return { onWheel, onTouchStart, onTouchMove, onTouchEnd, onKeyDown };
+  return { onWheel };
 }

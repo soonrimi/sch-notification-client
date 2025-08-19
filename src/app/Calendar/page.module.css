@@ -5,33 +5,49 @@
 }
 
 .calendar_head {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem 0rem 1.3rem 0rem;
+  position: fixed; 
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: #fff; 
+}
+
+.calendar_month {
+  text-align: center;
   font-weight: bold;
+  padding: 0.5rem;
   font-size: clamp(1.5rem, 2.5vw, 3rem);
+}
+
+.calendar_day_kr{
+  display: flex;
+  font-weight: bold;
+  padding: 0.2rem 0;
+  flex-direction: column;
+  flex: 1;
 }
 
 .calendar_body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
   font-size: clamp(0.9rem, 2.5vw, 1.5rem);
+  padding-bottom: clamp(3.4rem, 7vw, 5rem);
+  overflow-y: auto;
+  padding-top: clamp(4.85rem, 8vw, 6.5rem); 
 }
 
 .calendar_body_box {
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding-left: 5px;
 }
+
 
 .calendar_body_line {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  border-bottom: 1px solid #d9d9d9;
+  border-top: 1px solid #d9d9d9;
   flex: 1;
   align-items: start;     
 }                 
@@ -40,9 +56,10 @@
   background: #fff;
   position: relative;
   row-gap: 0.0625rem;
-  padding-top: 0.25rem; 
-  min-height: 5.5rem;
+  min-height: clamp(4.5rem, 10vw, 7.5rem);
   height: auto;
+  padding-top: clamp(0.1rem, 2vw, 0.4rem); 
+  padding-left: clamp(0.1rem, 2vw, 0.7rem);
 }
 
 .today {

@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import HomeHeader from "./components/HomeHeader"
 import HomeHeaderCategorys from "./components/HomeHeaderCategorys"
 import HomeContent from "./components/HomeContent"
-import BottomNav from "./components/BottomNav"
+import BottomNav from "../Components/BottomNav"
 
 export default function NoticeList() {
   return (

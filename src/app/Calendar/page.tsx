@@ -10,6 +10,7 @@ import { DUMMY_EVENTS } from "@/data/calendarDummy";
 import dayjs, { Dayjs } from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import BottomNav from "@/Components/BottomNav";
 dayjs.extend(isSameOrBefore);
 dayjs.extend(customParseFormat);
 
@@ -45,21 +46,16 @@ export default function Calendar() {
   return (
     <div className={styles.App}>
       <div className={styles.calendar_head}>
-        <div>{current.format("M월")}</div>
-      </div>
-
+        <div className={styles.calendar_month}>{current.format("M월")}</div>
+         <div className={styles.calendar_day_kr}><DayKor /></div>
+         </div>
       <div
         className={styles.calendar_body}
         tabIndex={0}
         style={{ outline: "none" }}
         onWheel={nav.onWheel}
-        onTouchStart={nav.onTouchStart}
-        onTouchMove={nav.onTouchMove}
-        onTouchEnd={nav.onTouchEnd}
-        onKeyDown={nav.onKeyDown}
       >
         <div className={styles.calendar_body_box}>
-          <DayKor />
           {weeks.map(
             (
               row: CalendarCell[],
@@ -101,6 +97,7 @@ export default function Calendar() {
           )}
         </div>
       </div>
+      <div><BottomNav></BottomNav></div>
     </div>
   );
 }
