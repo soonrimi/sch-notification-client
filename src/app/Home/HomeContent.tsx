@@ -4,15 +4,7 @@ import styles from './Home.module.css';
 import HomeNotice from './HomeNotice';
 import HomeHeaderCategorys from './HomeHeaderCategorys';
 import { Category } from '@/constants/categories';
-
-interface Notice {
-  id: string;
-  category: string;
-  upload_time: string;
-  application_period: string;
-  title: string;
-  detail: string;
-}
+import { Notice } from '@/types/notice';
 
 export default function HomeContent() {
   const [category, setCategory] = useState<Category>('전체');
@@ -38,8 +30,12 @@ export default function HomeContent() {
 
         const saved = localStorage.getItem('bookmarkedIds');
         if (saved) setBookmarkedIds(JSON.parse(saved));
-      } catch (e: any) {
-        if (e.name !== 'AbortError') console.error('공지 불러오기 오류:', e);
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          if (e.name !== 'AbortError') console.error('공지 불러오기 오류:', e);
+        } else {
+          console.error('공지 불러오기 오류 (알 수 없는 에러):', e);
+        }
       } finally {
         setLoading(false);
       }

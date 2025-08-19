@@ -3,6 +3,12 @@ import React from 'react';
 import styles from './Home.module.css';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import { Notice } from '@/types/notice';
+
+interface HomeNoticeProps extends Notice {
+  isBookmarked: boolean;
+  onToggleBookmark: (id: string) => void;
+}
 
 const categoryColors = {
   전체: '#1d9ad6',
@@ -23,7 +29,7 @@ export default function HomeNotice({
   detail,
   isBookmarked,
   onToggleBookmark,
-}) {
+}: HomeNoticeProps) {
   return (
     <div className={styles.home_notice}>
       <div className={styles.home_notice_content}>

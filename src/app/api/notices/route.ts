@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
 import type { Notice } from '@/types/notice';
 
+export const dynamic = 'force-dynamic'; // << 이거 필수!
+
 const categories: Notice['category'][] = [
+  '전체',
   '학교',
   '대학',
   '학년',
@@ -11,6 +14,7 @@ const categories: Notice['category'][] = [
 ];
 
 const noticeDetails: Record<Notice['category'], (i: number) => string> = {
+  전체: () => '',
   학교: () =>
     '이번 주 학사 일정 안내입니다. 과제 제출 마감, 시험 일정 등 중요한 정보를 포함하고 있습니다. 자세한 내용은 학사공지 게시판..',
   대학: (i) =>
@@ -25,16 +29,18 @@ const noticeDetails: Record<Notice['category'], (i: number) => string> = {
     `홍보 안내 ${i + 1}입니다. 참여 방법, 일시, 장소, 특별 혜택 등 자세한 내용이 포함됩니다.`,
 };
 
-const allNotices: Notice[] = categories.flatMap((cat) =>
-  Array.from({ length: 10 }, (_, i) => ({
-    id: `${cat}-${i + 1}`,
-    category: cat,
-    upload_time: `09:${30 + i}`,
-    application_period: `07/${25 + i}~07/${31 + i}`,
-    title: `${cat} 공지 ${i + 1}`,
-    detail: noticeDetails[cat](i),
-  }))
-);
+const allNotices: Notice[] = categories
+  .filter((cat) => cat !== '전체')
+  .flatMap((cat) =>
+    Array.from({ length: 10 }, (_, i) => ({
+      id: `${cat}-${i + 1}`,
+      category: cat,
+      upload_time: `09:${30 + i}`,
+      application_period: `07/${25 + i}~07/${31 + i}`,
+      title: `${cat} 공지 ${i + 1}`,
+      detail: noticeDetails[cat](i),
+    }))
+  );
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
