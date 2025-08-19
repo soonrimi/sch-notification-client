@@ -4,7 +4,7 @@ import { Dayjs } from 'dayjs';
 
 type Handlers = {
   onWheel: React.WheelEventHandler<HTMLDivElement>;
-}
+};
 
 type Options = {
   wheelThreshold?: number; // 기본 100

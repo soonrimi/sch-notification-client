@@ -4,9 +4,9 @@
   width: 100%;
 }
 
-.home_notice>*:not(.home_notice_hr),
-.home_header_icons>*,
-.home_categorys>* {
+.home_notice > *:not(.home_notice_hr),
+.home_header_icons > *,
+.home_categorys > * {
   transform: scale(0.9);
 }
 
@@ -56,7 +56,7 @@
   display: none;
 }
 
-.home_categorys> :last-child {
+.home_categorys > :last-child {
   margin-right: 100px;
 }
 

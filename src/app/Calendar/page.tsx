@@ -44,11 +44,13 @@ export default function Calendar() {
   }, []);
 
   return (
-    <Layout pageType='calendar'>
+    <Layout pageType="calendar">
       <div className={styles.calendar_head}>
         <div className={styles.calendar_month}>{current.format('M월')}</div>
-         <div className={styles.calendar_day_kr}><DayKor /></div>
-         </div>
+        <div className={styles.calendar_day_kr}>
+          <DayKor />
+        </div>
+      </div>
       <div
         className={styles.calendar_body}
         tabIndex={0}

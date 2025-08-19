@@ -45,7 +45,6 @@
   flex: 1;
 }
 
-
 .calendar_body_line {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
