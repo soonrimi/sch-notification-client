@@ -3,15 +3,9 @@ import React, { useEffect, useState } from 'react';
 import styles from '../page.module.css';
 import HomeNotice from '../Home/HomeNotice';
 import Layout from '../../components/Layout/Layout';
-
-interface Notice {
-  id: string;
-  category: string;
-  upload_time: string;
-  application_period: string;
-  title: string;
-  detail: string;
-}
+import { Category } from '@/types/notice';
+import type { Notice } from '@/types/notice';
+import { getNoticesByCategory } from '@/mock/notices';
 
 export default function Bookmark() {
   const [notices, setNotices] = useState<Notice[]>([]);
@@ -23,21 +17,11 @@ export default function Bookmark() {
     if (saved) setBookmarkedIds(JSON.parse(saved));
   }, []);
 
-  // 공지 불러오기
   useEffect(() => {
-    const fetchNotices = async () => {
-      try {
-        const res = await fetch('/api/notices');
-        const data: Notice[] = await res.json();
-        setNotices(data);
-      } catch (err) {
-        console.error('공지 불러오기 실패:', err);
-      }
-    };
-    fetchNotices();
+    const data = getNoticesByCategory('전체' as Category);
+    setNotices(data);
   }, []);
 
-  // 북마크 토글 함수
   const handleToggleBookmark = (id: string) => {
     const newBookmarked = bookmarkedIds.includes(id)
       ? bookmarkedIds.filter((x) => x !== id)

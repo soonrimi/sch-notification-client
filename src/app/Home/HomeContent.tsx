@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import styles from './Home.module.css';
 import HomeNotice from './HomeNotice';
 import HomeHeaderCategorys from './HomeHeaderCategorys';
-import { Category } from '@/constants/categories';
-import { Notice } from '@/types/notice';
+import { Category } from '@/types/notice';
+import type { Notice } from '@/types/notice';
+import { getNoticesByCategory } from '@/mock/notices';
 
 export default function HomeContent() {
   const [category, setCategory] = useState<Category>('전체');
@@ -13,36 +14,16 @@ export default function HomeContent() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const controller = new AbortController();
     setLoading(true);
 
-    const fetchNotices = async () => {
-      try {
-        const res = await fetch(
-          `/api/notices?category=${encodeURIComponent(category)}`,
-          {
-            signal: controller.signal,
-          }
-        );
-        if (!res.ok) throw new Error('API 요청 실패');
-        const data: Notice[] = await res.json();
-        setNotices(data);
+    const data = getNoticesByCategory(category);
+    setNotices(data);
 
-        const saved = localStorage.getItem('bookmarkedIds');
-        if (saved) setBookmarkedIds(JSON.parse(saved));
-      } catch (e: unknown) {
-        if (e instanceof Error) {
-          if (e.name !== 'AbortError') console.error('공지 불러오기 오류:', e);
-        } else {
-          console.error('공지 불러오기 오류 (알 수 없는 에러):', e);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
+    // 로컬스토리지에서 북마크 불러오기
+    const saved = localStorage.getItem('bookmarkedIds');
+    if (saved) setBookmarkedIds(JSON.parse(saved));
 
-    fetchNotices();
-    return () => controller.abort();
+    setLoading(false);
   }, [category]);
 
   const handleToggleBookmark = (id: string) => {
