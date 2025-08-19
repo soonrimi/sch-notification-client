@@ -1,31 +1,40 @@
+const path = require("path")
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack(config) {
-    // 기존 svg 처리 rule 제거
-    const fileLoaderRule = config.module.rules.find((rule) => {
-      if (!rule.test) return false;
-      if (rule.test instanceof RegExp) {
-        return rule.test.test('.svg');
-      }
-      if (typeof rule.test === 'function') {
-        return rule.test('.svg');
-      }
-      return false;
-    });
+  output: "export",
+  trailingSlash: true,
+  images: {
+    unoptimized: true,
+  },
 
-    if (fileLoaderRule) {
-      fileLoaderRule.exclude = /\.svg$/i;
-    }
+  compiler: {
+    styledComponents: true,
+  },
 
-    // svg를 React 컴포넌트로 불러오도록 새 규칙 추가
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
-      use: ['@svgr/webpack'],
-    });
-
-    return config;
+      use: ["@svgr/webpack"],
+    })
+    config.module.rules.push({
+      test: /\.m?ts$|\.tsx?$/,
+      // exclude: /node_modules/,
+      use: {
+        loader: "ts-loader",
+        options: {
+          onlyCompileBundledFiles: true,
+        },
+      },
+    })
+    config.resolve.alias["@/"] = path.resolve(__dirname, "src")
+    config.resolve.alias["@/components"] = path.resolve(
+      __dirname,
+      "src/components"
+    )
+    return config
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

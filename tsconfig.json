@@ -4,24 +4,32 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": false,
+    "incremental": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
+    "moduleResolution": "Node",
     "jsx": "preserve",
-    "incremental": true,
     "baseUrl": ".",
+    "isolatedModules": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": ["src/*"]
-    }
+      "@/*": ["src/*"],
+      "@axios": ["./config/axios.ts"]
+    },
+    "resolveJsonModule": true
   },
   "include": [
     "next-env.d.ts",
@@ -29,10 +37,7 @@
     "**/*.tsx",
     "src/**/*",
     ".next/types/**/*.ts",
-    "src/app/Home/HomeContent.jsx",
-    "src/app/Bookmark/page.jsx",
-    "src/components/Layout.jsx",
-    "src/components/Header.jsx"
+    "src/types/**/*.d.ts"
   ],
   "exclude": ["node_modules"]
 }
