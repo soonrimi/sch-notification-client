@@ -1,0 +1,46 @@
+.header_wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background-color: #fff;
+}
+
+.header_right_home {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+  align-items: center;
+}
+
+.header_right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon_small {
+  transform: scale(0.9);
+}
+
+.icon_settings,
+.icon_delete,
+.icon_back {
+  font-size: 21px;
+  color: #333;
+  cursor: pointer;
+}
+
+.bookmark_title {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.today_box {
+  border: 1px solid #000;
+  border-radius: 6px;
+  padding: 2px 4px;
+  font-size: 14px;
+  font-weight: bold;
+}

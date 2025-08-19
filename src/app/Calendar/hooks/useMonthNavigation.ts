@@ -1,6 +1,6 @@
-import { useCallback, useRef } from "react";
-import type React from "react";
-import { Dayjs } from "dayjs";
+import { useCallback, useRef } from 'react';
+import type React from 'react';
+import { Dayjs } from 'dayjs';
 
 type Handlers = {
   onWheel: React.WheelEventHandler<HTMLDivElement>;
@@ -11,9 +11,9 @@ type Handlers = {
 };
 
 type Options = {
-  wheelThreshold?: number;   // 기본 100
-  swipeThreshold?: number;   // 기본 40 (px)
-  cooldownMs?: number;       // 기본 250
+  wheelThreshold?: number; // 기본 100
+  swipeThreshold?: number; // 기본 40 (px)
+  cooldownMs?: number; // 기본 250
 };
 
 //월 전환 네비게이션(휠/스와이프/키보드)을 제공하는 훅
@@ -29,12 +29,15 @@ export function useMonthNavigation(
   const lastSwitchRef = useRef(0);
   const touchStartY = useRef<number | null>(null);
 
-  const changeMonth = useCallback((diff: number) => {
-    const now = Date.now();
-    if (now - lastSwitchRef.current < COOLDOWN) return;
-    lastSwitchRef.current = now;
-    setCurrent(prev => prev.clone().add(diff, "month"));
-  }, [COOLDOWN, setCurrent]);
+  const changeMonth = useCallback(
+    (diff: number) => {
+      const now = Date.now();
+      if (now - lastSwitchRef.current < COOLDOWN) return;
+      lastSwitchRef.current = now;
+      setCurrent((prev) => prev.clone().add(diff, 'month'));
+    },
+    [COOLDOWN, setCurrent]
+  );
 
   const onWheel: React.WheelEventHandler<HTMLDivElement> = (e) => {
     wheelAccumRef.current += e.deltaY;
@@ -55,10 +58,10 @@ export function useMonthNavigation(
     if (touchStartY.current == null) return;
     const dy = e.touches[0].clientY - touchStartY.current;
     if (dy > SWIPE_THRESHOLD) {
-      changeMonth(-1); 
+      changeMonth(-1);
       touchStartY.current = null;
     } else if (dy < -SWIPE_THRESHOLD) {
-      changeMonth(1); 
+      changeMonth(1);
       touchStartY.current = null;
     }
   };
@@ -68,8 +71,8 @@ export function useMonthNavigation(
   };
 
   const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
-    if (e.key === "ArrowUp") changeMonth(-1);
-    if (e.key === "ArrowDown") changeMonth(1);
+    if (e.key === 'ArrowUp') changeMonth(-1);
+    if (e.key === 'ArrowDown') changeMonth(1);
   };
 
   return { onWheel, onTouchStart, onTouchMove, onTouchEnd, onKeyDown };
