@@ -24,29 +24,29 @@ export default function BottomNav () {
       <Link href='/bookmark' className={styles.bottomnav_bookmark}>
         <Image
           className={styles.bottomnav_bookmark_icon}
-          src={pathname === "/bookmark" ? "/icons/active_nav_bookmark_icon.png" : "/icons/nav_bookmark_icon.png"}
+          src={pathname === "/bookmark/" ? "/icons/active_nav_bookmark_icon.png" : "/icons/nav_bookmark_icon.png"}
           alt='북마크'
           width={16}
           height={21}
         />
-        <span className={`${styles.bottomnav_bookmark_text} ${pathname === "/bookmark" ? styles.active_text : ""}`}>북마크</span>
+        <span className={`${styles.bottomnav_bookmark_text} ${pathname === "/bookmark/" ? styles.active_text : ""}`}>북마크</span>
       </Link>
 
       <Link href='/alarm' className={styles.bottomnav_alarm}>
         <Image
           className={styles.bottomnav_alarm_icon}
-          src={pathname === "/alarm" ? "/icons/active_alarm_icon.png" : "/icons/alarm_icon.png"}
+          src={pathname === "/alarm/" ? "/icons/active_alarm_icon.png" : "/icons/alarm_icon.png"}
           alt='알림'
           width={35}
           height={40}
         />
-        <span className={`${styles.bottomnav_alarm_text} ${pathname === "/alarm" ? styles.active_text : ""}`}>알림</span>
+        <span className={`${styles.bottomnav_alarm_text} ${pathname === "/alarm/" ? styles.active_text : ""}`}>알림</span>
       </Link>
 
       <Link href='/calendar' className={styles.bottomnav_calendar}>
         <Image
           className={styles.bottomnav_calendar_icon}
-          src={pathname === "/calendar/" ? "/icons/action_calender_icon.png" : "/icons/calendar_icon.png"}
+          src={pathname === "/calendar/" ? "/icons/action_calendar_icon.png" : "/icons/calendar_icon.png"}
           alt='달력'
           width={24}
           height={25}
