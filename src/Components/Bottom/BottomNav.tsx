@@ -9,10 +9,10 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import styles from './BottomNav.module.css';
 
 const navItems = [
-  { href: '/Home', label: '홈', Icon: HomeFilledIcon },
-  { href: '/Bookmark', label: '북마크', Icon: BookmarkIcon },
-  { href: '/Alarm', label: '알림', Icon: NotificationsIcon },
-  { href: '/Calendar', label: '달력', Icon: CalendarTodayIcon },
+  { href: '/Home/', label: '홈', Icon: HomeFilledIcon },
+  { href: '/Bookmark/', label: '북마크', Icon: BookmarkIcon },
+  { href: '/Alarm/', label: '알림', Icon: NotificationsIcon },
+  { href: '/Calendar/', label: '달력', Icon: CalendarTodayIcon },
 ];
 
 export default function BottomNav() {
