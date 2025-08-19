@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import Layout from '@/Components/Layout/Layout';
+import Layout from '@/Components/LayoutDir/Layout';
 
 export default function Bookmark() {
   return (

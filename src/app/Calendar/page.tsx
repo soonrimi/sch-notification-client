@@ -10,7 +10,7 @@ import { DUMMY_EVENTS } from '@/data/calendarDummy';
 import dayjs, { Dayjs } from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import Layout from '@/Components/Layout/Layout';
+import Layout from '@/Components/LayoutDir/Layout';
 dayjs.extend(isSameOrBefore);
 dayjs.extend(customParseFormat);
 

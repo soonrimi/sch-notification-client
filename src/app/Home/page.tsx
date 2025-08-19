@@ -1,5 +1,5 @@
 'use client';
-import Layout from '@/Components/Layout/Layout';
+import Layout from '@/Components/LayoutDir/Layout';
 import HomeContent from './HomeContent';
 
 export default function HomePage() {
