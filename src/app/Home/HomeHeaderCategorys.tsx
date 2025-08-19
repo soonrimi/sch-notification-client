@@ -12,11 +12,18 @@ interface HomeHeaderCategorysProps {
 
 function getButtonStyles(cat: Category, selected: boolean) {
   return selected
-    ? { border: `1px solid ${categoryColors[cat]}`, backgroundColor: categoryColors[cat], color: '#fff' }
+    ? {
+        border: `1px solid ${categoryColors[cat]}`,
+        backgroundColor: categoryColors[cat],
+        color: '#fff',
+      }
     : { border: '1px solid #6b6b6b', backgroundColor: '#fff', color: '#000' };
 }
 
-export default function HomeHeaderCategorys({ category, setCategory }: HomeHeaderCategorysProps) {
+export default function HomeHeaderCategorys({
+  category,
+  setCategory,
+}: HomeHeaderCategorysProps) {
   return (
     <Stack
       direction="row"

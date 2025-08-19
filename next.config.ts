@@ -1,8 +1,8 @@
-import type { NextConfig } from "next"
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   // Static export 설정 (GitHub Actions에서 out 폴더 생성용)
-  output: "export",
+  output: 'export',
   trailingSlash: true,
   images: {
     unoptimized: true,
@@ -24,11 +24,11 @@ const nextConfig: NextConfig = {
   experimental: {
     // CSS 모듈 최적화
     optimizePackageImports: [
-      "@mui/material",
-      "@emotion/react",
-      "@emotion/styled",
+      '@mui/material',
+      '@emotion/react',
+      '@emotion/styled',
     ],
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Container,
@@ -8,29 +8,29 @@ import {
   ListItemButton,
   ListItemText,
   Divider,
-} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import styles from "./page.module.css";
+} from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import styles from './page.module.css';
 
 type Major = { name: string; grade: string };
 type Profile = { majors: Major[]; appVersion: string };
 
-const STORAGE_KEY = "userProfile";
+const STORAGE_KEY = 'userProfile';
 
 // 가나다 + 학년(1→4) 정렬
 const gradeRank: Record<string, number> = {
-  "1학년": 1,
-  "2학년": 2,
-  "3학년": 3,
-  "4학년": 4,
+  '1학년': 1,
+  '2학년': 2,
+  '3학년': 3,
+  '4학년': 4,
 };
 const sortMajors = (arr: Major[]) =>
   [...arr].sort(
     (a, b) =>
-      a.name.localeCompare(b.name, "ko") ||
+      a.name.localeCompare(b.name, 'ko') ||
       (gradeRank[a.grade] ?? 99) - (gradeRank[b.grade] ?? 99)
   );
 
@@ -39,10 +39,10 @@ export default function SettingsPage() {
 
   const [profile, setProfile] = useState<Profile>({
     majors: [
-      { name: "컴퓨터소프트웨어공학과", grade: "3학년" },
-      { name: "사물인터넷학과", grade: "4학년" },
+      { name: '컴퓨터소프트웨어공학과', grade: '3학년' },
+      { name: '사물인터넷학과', grade: '4학년' },
     ],
-    appVersion: "11.1.1",
+    appVersion: '11.1.1',
   });
 
   useEffect(() => {
@@ -63,7 +63,11 @@ export default function SettingsPage() {
     <Container maxWidth="sm" className={styles.container}>
       {/* 헤더 */}
       <div className={styles.header}>
-        <IconButton size="small" className={styles.backBtn} onClick={() => router.back()}>
+        <IconButton
+          size="small"
+          className={styles.backBtn}
+          onClick={() => router.back()}
+        >
           <ArrowBackIosNewRoundedIcon fontSize="small" />
         </IconButton>
         <h1 className={styles.headerTitle}>설정</h1>
@@ -76,7 +80,7 @@ export default function SettingsPage() {
           <IconButton
             size="small"
             className={styles.editBtn}
-            onClick={() => router.push("/settings/edit")}
+            onClick={() => router.push('/settings/edit')}
           >
             <EditIcon fontSize="small" />
           </IconButton>
@@ -85,17 +89,29 @@ export default function SettingsPage() {
         {/* 표 */}
         <div className={styles.table}>
           <div className={`${styles.row} ${styles.headerRow}`}>
-            <span className={`${styles.col} ${styles.colMajor} ${styles.headerText}`}>학과</span>
-            <span className={`${styles.col} ${styles.colGrade} ${styles.headerText}`}>학년</span>
+            <span
+              className={`${styles.col} ${styles.colMajor} ${styles.headerText}`}
+            >
+              학과
+            </span>
+            <span
+              className={`${styles.col} ${styles.colGrade} ${styles.headerText}`}
+            >
+              학년
+            </span>
           </div>
 
           {profile.majors.map((m, i) => (
             <div key={`${m.name}-${i}`} className={styles.row}>
-              <span className={`${styles.col} ${styles.colMajor} ${styles.majorText}`}>
-                {m.name || "—"}
+              <span
+                className={`${styles.col} ${styles.colMajor} ${styles.majorText}`}
+              >
+                {m.name || '—'}
               </span>
-              <span className={`${styles.col} ${styles.colGrade} ${styles.gradeText}`}>
-                {m.grade || "—"}
+              <span
+                className={`${styles.col} ${styles.colGrade} ${styles.gradeText}`}
+              >
+                {m.grade || '—'}
               </span>
             </div>
           ))}
@@ -106,7 +122,7 @@ export default function SettingsPage() {
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>맞춤 설정</h3>
         <List className={styles.list}>
-          <ListItemButton onClick={() => alert("관심 키워드 관리 (추가 예정)")}>
+          <ListItemButton onClick={() => alert('관심 키워드 관리 (추가 예정)')}>
             <ListItemText
               primary="관심 키워드 관리"
               slotProps={{ primary: { className: styles.listItemText } }}
@@ -119,7 +135,7 @@ export default function SettingsPage() {
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>기타</h3>
         <List className={styles.list}>
-          <ListItemButton onClick={() => router.push("/feedback")}>
+          <ListItemButton onClick={() => router.push('/feedback')}>
             <ListItemText
               primary="건의하기"
               slotProps={{ primary: { className: styles.listItemText } }}

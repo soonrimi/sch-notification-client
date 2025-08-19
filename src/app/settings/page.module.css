@@ -74,7 +74,7 @@
   color: #666;
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: .2px;
+  letter-spacing: 0.2px;
 }
 .majorText {
   font-size: 14px;
@@ -120,5 +120,7 @@
   font-size: 14px;
   padding: 10px 0;
 }
-.versionLabel {}
-.versionValue {}
+.versionLabel {
+}
+.versionValue {
+}
