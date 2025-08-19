@@ -1,0 +1,32 @@
+.bottomnav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  position: relative;
+  width: 100%;
+  height: 50px;
+  border: 0.5px solid #cdcdcd;
+  border-radius: 15px 15px 0 0;
+}
+
+.bottomnav_icon {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+  top: 6px;
+}
+
+.bottomnav_icon_text {
+  color: #a1a1a1;
+  font-size: 8.3px;
+  position: absolute;
+  align-items: center;
+  top: 25px;
+  font-weight: bold;
+}
+
+.active_text {
+  color: #333333;
+  font-weight: bold;
+}

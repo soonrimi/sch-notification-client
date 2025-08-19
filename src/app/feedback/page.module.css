@@ -34,7 +34,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-wrap: nowrap;       /* 줄바꿈 금지 */
+  flex-wrap: nowrap; /* 줄바꿈 금지 */
 }
 
 /* 입력칸은 남은 공간 모두 차지 */
@@ -45,10 +45,10 @@
 
 /* 버튼은 고정 크기 + 줄바꿈 금지 */
 .fileBtn {
-  flex: 0 0 auto;          /* 줄어들지 않음 */
-  min-width: 104px;        /* 텍스트가 한 줄로 들어갈 최소 너비 */
-  height: 40px;            /* TextField size="small"과 맞춤(약 40px) */
-  padding: 0 16px;         /* 좌우 여백 */
+  flex: 0 0 auto; /* 줄어들지 않음 */
+  min-width: 104px; /* 텍스트가 한 줄로 들어갈 최소 너비 */
+  height: 40px; /* TextField size="small"과 맞춤(약 40px) */
+  padding: 0 16px; /* 좌우 여백 */
 }
 
 /* ✅ 버튼 텍스트 완전 nowrap */
@@ -60,7 +60,9 @@
 /* 하단 고정 버튼 */
 .footer {
   position: fixed;
-  left: 0; right: 0; bottom: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: var(--background);
   border-top: 1px solid #e0e0e0;
 }

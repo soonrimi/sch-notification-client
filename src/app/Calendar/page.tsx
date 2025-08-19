@@ -1,16 +1,16 @@
-"use client";
-import { useState, useMemo } from "react";
-import styles from "./page.module.css";
-import { useMonthNavigation } from "./hooks/useMonthNavigation";
-import useCalendarCells,{CalendarCell} from "./hooks/useCalendarCells";
-import EventItem from "./Components/EventItem";
-import { CalendarEvent } from "@/types/calendar";
-import DayKor from "./Components/DayKor";
-import { DUMMY_EVENTS } from "@/data/calendarDummy";
-import dayjs, { Dayjs } from "dayjs";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import BottomNav from "@/Components/BottomNav";
+'use client';
+import { useState, useMemo } from 'react';
+import styles from './page.module.css';
+import { useMonthNavigation } from './hooks/useMonthNavigation';
+import useCalendarCells, { CalendarCell } from './hooks/useCalendarCells';
+import EventItem from './Components/EventItem';
+import { CalendarEvent } from '@/types/calendar';
+import DayKor from './Components/DayKor';
+import { DUMMY_EVENTS } from '@/data/calendarDummy';
+import dayjs, { Dayjs } from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import Layout from '@/Components/Layout/Layout';
 dayjs.extend(isSameOrBefore);
 dayjs.extend(customParseFormat);
 
@@ -30,21 +30,21 @@ export default function Calendar() {
     for (const ev of DUMMY_EVENTS) {
       const start = dayjs(ev.start);
       const end = dayjs(ev.end ?? ev.start);
-      let cursor = start.startOf("day");
-      const last = end.startOf("day");
+      let cursor = start.startOf('day');
+      const last = end.startOf('day');
 
       while (cursor.isSameOrBefore(last)) {
-        const key = cursor.format("YYYYMMDD");
+        const key = cursor.format('YYYYMMDD');
         if (!map.has(key)) map.set(key, []);
         map.get(key)!.push(ev);
-        cursor = cursor.add(1, "day");
+        cursor = cursor.add(1, 'day');
       }
     }
     return map;
   }, []);
 
   return (
-    <div className={styles.App}>
+    <Layout pageType="calendar">
       <div className={styles.calendar_head}>
         <div className={styles.calendar_month}>{current.format("M월")}</div>
          <div className={styles.calendar_day_kr}><DayKor /></div>
@@ -52,21 +52,21 @@ export default function Calendar() {
       <div
         className={styles.calendar_body}
         tabIndex={0}
-        style={{ outline: "none" }}
+        style={{ outline: 'none' }}
         onWheel={nav.onWheel}
       >
         <div className={styles.calendar_body_box}>
           {weeks.map(
             (
               row: CalendarCell[],
-              wIdx:number //주단위 렌더링
+              wIdx: number //주단위 렌더링
             ) => (
               <div className={styles.calendar_body_line} key={wIdx}>
-                {row.map((cell: CalendarCell, idx:number) => {
+                {row.map((cell: CalendarCell, idx: number) => {
                   //각 날짜 렌더링
                   const ymd = cell.ymd;
                   const dayEvents = eventsByYmd.get(ymd) ?? [];
-                  
+
                   return (
                     <div
                       className={styles.calendar_body_days}
@@ -82,10 +82,7 @@ export default function Calendar() {
                       <div className={styles.calendar_event}>
                         {dayEvents.map((ev) => {
                           return (
-                            <EventItem
-                              key={`${ymd}-${ev.id}`}
-                              event={ev}
-                            />
+                            <EventItem key={`${ymd}-${ev.id}`} event={ev} />
                           );
                         })}
                       </div>
@@ -97,36 +94,41 @@ export default function Calendar() {
           )}
         </div>
       </div>
-      <div><BottomNav></BottomNav></div>
-    </div>
+    </Layout>
   );
 }
 
 function cellColor(day: Dayjs, idx: number, isOtherMonth: boolean) {
-  if (day.isSame(dayjs(), "day")) {  //오늘
+  if (day.isSame(dayjs(), 'day')) {
+    //오늘
     return {
-      backgroundColor: "black",
-      color: "white",
-      borderRadius: "6px",
-      padding: "2px 6px",
-      display: "inline-block",
-      fontWeight: "bold",
+      backgroundColor: 'black',
+      color: 'white',
+      borderRadius: '6px',
+      padding: '2px 6px',
+      display: 'inline-block',
+      fontWeight: 'bold',
     };
   }
-  if (idx === 0 && isOtherMonth) {  //다른달 일요일
-    return { color: "#FFADAD" };
+  if (idx === 0 && isOtherMonth) {
+    //다른달 일요일
+    return { color: '#FFADAD' };
   }
-  if (idx === 6 && isOtherMonth) {  //다른달 토요일
-    return { color: "#E6D47F" };
+  if (idx === 6 && isOtherMonth) {
+    //다른달 토요일
+    return { color: '#E6D47F' };
   }
-  if (isOtherMonth) {  //다른달 평일
-    return { color: "#b1b1b1" };
+  if (isOtherMonth) {
+    //다른달 평일
+    return { color: '#b1b1b1' };
   }
-  if (idx === 0) {  //해당달 일요일
-    return { color: "#FF6060", fontWeight: "bold" };
+  if (idx === 0) {
+    //해당달 일요일
+    return { color: '#FF6060', fontWeight: 'bold' };
   }
-  if (idx === 6) {  //해당달 토요일
-    return { color: "#D5B829", fontWeight: "bold" };
+  if (idx === 6) {
+    //해당달 토요일
+    return { color: '#D5B829', fontWeight: 'bold' };
   }
-  return { fontWeight: "bold" };
+  return { fontWeight: 'bold' };
 }
