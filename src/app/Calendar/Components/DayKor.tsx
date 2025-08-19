@@ -1,5 +1,5 @@
-import type { ReactElement } from "react";
-import styles from "./styles.module.css";
+import type { ReactElement } from 'react';
+import styles from './styles.module.css';
 
 export default function DayKor(): ReactElement {
   const days = ['일', '월', '화', '수', '목', '금', '토'];

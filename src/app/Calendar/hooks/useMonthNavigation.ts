@@ -18,12 +18,10 @@ export function useMonthNavigation(
   opts: Options = {}
 ): Handlers {
   const WHEEL_THRESHOLD = opts.wheelThreshold ?? 100;
-  const SWIPE_THRESHOLD = opts.swipeThreshold ?? 40;
   const COOLDOWN = opts.cooldownMs ?? 250;
 
   const wheelAccumRef = useRef(0);
   const lastSwitchRef = useRef(0);
-  const touchStartY = useRef<number | null>(null);
 
   const changeMonth = useCallback(
     (diff: number) => {

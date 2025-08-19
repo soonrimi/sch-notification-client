@@ -26,8 +26,8 @@ export default function useCalendarCells(current: Dayjs): CalendarCell[][] {
     const monthStart = current.startOf('month');
     const monthEnd = current.endOf('month');
 
-    const rangeStart=monthStart.startOf("week")
-    const rangeEnd=monthEnd.endOf("week");
+    const rangeStart=monthStart.startOf('week')
+    const rangeEnd=monthEnd.endOf('week');
 
     const rows: CalendarCell[][] = [];
     let week: CalendarCell[] = [];
