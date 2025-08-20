@@ -11,7 +11,7 @@ export const DUMMY_EVENTS: CalendarEvent[] = [
   },
   {
     id: 2,
-    title: '2학기 수강신청 시작',
+    title: '2학기 수강신청',
     start: '2025-08-20T09:00:00+09:00',
     end: '2025-08-20T18:00:00+09:00',
     category: 'academic',
