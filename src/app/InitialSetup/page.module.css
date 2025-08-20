@@ -1,0 +1,91 @@
+.App {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.title {
+  left: 0;
+  right: 0;
+  z-index: 100;
+  margin-top: clamp(1.5rem, 5vw, 2.5rem);
+  text-align: center;
+  font-weight: bold;
+  font-size: clamp(1.3rem, 2.5vw, 3rem);
+  background: #fff;
+}
+
+.body {
+  padding: clamp(1rem, 2vw, 2rem);
+  width: clamp(15rem, 95vw, 70rem);
+  margin: 0 auto;
+}
+
+.tag {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+  min-height: clamp(2.9rem, 5vw, 4.8rem);
+  align-items: center;
+}
+
+.tag::-webkit-scrollbar {
+  display: none;
+}
+
+.selectedTag {
+  display: flex;
+  margin-right: clamp(0.3rem, 2vw, 2rem);
+  padding: clamp(0.3rem, 1vw, 0.7rem) clamp(0.8rem, 2vw, 1.5rem);
+  background: #fff;
+  border-radius: 999px;
+  border: 0.1rem solid #5f779f;
+  font-size: clamp(0.9rem, 3vw, 1.3rem);
+  font-weight: bold;
+  color: #26539C;
+  white-space: nowrap;
+}
+
+.removeBtn {
+  width: clamp(1rem, 2vw, 1.5rem);
+  height: clamp(1rem, 2vw, 1.5rem);
+  justify-content: center;
+  align-items: center;
+  margin-left: clamp(0.2rem, 1vw, 0.5rem);
+  border-radius: 50%;
+  border: none;
+  background-color: #d9d9d9;
+  color: #fff;
+}
+
+.gradeSetup {
+  display: flex;
+  flex-direction: column;
+}
+
+.departmentSetup {
+  display: flex;
+  flex-direction: column;
+  padding-top: clamp(1rem, 2vw, 1.5rem);
+}
+
+.start {
+  left: 0;
+  right: 0;
+  z-index: 30;
+  position: sticky;
+  padding: clamp(1rem, 2vw, 2rem);
+  width: clamp(20rem, 100vw, 70rem);
+  margin: 0 auto;
+}
+
+
+.startbtn {
+  background-color: #26539C !important;
+  font-weight: bold !important;
+  font-size: clamp(1.1rem, 2vw, 1.5rem) !important;
+  border-radius: 10px !important;
+  height: clamp(3rem, 5vw, 4rem);
+}
