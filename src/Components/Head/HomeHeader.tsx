@@ -3,6 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import SettingsIcon from '@mui/icons-material/Settings';
 import styles from './Header.module.css';
+import Link from 'next/link';
 
 export default function HomeHeader() {
   return (
@@ -15,7 +16,9 @@ export default function HomeHeader() {
           height={21}
           className={styles.icon_small}
         />
-        <SettingsIcon className={styles.icon_settings} />
+        <Link href="/Settings">
+          <SettingsIcon className={styles.icon_settings} />
+        </Link>
       </div>
     </div>
   );

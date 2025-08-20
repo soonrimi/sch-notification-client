@@ -1,5 +1,5 @@
 import type { CalendarEvent } from '@/types/calendar';
-import styles from './page.module.css';
+import styles from './styles.module.css';
 
 interface EventItemProps {
   event: CalendarEvent;

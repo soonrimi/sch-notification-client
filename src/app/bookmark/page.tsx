@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../page.module.css';
 import HomeNotice from '../Home/HomeNotice';
-import Layout from '../../components/Layout/Layout';
+import Layout from '../../Components/LayoutDir/Layout';
 import { Category } from '@/types/notice';
 import type { Notice } from '@/types/notice';
 import { getNoticesByCategory } from '@/mock/notices';
