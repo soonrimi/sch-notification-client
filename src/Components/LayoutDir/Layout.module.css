@@ -1,0 +1,42 @@
+.layout_container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.header_wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 45px;
+  z-index: 100;
+  background-color: white;
+}
+
+.main_scroll {
+  flex: 1;
+  margin-top: 45px;
+  margin-bottom: 48px;
+  overflow-y: auto;
+}
+
+.main_fixed {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 45px - 48px);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.bottom_nav_wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 48px;
+  z-index: 100;
+  background-color: white;
+}

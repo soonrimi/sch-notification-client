@@ -12,6 +12,7 @@
     "module": "esnext",
     "moduleResolution": "Node",
     "jsx": "preserve",
+    "baseUrl": ".",
     "isolatedModules": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
@@ -25,7 +26,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["src/*"],
       "@axios": ["./config/axios.ts"]
     },
     "resolveJsonModule": true
@@ -34,6 +35,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "src/**/*",
     ".next/types/**/*.ts",
     "src/types/**/*.d.ts"
   ],

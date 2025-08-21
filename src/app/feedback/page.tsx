@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
-import { Container, IconButton, TextField, Button } from "@mui/material";
-import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
-import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
-import styles from "./page.module.css";
+import { Container, IconButton, TextField, Button } from '@mui/material';
+import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
+import { useRouter } from 'next/navigation';
+import { useRef, useState } from 'react';
+import styles from './page.module.css';
 
 export default function FeedbackPage() {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement | null>(null);
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [fileName, setFileName] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [fileName, setFileName] = useState('');
 
   const onPickFile = () => fileRef.current?.click();
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
-    setFileName(f ? f.name : "");
+    setFileName(f ? f.name : '');
   };
 
   const onSave = () => {
     console.log({ title, content, fileName });
-    alert("저장되었습니다. (데모)");
+    alert('저장되었습니다. (데모)');
     router.back();
   };
 
@@ -30,7 +30,11 @@ export default function FeedbackPage() {
     <Container maxWidth="sm" className={styles.container}>
       {/* 헤더 */}
       <div className={styles.header}>
-        <IconButton size="small" className={styles.backBtn} onClick={() => router.back()}>
+        <IconButton
+          size="small"
+          className={styles.backBtn}
+          onClick={() => router.back()}
+        >
           <ArrowBackIosNewRoundedIcon fontSize="small" />
         </IconButton>
         <h1 className={styles.headerTitle}>건의하기</h1>
@@ -76,7 +80,11 @@ export default function FeedbackPage() {
             fullWidth
           />
           <input ref={fileRef} type="file" hidden onChange={onFileChange} />
-          <Button variant="outlined" onClick={onPickFile} className={styles.fileBtn}>
+          <Button
+            variant="outlined"
+            onClick={onPickFile}
+            className={styles.fileBtn}
+          >
             <span className={styles.noWrap}>파일 선택</span>
           </Button>
         </div>

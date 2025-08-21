@@ -1,8 +1,8 @@
-const path = require("path")
+const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
+  output: 'export',
   trailingSlash: true,
   images: {
     unoptimized: true,
@@ -16,25 +16,25 @@ const nextConfig = {
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
-      use: ["@svgr/webpack"],
-    })
+      use: ['@svgr/webpack'],
+    });
     config.module.rules.push({
       test: /\.m?ts$|\.tsx?$/,
       // exclude: /node_modules/,
       use: {
-        loader: "ts-loader",
+        loader: 'ts-loader',
         options: {
           onlyCompileBundledFiles: true,
         },
       },
-    })
-    config.resolve.alias["@/"] = path.resolve(__dirname, "src")
-    config.resolve.alias["@/components"] = path.resolve(
+    });
+    config.resolve.alias['@/'] = path.resolve(__dirname, 'src');
+    config.resolve.alias['@/components'] = path.resolve(
       __dirname,
-      "src/components"
-    )
-    return config
+      'src/components'
+    );
+    return config;
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
