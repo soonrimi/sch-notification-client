@@ -1,0 +1,11 @@
+.calendar_sun_to_mon {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: clamp(0.9rem, 2.5vw, 1.5rem);
+}
+
+.event_item {
+  background: none;
+  font-size: clamp(0.7rem, 2.5vw, 1.3rem);
+}

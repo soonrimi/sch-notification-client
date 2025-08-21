@@ -1,0 +1,79 @@
+.home_notice > *:not(.home_notice_hr) {
+  transform: scale(0.9);
+}
+
+/* _________________________________________________________________________- */
+
+.home_content_wrapper {
+  position: relative;
+  padding-top: 50px;
+}
+.home_content {
+  display: flex;
+  flex-direction: column;
+}
+
+.loading {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 16px;
+  color: #555;
+}
+
+.no_notice {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 16px;
+  color: #999;
+}
+/* _________________________________________________________________________- */
+
+.home_notice {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 10px 0 0 0;
+}
+
+.home_notice_info {
+  display: flex;
+  flex-direction: row;
+}
+
+.home_notice_upload_info {
+  color: #5e5e5e;
+  font-size: 10px;
+}
+
+.home_notice_text {
+  width: 337px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  margin: 2px 0 0 0;
+}
+
+.home_notice_title {
+  color: black;
+  font-size: 17px;
+  margin: 0 0 5px 0;
+}
+
+.home_notice_detail {
+  color: #5e5e5e;
+  font-size: 11px;
+}
+
+.home_notic_bookmark {
+  position: absolute;
+  right: 15px;
+  top: 20px;
+}
+
+.home_notic_bookmark_btn {
+  background: none;
+  border: none;
+  cursor: none;
+}
+
+/* _________________________________________________________________________- */

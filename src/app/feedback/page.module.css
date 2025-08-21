@@ -1,0 +1,73 @@
+/* 레이아웃 */
+.container {
+  padding: 16px 16px 88px;
+  min-height: 100vh;
+  background: var(--background);
+}
+
+/* 헤더 */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.headerTitle {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* 공통 필드 블록 */
+.fieldBlock {
+  margin-bottom: 16px;
+}
+.label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* 파일 한 줄 레이아웃 */
+.fileRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap; /* 줄바꿈 금지 */
+}
+
+/* 입력칸은 남은 공간 모두 차지 */
+.fileInput {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* 버튼은 고정 크기 + 줄바꿈 금지 */
+.fileBtn {
+  flex: 0 0 auto; /* 줄어들지 않음 */
+  min-width: 104px; /* 텍스트가 한 줄로 들어갈 최소 너비 */
+  height: 40px; /* TextField size="small"과 맞춤(약 40px) */
+  padding: 0 16px; /* 좌우 여백 */
+}
+
+/* ✅ 버튼 텍스트 완전 nowrap */
+.noWrap {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* 하단 고정 버튼 */
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--background);
+  border-top: 1px solid #e0e0e0;
+}
+.footerInner {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+}

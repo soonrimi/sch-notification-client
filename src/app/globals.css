@@ -3,10 +3,11 @@
   --foreground: #171717;
 }
 
+/*Todo 나중에 바꾸기 */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #ffffff;
+    --foreground: #171717;
   }
 }
 
@@ -39,4 +40,8 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+.page {
+  color: red;
 }
