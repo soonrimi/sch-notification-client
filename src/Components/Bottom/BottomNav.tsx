@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
-import BottomNavItem from './BottomNavItem';
 import { usePathname } from 'next/navigation';
+import BottomNavItem from './BottomNavItem';
 import HomeFilledIcon from '@mui/icons-material/HomeFilled';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import NotificationsIcon from '@mui/icons-material/Notifications';

@@ -1,7 +1,7 @@
 'use client';
 import React, { ReactNode } from 'react';
-import BottomNav from '@/components/BottomNav/BottomNav';
-import Header from '@/components/Header/Header';
+import BottomNav from '@/Components/Bottom/BottomNav';
+import Header from '@/Components/Head/Header';
 import styles from './Layout.module.css';
 import { PageType } from '@/constants/pageTypes';
 import clsx from 'clsx';
