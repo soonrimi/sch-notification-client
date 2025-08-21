@@ -7,5 +7,8 @@
 
 .event_item {
   background: none;
-  font-size: clamp(0.7rem, 2.5vw, 1.3rem);
+  font-size: clamp(0.65rem, 2.5vw, 1.3rem);
+  margin: 3px auto;
+  padding: 3px;
+  border-radius: 3px;
 }

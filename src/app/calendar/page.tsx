@@ -10,7 +10,8 @@ import { DUMMY_EVENTS } from '@/data/calendarDummy';
 import dayjs, { Dayjs } from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import Layout from '@/Components/LayoutDir/Layout';
+import SearchIcon from '@mui/icons-material/Search';
+import BottomNav from '@/Components/Bottom/BottomNav';
 dayjs.extend(isSameOrBefore);
 dayjs.extend(customParseFormat);
 
@@ -44,8 +45,15 @@ export default function Calendar() {
   }, []);
 
   return (
-    <Layout pageType="calendar">
+    <div className={styles.App}>
       <div className={styles.calendar_head}>
+        <div className={styles.head_top}>
+          <div className={styles.header_year}>{current.year()}년</div>
+          <div className={styles.header_right}>
+            <SearchIcon />
+            <div className={styles.today_box}>{dayjs().format('DD')}</div>
+          </div>
+        </div>
         <div className={styles.calendar_month}>{current.format('M월')}</div>
         <div className={styles.calendar_day_kr}>
           <DayKor />
@@ -76,12 +84,13 @@ export default function Calendar() {
                       onClick={() => console.log(cell.ymd)}
                     >
                       <span
+                        className={styles.date_num}
                         style={cellColor(cell.date, idx, cell.isOtherMonth)}
                       >
                         {cell.dayLabel}
                       </span>
 
-                      <div className={styles.calendar_event}>
+                      <div>
                         {dayEvents.map((ev) => {
                           return (
                             <EventItem key={`${ymd}-${ev.id}`} event={ev} />
@@ -96,7 +105,10 @@ export default function Calendar() {
           )}
         </div>
       </div>
-    </Layout>
+      <div className={styles.bottom_nav_wrapper} style={{ height: 48 }}>
+        <BottomNav />
+      </div>
+    </div>
   );
 }
 
@@ -109,7 +121,6 @@ function cellColor(day: Dayjs, idx: number, isOtherMonth: boolean) {
       borderRadius: '6px',
       padding: '2px 6px',
       display: 'inline-block',
-      fontWeight: 'bold',
     };
   }
   if (idx === 0 && isOtherMonth) {
@@ -126,11 +137,10 @@ function cellColor(day: Dayjs, idx: number, isOtherMonth: boolean) {
   }
   if (idx === 0) {
     //해당달 일요일
-    return { color: '#FF6060', fontWeight: 'bold' };
+    return { color: '#FF6060' };
   }
   if (idx === 6) {
     //해당달 토요일
-    return { color: '#D5B829', fontWeight: 'bold' };
+    return { color: '#D5B829' };
   }
-  return { fontWeight: 'bold' };
 }
