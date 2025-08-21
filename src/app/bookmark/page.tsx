@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import styles from '../page.module.css';
-import HomeNotice from '../Home/HomeNotice';
+import HomeNotice from '../home/HomeNotice';
 import Layout from '../../components/Layout/Layout';
 import { Category } from '@/types/notice';
 import type { Notice } from '@/types/notice';
