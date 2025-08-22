@@ -9,7 +9,7 @@ import {
   deleteNotice as lsDelete,
   seedIfEmpty,
   type LocalNotice,
-  type Category,
+  type Category
 } from './localNotice';
 
 const CATEGORY_COLOR: Record<Category, string> = {
@@ -19,7 +19,7 @@ const CATEGORY_COLOR: Record<Category, string> = {
   학년: '#9b59b6',
   채용: '#f39c12',
   활동: '#16a085',
-  홍보: '#34495e',
+  홍보: '#34495e'
 };
 
 const DELETE_WINDOW_MS = 5 * 60 * 1000;
@@ -57,16 +57,16 @@ export default function AdminHomePage() {
     };
   }, []);
 
-  // 카운트다운은 setInterval로 재렌더만 유도 → 정렬은 notices만 의존
+  // 정렬은 notices에만 의존(함수 인자 뒤 꼬리 콤마 제거)
   const view = useMemo(
     () =>
       notices
         .slice()
         .sort(
           (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         ),
-    [notices],
+    [notices]
   );
 
   const handleDelete = (id: string, createdAt: string) => {
@@ -97,7 +97,7 @@ export default function AdminHomePage() {
                 month: '2-digit',
                 day: '2-digit',
                 hour: '2-digit',
-                minute: '2-digit',
+                minute: '2-digit'
               });
               const files = n.attachments?.length || 0;
 
