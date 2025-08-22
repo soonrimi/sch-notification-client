@@ -44,6 +44,7 @@ export default function EditUserInfoPage() {
     majors: [
       { name: '컴퓨터소프트웨어공학과', grade: '3학년' },
       { name: '사물인터넷학과', grade: '4학년' },
+      { name: '정보통신공학과', grade: '3학년' }
     ],
     appVersion: '11.1.1',
   });
