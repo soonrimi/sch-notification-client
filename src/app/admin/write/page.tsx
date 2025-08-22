@@ -6,7 +6,16 @@ import styles from '../Admin.module.css';
 import Layout from '@/Components/LayoutDir/Layout';
 import { addNotice, type Category, type LocalNotice } from '../localNotice';
 
-const CATEGORIES: Category[] = ['대학', '학교', '학년', '채용', '활동', '홍보', '전체'];
+const CATEGORIES: Category[] = [
+  '대학',
+  '학교',
+  '학년',
+  '채용',
+  '활동',
+  '홍보',
+  '전체',
+];
+
 type FileItem = { id: string; file: File };
 
 export default function AdminWritePage() {
@@ -21,7 +30,7 @@ export default function AdminWritePage() {
 
   const numberedFiles = useMemo(
     () => files.map((f, i) => ({ no: i + 1, name: f.file.name, id: f.id })),
-    [files]
+    [files],
   );
 
   const appendFiles = (list: FileList | null) => {
@@ -75,7 +84,7 @@ export default function AdminWritePage() {
         attachments: files.map((f) => ({ name: f.file.name })),
       };
       addNotice(newItem);
-      // ✅ 성공 알림 없이 바로 목록으로 이동
+      // 성공 알림 없이 바로 목록으로 이동
       router.push('/admin');
     } finally {
       setSubmitting(false);
@@ -110,7 +119,7 @@ export default function AdminWritePage() {
             maxLength={100}
           />
 
-        <label className={styles.label}>내용</label>
+          <label className={styles.label}>내용</label>
           <textarea
             className={styles.textarea}
             placeholder="내용을 입력하세요."
@@ -126,7 +135,9 @@ export default function AdminWritePage() {
                 <button
                   key={c}
                   type="button"
-                  className={`${styles.chip} ${category === c ? styles.chipActive : ''}`}
+                  className={`${styles.chip} ${
+                    category === c ? styles.chipActive : ''
+                  }`}
                   onClick={() => setCategory(c)}
                 >
                   {c}
@@ -137,8 +148,11 @@ export default function AdminWritePage() {
 
           <div className={styles.section}>
             <div className={styles.sectionTitle}>첨부파일 추가</div>
+
             <div
-              className={`${styles.dropZone} ${dragOver ? styles.dropZoneActive : ''}`}
+              className={`${styles.dropZone} ${
+                dragOver ? styles.dropZoneActive : ''
+              }`}
               onDrop={onDrop}
               onDragOver={onDragOver}
               onDragLeave={onDragLeave}
@@ -163,7 +177,9 @@ export default function AdminWritePage() {
             <ol className={styles.fileList}>
               {numberedFiles.map(({ no, name, id }) => (
                 <li key={id} className={styles.fileRow}>
-                  <span className={styles.fileName}>{no}. {name}</span>
+                  <span className={styles.fileName}>
+                    {no}. {name}
+                  </span>
                   <button
                     type="button"
                     className={styles.fileRemove}
