@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier --write .",
-    "generate-api": "npx openapi-typescript-codegen --input http://notification.iubns.net:7100/api-docs --output ./src/generated/api --client axios"
+    "generate-api": "npx openapi-typescript-codegen --input https://notification.iubns.net/api/api-docs --output ./src/api --client axios"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
