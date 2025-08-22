@@ -23,8 +23,10 @@ const CATEGORY_COLOR: Record<Category, string> = {
 };
 
 const DELETE_WINDOW_MS = 5 * 60 * 1000;
+
 const msLeft = (createdAt: string) =>
   Math.max(0, DELETE_WINDOW_MS - (Date.now() - new Date(createdAt).getTime()));
+
 const fmtMMSS = (ms: number) => {
   const m = Math.floor(ms / 60000);
   const s = Math.floor((ms % 60000) / 1000);
@@ -33,15 +35,13 @@ const fmtMMSS = (ms: number) => {
 
 export default function AdminHomePage() {
   const [notices, setNotices] = useState<LocalNotice[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [_tick, setTick] = useState(0); // 카운트다운 재렌더용
+  const [, setTick] = useState(0); // 카운트다운 재렌더용
 
   useEffect(() => {
     let mounted = true;
     seedIfEmpty();
     const refresh = () => mounted && setNotices(loadNotices());
     refresh();
-    setLoading(false);
 
     const onStorage = (e: StorageEvent) => {
       if (e.key === 'soonrimi_admin_notices') refresh();
@@ -57,15 +57,16 @@ export default function AdminHomePage() {
     };
   }, []);
 
+  // 카운트다운은 setInterval로 재렌더만 유도 → 정렬은 notices만 의존
   const view = useMemo(
     () =>
       notices
         .slice()
         .sort(
           (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         ),
-    [notices, _tick]
+    [notices],
   );
 
   const handleDelete = (id: string, createdAt: string) => {
@@ -85,19 +86,9 @@ export default function AdminHomePage() {
         </div>
 
         <div className={styles.listWrap}>
-          {loading && (
-            <div className={styles.skeletonList}>
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className={styles.skeletonCard} />
-              ))}
-            </div>
-          )}
-
-          {!loading && view.length === 0 && (
+          {view.length === 0 ? (
             <div className={styles.empty}>등록된 공지가 없습니다.</div>
-          )}
-
-          {!loading &&
+          ) : (
             view.map((n) => {
               const left = msLeft(n.createdAt);
               const canDelete = left > 0;
@@ -146,7 +137,8 @@ export default function AdminHomePage() {
                   </div>
                 </article>
               );
-            })}
+            })
+          )}
         </div>
 
         <Link href="/admin/write" className={styles.fab} aria-label="글쓰기">
