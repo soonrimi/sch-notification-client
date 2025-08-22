@@ -35,7 +35,7 @@ export default function InitialSetup() {
 
   const { push } = useRouter();
   const handleGoToHome = () => {
-    push('/Home');
+    push('/home');
   };
 
   return (
