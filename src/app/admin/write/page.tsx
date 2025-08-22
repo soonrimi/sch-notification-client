@@ -13,7 +13,7 @@ const CATEGORIES: Category[] = [
   '채용',
   '활동',
   '홍보',
-  '전체',
+  '전체'
 ];
 
 type FileItem = { id: string; file: File };
@@ -30,14 +30,14 @@ export default function AdminWritePage() {
 
   const numberedFiles = useMemo(
     () => files.map((f, i) => ({ no: i + 1, name: f.file.name, id: f.id })),
-    [files],
+    [files]
   );
 
   const appendFiles = (list: FileList | null) => {
     if (!list) return;
     const next: FileItem[] = Array.from(list).map((f) => ({
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      file: f,
+      file: f
     }));
     setFiles((prev) => [...prev, ...next]);
   };
@@ -81,7 +81,7 @@ export default function AdminWritePage() {
         category,
         createdAt: new Date().toISOString(),
         // 서버 업로드 없음 → 파일명만 저장
-        attachments: files.map((f) => ({ name: f.file.name })),
+        attachments: files.map((f) => ({ name: f.file.name }))
       };
       addNotice(newItem);
       // 성공 알림 없이 바로 목록으로 이동
