@@ -1,22 +1,19 @@
 'use client';
-
-import { useParams } from 'next/navigation';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { allNotices } from '@/mock/notices';
 import Layout from '@/Components/LayoutDir/Layout';
 import { Box, Typography, Stack, Button, IconButton } from '@mui/material';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { useBookmark } from '@/hooks/useBookmark';
 
-export default function NoticeDetailPage() {
-  const { id } = useParams();
-  const notice = allNotices.find(
-    (n) => n.id === decodeURIComponent(id as string)
-  );
+interface NoticeDetailProps {
+  id: string;
+}
 
+export default function NoticeDetail({ id }: NoticeDetailProps) {
+  const notice = allNotices.find((n) => n.id === decodeURIComponent(id));
   const { bookmarked, toggleBookmark } = useBookmark(notice?.id || '');
 
-  // 읽음 처리
   useEffect(() => {
     if (!notice) return;
     const readNotices = JSON.parse(localStorage.getItem('readNotices') || '[]');
@@ -26,9 +23,9 @@ export default function NoticeDetailPage() {
     }
   }, [notice]);
 
-  if (!notice) return <Layout>해당 공지를 찾을 수 없습니다.</Layout>;
+  if (!notice)
+    return <Layout hideBottomNav>해당 공지를 찾을 수 없습니다.</Layout>;
 
-  // 첨부파일 리스트 (임시 데이터)
   const attachments = [
     {
       name: '개인정보수집이용동의서.hwp',
@@ -39,7 +36,6 @@ export default function NoticeDetailPage() {
     { name: '이력서 양식_3.hwp', url: '/files/이력서양식.hwp' },
   ];
 
-  // 모든 첨부파일 다운로드
   const handleDownloadAll = () => {
     attachments.forEach((file) => {
       const link = document.createElement('a');
@@ -58,11 +54,11 @@ export default function NoticeDetailPage() {
         isBookmarked: bookmarked,
         onToggleBookmark: toggleBookmark,
       }}
-      hideBottomNav={true}
+      hideBottomNav
     >
       {/* 본문 */}
       <Box sx={{ p: 3 }}>
-        <Typography variant="subtitle1" fontWeight={'bold'} mb={1}>
+        <Typography variant="subtitle1" fontWeight="bold" mb={1}>
           {notice.title}
         </Typography>
         <Typography
@@ -70,7 +66,7 @@ export default function NoticeDetailPage() {
           color="text.secondary"
           mb={1}
           display="block"
-          fontSize={'12px'}
+          fontSize="12px"
         >
           작성자: 국제교육교류처 | 등록일: 2025-08-01 | 조회수: 37
         </Typography>
@@ -78,7 +74,7 @@ export default function NoticeDetailPage() {
           style={{
             border: '1px solid #acacacff',
             transform: 'scaleY(0.1)',
-            marginBottom: '20px',
+            marginBottom: 20,
             width: '100vw',
             marginLeft: '-50vw',
             position: 'relative',
@@ -90,13 +86,13 @@ export default function NoticeDetailPage() {
           variant="body2"
           whiteSpace="pre-line"
           mb={3}
-          fontSize={'14px'}
+          fontSize="14px"
         >
           {notice.detail}
         </Typography>
       </Box>
 
-      {/* 첨부파일 영역 */}
+      {/* 첨부파일 */}
       <Box
         sx={{
           display: 'flex',
@@ -111,15 +107,12 @@ export default function NoticeDetailPage() {
           position: 'fixed',
         }}
       >
-        {/* 첨부파일 리스트 */}
         <Box
           sx={{
             flex: 9,
             overflowX: 'auto',
-            scrollbarWidth: 'none', // Firefox
-            '&::-webkit-scrollbar': {
-              display: 'none', // Chrome, Safari, Edge
-            },
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': { display: 'none' },
           }}
         >
           <Stack direction="row" spacing={1.1} alignItems="center">
@@ -161,7 +154,6 @@ export default function NoticeDetailPage() {
           </Stack>
         </Box>
 
-        {/* 전체 다운로드 버튼 */}
         <Box sx={{ flex: 1, textAlign: 'center' }}>
           <IconButton onClick={handleDownloadAll} sx={{ bgcolor: 'white' }}>
             <SystemUpdateAltIcon
