@@ -1,11 +1,21 @@
 'use client';
-import { useSearchParams } from 'next/navigation';
+
+import { Suspense } from 'react';
 import HomeContent from './HomeContent';
 import NoticeDetail from './NoticeDetail';
+import { useSearchParams } from 'next/navigation';
 
-export default function HomePage() {
+function HomePageInner() {
   const searchParams = useSearchParams();
-  const id = searchParams.get('id'); // ?id=공지ID 확인
+  const id = searchParams.get('id');
 
   return id ? <NoticeDetail id={id} /> : <HomeContent />;
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomePageInner />
+    </Suspense>
+  );
 }

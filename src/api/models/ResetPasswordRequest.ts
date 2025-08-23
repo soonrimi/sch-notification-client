@@ -3,6 +3,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export type ResetPasswordRequest = {
-    username?: string;
+  username?: string;
 };
-
