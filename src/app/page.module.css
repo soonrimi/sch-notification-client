@@ -28,22 +28,6 @@
 }
 
 /* _________________________________________________________________________- */
-
-.home_header_icons {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.home_header_icon_search {
-  margin: 10px 13px 10px 0;
-}
-
-.home_header_icon_setting {
-  margin: 10px 20px 10px 0;
-}
-
-/* _________________________________________________________________________- */
-
 .home_categorys {
   display: flex;
   overflow-x: auto;
@@ -60,8 +44,7 @@
   margin-right: 100px;
 }
 
-.home_category_edit,
-.home_notic_bookmark_btn {
+.home_category_edit {
   background: none;
   border: none;
   cursor: none;
@@ -70,95 +53,4 @@
 .home_category_edit {
   padding: 6px 0 0 0;
   margin: 0 0 0 13px;
-}
-
-.home_category_unclicked,
-.home_category_clicked {
-  border-radius: 9999px;
-  width: 54px;
-  height: 32px;
-  margin-right: 5px;
-  font-size: 17px;
-  display: flex;
-  flex-shrink: 0;
-  justify-content: center;
-  align-items: center;
-}
-
-.home_category_clicked {
-  border: 1px solid #1d9ad6;
-  background-color: #1d9ad6;
-  color: white;
-}
-
-.home_category_unclicked {
-  border: 1px solid #6b6b6b;
-  background-color: white;
-  color: black;
-}
-
-/* _________________________________________________________________________- */
-
-.home_notice {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  margin: 10px 0 0 0;
-}
-
-.home_notice_info {
-  display: flex;
-  flex-direction: row;
-}
-
-.home_notice_info_category {
-  width: 30px;
-  height: 17px;
-  border-radius: 999px;
-  color: white;
-  font-size: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 5px 0 0;
-}
-
-.home_notice_info_category {
-  background-color: #1d9ad6;
-}
-
-.home_notice_upload_info {
-  color: #5e5e5e;
-  font-size: 10px;
-}
-
-.home_notice_text {
-  width: 337px;
-  height: 70px;
-  display: flex;
-  flex-direction: column;
-  margin: 2px 0 0 0;
-}
-
-.home_notice_title {
-  color: black;
-  font-size: 17px;
-  margin: 0 0 5px 0;
-}
-
-.home_notice_detail {
-  color: #5e5e5e;
-  font-size: 11px;
-}
-
-.home_notice_content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-}
-
-.home_notic_bookmark {
-  position: absolute;
-  right: 15px;
 }

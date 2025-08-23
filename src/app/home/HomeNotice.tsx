@@ -1,16 +1,20 @@
 'use client';
+
 import React from 'react';
-import styles from './Home.module.css';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import Link from 'next/link';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import styles from './Home.module.css';
 import { Notice } from '@/types/notice';
 
 interface HomeNoticeProps extends Notice {
   isBookmarked: boolean;
   onToggleBookmark: (id: string) => void;
+  isRead: boolean;
 }
 
-const categoryColors = {
+// 카테고리별 색상
+const categoryColors: Record<string, string> = {
   전체: '#1d9ad6',
   학교: '#e74c3c',
   대학: '#27ae60',
@@ -29,10 +33,15 @@ export default function HomeNotice({
   detail,
   isBookmarked,
   onToggleBookmark,
+  isRead,
 }: HomeNoticeProps) {
   return (
-    <div className={styles.home_notice}>
+    <Link
+      href={`/home/${encodeURIComponent(id)}`}
+      className={styles.home_notice}
+    >
       <div className={styles.home_notice_content}>
+        {/* 상단 정보 */}
         <div className={styles.home_notice_info}>
           <div
             style={{
@@ -54,26 +63,41 @@ export default function HomeNotice({
             | {upload_time} | 신청: {application_period}
           </div>
         </div>
+
+        {/* 제목 / 내용 */}
         <div className={styles.home_notice_text}>
-          <div className={styles.home_notice_title}>{title}</div>
-          <div className={styles.home_notice_detail}>{detail}</div>
+          <div
+            className={`${styles.home_notice_title} ${isRead ? styles.read : ''}`}
+          >
+            {title}
+          </div>
+          <div
+            className={`${styles.home_notice_detail} ${isRead ? styles.read : ''}`}
+          >
+            {detail}
+          </div>
         </div>
       </div>
+
+      {/* 북마크 버튼 */}
       <div className={styles.home_notic_bookmark}>
         <button
           className={styles.home_notic_bookmark_btn}
-          onClick={() => onToggleBookmark(id)}
+          onClick={(e) => {
+            e.preventDefault(); // 링크 이동 방지
+            onToggleBookmark(id);
+          }}
         >
           {isBookmarked ? (
-            <BookmarkIcon sx={{ fontSize: 18, color: '#FFD700' }} />
+            <BookmarkIcon sx={{ fontSize: 22, color: '#FFD700' }} />
           ) : (
-            <BookmarkBorderIcon sx={{ fontSize: 18, color: '#A1A1A1' }} />
+            <BookmarkBorderIcon sx={{ fontSize: 22, color: '#A1A1A1' }} />
           )}
         </button>
       </div>
-      <div className={styles.home_notice_hr}>
-        <hr />
-      </div>
-    </div>
+
+      {/* 구분선 */}
+      <hr className={styles.home_notice_hr} />
+    </Link>
   );
 }

@@ -13,18 +13,12 @@
   flex-direction: column;
 }
 
-.loading {
-  text-align: center;
-  margin-top: 50px;
-  font-size: 16px;
-  color: #555;
-}
-
+.loading,
 .no_notice {
   text-align: center;
   margin-top: 50px;
   font-size: 16px;
-  color: #999;
+  color: #555;
 }
 /* _________________________________________________________________________- */
 
@@ -42,7 +36,7 @@
 
 .home_notice_upload_info {
   color: #5e5e5e;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .home_notice_text {
@@ -60,14 +54,21 @@
 }
 
 .home_notice_detail {
-  color: #5e5e5e;
-  font-size: 11px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2; /* 표준 속성 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  color: #000;
+  font-weight: 340;
 }
 
 .home_notic_bookmark {
   position: absolute;
-  right: 15px;
-  top: 20px;
+  right: 12px;
+  top: 22px;
 }
 
 .home_notic_bookmark_btn {
@@ -76,4 +77,13 @@
   cursor: none;
 }
 
+.home_notice_hr {
+  border: none;
+  border-top: 1px solid #242424;
+  transform: scaleY(0.3);
+  margin-top: 5px;
+}
+.read {
+  color: #5e5e5e !important;
+}
 /* _________________________________________________________________________- */
