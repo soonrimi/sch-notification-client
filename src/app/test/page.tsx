@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { HealthCheckService } from '@/generated/api/services/HealthCheckService';
+import { HealthCheckService } from '@/api/services/HealthCheckService';
 
 export default function TestPage() {
   useEffect(() => {
