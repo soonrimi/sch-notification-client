@@ -29,7 +29,7 @@ export default function HomeContent() {
   }, [category]);
 
   return (
-    <Layout pageType="home">
+    <Layout headerProps={{ pageType: 'home' }}>
       <div className={styles.home_content_wrapper}>
         <HomeHeaderCategorys category={category} setCategory={setCategory} />
         <div className={styles.home_content}>
@@ -65,11 +65,11 @@ function HomeNoticeWrapper({
   const handleClick = () => {
     const url = `/home?id=${encodeURIComponent(notice.id)}`;
     console.log('클릭한 공지 URL:', url);
-    router.push(url); // 쿼리 파라미터로 페이지 이동
+    router.push(url);
   };
 
   return (
-    <div style={{ marginBottom: 8, cursor: 'pointer' }} onClick={handleClick}>
+    <div style={{ marginBottom: 0, cursor: 'pointer' }} onClick={handleClick}>
       <HomeNotice
         id={notice.id}
         category={notice.category}

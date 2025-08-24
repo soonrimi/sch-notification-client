@@ -47,18 +47,85 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
 
   return (
     <Layout
-      pageType="notice"
-      noticeHeaderProps={{
-        category: notice.category,
-        noticeId: notice.id,
-        isBookmarked: bookmarked,
-        onToggleBookmark: toggleBookmark,
+      headerProps={{
+        pageType: 'contentdetail',
+        noticeHeaderProps: {
+          category: notice.category,
+          noticeId: notice.id,
+          isBookmarked: bookmarked,
+          onToggleBookmark: toggleBookmark,
+        },
       }}
       hideBottomNav
+      footerSlot={
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            p: 1,
+            bgcolor: 'white',
+            height: 48,
+          }}
+        >
+          <Box
+            sx={{
+              flex: 9,
+              overflowX: 'auto',
+              scrollbarWidth: 'none',
+              '&::-webkit-scrollbar': { display: 'none' },
+            }}
+          >
+            <Stack direction="row" spacing={1.1} alignItems="center">
+              {attachments.map((file, idx) => (
+                <Button
+                  key={idx}
+                  variant="outlined"
+                  sx={{
+                    height: 25,
+                    width: 'auto',
+                    maxWidth: 160,
+                    px: 1,
+                    borderRadius: '20px',
+                    borderColor: '#aaa',
+                    color: 'black',
+                    bgcolor: 'white',
+                    flexShrink: 0,
+                  }}
+                  onClick={() => {
+                    const link = document.createElement('a');
+                    link.href = file.url;
+                    link.download = file.name;
+                    link.click();
+                  }}
+                >
+                  <Box
+                    sx={{
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      fontSize: '12px',
+                    }}
+                  >
+                    {file.name}
+                  </Box>
+                </Button>
+              ))}
+            </Stack>
+          </Box>
+
+          <Box sx={{ flex: 1, textAlign: 'center' }}>
+            <IconButton onClick={handleDownloadAll} sx={{ bgcolor: 'white' }}>
+              <SystemUpdateAltIcon
+                sx={{ fontSize: 22, color: '#626262ff', marginRight: -1.5 }}
+              />
+            </IconButton>
+          </Box>
+        </Box>
+      }
     >
       {/* 본문 */}
       <Box sx={{ p: 3 }}>
-        <Typography variant="subtitle1" fontWeight="bold" mb={1}>
+        <Typography variant="subtitle1" fontWeight="bold" fontSize={19} mb={1}>
           {notice.title}
         </Typography>
         <Typography
@@ -86,81 +153,10 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
           variant="body2"
           whiteSpace="pre-line"
           mb={3}
-          fontSize="14px"
+          fontSize="15px"
         >
           {notice.detail}
         </Typography>
-      </Box>
-
-      {/* 첨부파일 */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          p: 1,
-          bottom: 0,
-          bgcolor: 'white',
-          height: 40,
-          zIndex: 1000,
-          left: 0,
-          width: '100%',
-          position: 'fixed',
-        }}
-      >
-        <Box
-          sx={{
-            flex: 9,
-            overflowX: 'auto',
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': { display: 'none' },
-          }}
-        >
-          <Stack direction="row" spacing={1.1} alignItems="center">
-            {attachments.map((file, idx) => (
-              <Button
-                key={idx}
-                variant="outlined"
-                sx={{
-                  height: 24,
-                  width: 'auto',
-                  maxWidth: 160,
-                  px: 1,
-                  borderRadius: '20px',
-                  borderColor: '#aaa',
-                  color: 'black',
-                  fontSize: '14px',
-                  bgcolor: 'white',
-                  flexShrink: 0,
-                }}
-                onClick={() => {
-                  const link = document.createElement('a');
-                  link.href = file.url;
-                  link.download = file.name;
-                  link.click();
-                }}
-              >
-                <Box
-                  sx={{
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    fontSize: '10px',
-                  }}
-                >
-                  {file.name}
-                </Box>
-              </Button>
-            ))}
-          </Stack>
-        </Box>
-
-        <Box sx={{ flex: 1, textAlign: 'center' }}>
-          <IconButton onClick={handleDownloadAll} sx={{ bgcolor: 'white' }}>
-            <SystemUpdateAltIcon
-              sx={{ fontSize: 22, color: '#626262ff', marginRight: -1.5 }}
-            />
-          </IconButton>
-        </Box>
       </Box>
     </Layout>
   );
