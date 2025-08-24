@@ -47,9 +47,7 @@ export default function Layout({
         className={styles.bottom_nav_wrapper}
         style={{ height: BOTTOM_NAV_HEIGHT }}
       >
-        {footerSlot
-          ? footerSlot
-          : !hideBottomNav && <BottomNav />}
+        {footerSlot ? footerSlot : !hideBottomNav && <BottomNav />}
       </div>
     </div>
   );
