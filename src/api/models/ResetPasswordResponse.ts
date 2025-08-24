@@ -3,7 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type ResetPasswordResponse = {
-    username?: string;
-    tempPassword?: string;
+  username?: string;
+  tempPassword?: string;
 };
-

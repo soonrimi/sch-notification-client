@@ -1,4 +1,5 @@
-.header_wrapper {
+.header_wrapper,
+.bookmarkheader_wrapper {
   width: 100%;
   display: flex;
   justify-content: space-between;

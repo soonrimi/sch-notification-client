@@ -24,7 +24,6 @@
   font-weight: bold;
 }
 
-
 .header_right {
   display: flex;
   align-items: center;
@@ -38,7 +37,6 @@
   font-size: 14px;
   font-weight: bold;
 }
-
 
 .calendar_month {
   text-align: center;
@@ -81,7 +79,6 @@
 }
 
 .calendar_body_days {
-
   background: #fff;
   height: 100%;
   position: relative;
