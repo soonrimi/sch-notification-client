@@ -1,10 +1,10 @@
 'use client';
 import React from 'react';
-import { PageType } from '@/constants/pageTypes';
 import HomeHeader from './HomeHeader';
 import BookmarkHeader from './BookmarkHeader';
 import CalendarHeader from './CalendarHeader';
 import NoticeHeader, { NoticeHeaderProps } from './NoticeHeader';
+import CategorySettingsHeader from './CategorySettingsHeader';
 import styles from './Header.module.css';
 
 export interface BookmarkHeaderProps {
@@ -33,7 +33,11 @@ export type HeaderProps =
       pageType: 'notice' | 'contentdetail';
       noticeHeaderProps?: NoticeHeaderProps;
     }
-  | { pageType: 'mypage' };
+  | { pageType: 'mypage' }
+  | {
+      pageType: 'categorysettings';
+      categoryHeaderProps: { onReset: () => void };
+    };
 
 export default function Header(props: HeaderProps) {
   const { pageType } = props;
@@ -52,6 +56,8 @@ export default function Header(props: HeaderProps) {
         <CalendarHeader />
       ) : pageType === 'mypage' ? (
         <div>마이페이지 헤더</div>
+      ) : pageType === 'categorysettings' && props.categoryHeaderProps ? (
+        <CategorySettingsHeader {...props.categoryHeaderProps} />
       ) : null}
     </div>
   );

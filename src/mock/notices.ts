@@ -1,18 +1,6 @@
 import type { Notice, Category } from '@/types/notice';
+import { categories } from '@/constants/categories';
 
-export const categories: Category[] = [
-  '전체',
-  '학교',
-  '대학',
-  '학년',
-  '채용',
-  '활동',
-  '홍보',
-];
-
-/**
- * 카테고리별 더미 공지 내용 (페이지 한 장 정도 길이)
- */
 const noticeDetails: Record<Category, (i: number) => string> = {
   전체: () => '',
   학교: (i) =>
@@ -30,28 +18,28 @@ const noticeDetails: Record<Category, (i: number) => string> = {
     `홍보 안내 내용입니다.\n`.repeat(50) + `추가 홍보 ${i + 1}입니다.`,
 };
 
-/**
- * 전체 공지 데이터 생성
- */
 export const allNotices: Notice[] = categories
   .filter((cat) => cat !== '전체')
   .flatMap((cat) =>
-    Array.from({ length: 10 }, (_, i) => ({
-      id: `${cat}-${i + 1}`,
-      category: cat,
-      upload_time: `09:${30 + i}`,
-      application_period: `07/${25 + i}~07/${31 + i}`,
-      title: `${cat} 공지 ${i + 1}`,
-      detail: noticeDetails[cat](i), // 실제 페이지에서는 전체, 목록에서는 두 줄까지만 보여주기
-      isRead: false, // 👈 반드시 추가
-    }))
-  );
+    Array.from({ length: 10 }, (_, i) => {
+      const now = new Date();
+      const uploadTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        9, // 시
+        30 + i, // 분
+        0 // 초
+      );
 
-/**
- * 카테고리별 공지 필터링
- * @param category Category | '전체'
- */
-export function getNoticesByCategory(category: Category): Notice[] {
-  if (category === '전체') return allNotices;
-  return allNotices.filter((n) => n.category === category);
-}
+      return {
+        id: `${cat}-${i + 1}`,
+        category: cat,
+        upload_time: uploadTime,
+        application_period: `07/${25 + i}~07/${31 + i}`,
+        title: `${cat} 공지 ${i + 1}`,
+        detail: noticeDetails[cat](i),
+        isRead: false,
+      };
+    })
+  );

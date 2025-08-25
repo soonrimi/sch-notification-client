@@ -4,22 +4,20 @@ import styles from '../page.module.css';
 import HomeNotice from '../home/HomeNotice';
 import Layout from '../../Components/LayoutDir/Layout';
 import { Category, Notice } from '@/types/notice';
-import { getNoticesByCategory } from '@/mock/notices';
+import { useNotices } from '@/hooks/useNotices';
 import { useBookmark } from '@/hooks/useBookmark';
 import { useRouter } from 'next/navigation';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 export default function Bookmark() {
-  const [notices, setNotices] = useState<Notice[]>([]);
+  const notices = useNotices('전체' as Category);
   const [readIds, setReadIds] = useState<string[]>([]);
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const router = useRouter();
 
-  // 공지 + 읽은 목록 불러오기
+  // 읽은 목록 불러오기
   useEffect(() => {
-    const data = getNoticesByCategory('전체' as Category);
-    setNotices(data);
     const savedReads = localStorage.getItem('readNotices');
     if (savedReads) setReadIds(JSON.parse(savedReads));
   }, []);
@@ -61,7 +59,6 @@ export default function Bookmark() {
     localStorage.setItem('bookmarkedIds', JSON.stringify(updated));
     setSelectedIds([]);
     setSelectionMode(false);
-    setNotices([...notices]); // 갱신
   };
 
   // 아이콘과 글씨 색상

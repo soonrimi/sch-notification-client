@@ -10,7 +10,7 @@ export type Category =
 export interface Notice {
   id: string;
   category: Category;
-  upload_time: string;
+  upload_time: Date;
   application_period: string;
   title: string;
   detail: string;

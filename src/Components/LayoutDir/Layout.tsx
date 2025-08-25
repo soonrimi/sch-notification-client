@@ -13,6 +13,7 @@ interface LayoutProps {
   headerProps?: HeaderProps;
   hideBottomNav?: boolean;
   footerSlot?: ReactNode;
+  backgroundColor?: string;
 }
 
 export default function Layout({
@@ -20,9 +21,13 @@ export default function Layout({
   headerProps,
   hideBottomNav,
   footerSlot,
+  backgroundColor,
 }: LayoutProps) {
   return (
-    <div className={styles.layout_container}>
+    <div
+      className={styles.layout_container}
+      style={{ backgroundColor: backgroundColor || '#fff' }}
+    >
       {/* Header */}
       <div className={styles.header_wrapper} style={{ height: HEADER_HEIGHT }}>
         {headerProps && <Header {...headerProps} />}
@@ -37,6 +42,7 @@ export default function Layout({
         style={{
           marginTop: HEADER_HEIGHT,
           marginBottom: BOTTOM_NAV_HEIGHT,
+          backgroundColor: 'transparent',
         }}
       >
         {children}

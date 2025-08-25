@@ -5,26 +5,50 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import styles from './Home.module.css';
+import { IconButton } from '@mui/material';
 import { Notice } from '@/types/notice';
+import { useCategoryColors } from '@/contexts/CategoryColorContext';
+import styles from './Home.module.css';
 
 interface HomeNoticeProps extends Notice {
   isBookmarked: boolean;
-  onToggleBookmark: (id: string) => void;
+  onToggleBookmark: () => void;
   isRead: boolean;
   selectionMode?: boolean;
   isSelected?: boolean;
 }
+// 기존 코드 상단에
+function formatUploadTime(date: Date) {
+  const now = new Date();
 
-const categoryColors: Record<string, string> = {
-  전체: '#1d9ad6',
-  학교: '#e74c3c',
-  대학: '#27ae60',
-  학년: '#8e44ad',
-  채용: '#f39c12',
-  활동: '#16a085',
-  홍보: '#d35400',
-};
+  const isToday =
+    date.getFullYear() === now.getFullYear() &&
+    date.getMonth() === now.getMonth() &&
+    date.getDate() === now.getDate();
+
+  if (isToday) {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  const isThisYear = date.getFullYear() === now.getFullYear();
+
+  if (isThisYear) {
+    return date.toLocaleString([], {
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+
+  return date.toLocaleString([], {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
 
 export default function HomeNotice({
   id,
@@ -39,9 +63,10 @@ export default function HomeNotice({
   selectionMode = false,
   isSelected = false,
 }: HomeNoticeProps) {
+  const { categoryColors } = useCategoryColors();
+
   const noticeContent = (
     <div className={styles.home_notice_content}>
-      {/* 상단 정보 */}
       <div className={styles.home_notice_info}>
         <div
           style={{
@@ -60,11 +85,10 @@ export default function HomeNotice({
           {category}
         </div>
         <div className={styles.home_notice_upload_info}>
-          | {upload_time} | 신청: {application_period}
+          | {formatUploadTime(upload_time)} | 신청: {application_period}
         </div>
       </div>
 
-      {/* 제목 / 내용 */}
       <div className={styles.home_notice_text}>
         <div
           className={`${styles.home_notice_title} ${isRead ? styles.read : ''}`}
@@ -115,18 +139,19 @@ export default function HomeNotice({
         {selectionMode ? (
           noticeContent
         ) : (
-          <Link href={`/home/${encodeURIComponent(id)}`}>{noticeContent}</Link>
+          <Link href={`/home/${encodeURIComponent(id)}`} prefetch={false}>
+            {noticeContent}
+          </Link>
         )}
       </div>
 
-      {/* 북마크 버튼 */}
       {!selectionMode && (
         <div className={styles.home_notic_bookmark}>
-          <button
+          <IconButton
             className={styles.home_notic_bookmark_btn}
             onClick={(e) => {
-              e.preventDefault(); // 링크 이동 방지
-              onToggleBookmark(id);
+              e.preventDefault();
+              onToggleBookmark();
             }}
           >
             {isBookmarked ? (
@@ -134,7 +159,7 @@ export default function HomeNotice({
             ) : (
               <BookmarkBorderIcon sx={{ fontSize: 22, color: '#A1A1A1' }} />
             )}
-          </button>
+          </IconButton>
         </div>
       )}
 
