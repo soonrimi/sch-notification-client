@@ -16,6 +16,9 @@ export default function HomeContent() {
   const notices = useNotices(category);
   const [readIds, setReadIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const sortedNotices = [...notices].sort(
+    (a, b) => b.upload_time.getTime() - a.upload_time.getTime()
+  );
 
   useEffect(() => {
     setLoading(true);
@@ -36,7 +39,7 @@ export default function HomeContent() {
           ) : notices.length === 0 ? (
             <div className={styles.no_notice}>공지 없음</div>
           ) : (
-            notices.map((notice) => (
+            sortedNotices.map((notice) => (
               <HomeNoticeWrapper
                 key={notice.id}
                 notice={notice}

@@ -17,6 +17,38 @@ interface HomeNoticeProps extends Notice {
   selectionMode?: boolean;
   isSelected?: boolean;
 }
+// 기존 코드 상단에
+function formatUploadTime(date: Date) {
+  const now = new Date();
+
+  const isToday =
+    date.getFullYear() === now.getFullYear() &&
+    date.getMonth() === now.getMonth() &&
+    date.getDate() === now.getDate();
+
+  if (isToday) {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  const isThisYear = date.getFullYear() === now.getFullYear();
+
+  if (isThisYear) {
+    return date.toLocaleString([], {
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+
+  return date.toLocaleString([], {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
 
 export default function HomeNotice({
   id,
@@ -53,7 +85,7 @@ export default function HomeNotice({
           {category}
         </div>
         <div className={styles.home_notice_upload_info}>
-          | {upload_time} | 신청: {application_period}
+          | {formatUploadTime(upload_time)} | 신청: {application_period}
         </div>
       </div>
 
