@@ -8,6 +8,7 @@ import {
   useSensors,
   DragEndEvent,
   DragOverEvent,
+  Active,
 } from '@dnd-kit/core';
 import {
   SortableContext,
@@ -36,8 +37,6 @@ import { useCategoryColors } from '@/contexts/CategoryColorContext';
 import { useCategories } from '@/contexts/CategoryContext';
 import { getDefaultCategories } from '@/contexts/CategoryContext';
 import { categoryColors as DEFAULT_COLORS } from '@/constants/categories';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import { styleText } from 'util';
 
 interface SortableItemProps {
   item: {
@@ -89,17 +88,20 @@ function SortableItem({
       }}
     >
       {/* 카테고리 버튼 */}
-      <Button
+      <Box
         sx={{
-          color: '#fff',
-          width: 68,
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          px: 1.1,
           height: 28,
           borderRadius: '9999px',
           fontSize: 15,
-          flexShrink: 0,
           backgroundColor: item.visible
             ? categoryColors[item.name] || item.color
             : '#ccc',
+          color: '#fff',
+          cursor: 'pointer',
         }}
       >
         {item.name}
@@ -108,9 +110,9 @@ function SortableItem({
             size="small"
             onClick={() => onToggleActive(index)}
             sx={{
-              color: item.visible ? '#ffffffff' : '#69B054',
               width: 20,
               height: 20,
+              color: item.visible ? '#fff' : '#69B054',
             }}
           >
             {item.visible ? (
@@ -120,7 +122,7 @@ function SortableItem({
             )}
           </IconButton>
         )}
-      </Button>
+      </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         {/* 색상 변경 */}
@@ -225,8 +227,8 @@ export default function CategorySettingsPage() {
     });
   };
 
-  const handleDragStart = ({ active }: { active: any }) =>
-    setActiveId(active.id);
+  const handleDragStart = ({ active }: { active: Active }) =>
+    setActiveId(String(active.id));
   const handleDragCancel = () => setActiveId(null);
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
@@ -259,16 +261,23 @@ export default function CategorySettingsPage() {
   const handleToggleActive = (index: number) => {
     setItems((prev) => {
       const newItems = [...prev];
+
       // 1. visible 토글
-      newItems[index] = {
+      const toggledItem = {
         ...newItems[index],
         visible: !newItems[index].visible,
       };
 
-      // 2. 만약 false로 바뀌었으면 맨 뒤로 이동
-      if (!newItems[index].visible) {
-        const [item] = newItems.splice(index, 1); // 기존 위치에서 제거
-        newItems.push(item); // 맨 뒤로 추가
+      // 2. 기존 위치에서 제거
+      newItems.splice(index, 1);
+
+      if (toggledItem.visible) {
+        // true이면 'all' 바로 아래로 이동
+        const allIndex = newItems.findIndex((i) => i.id === 'all');
+        newItems.splice(allIndex + 1, 0, toggledItem);
+      } else {
+        // false이면 맨 뒤로 이동
+        newItems.push(toggledItem);
       }
 
       return newItems;

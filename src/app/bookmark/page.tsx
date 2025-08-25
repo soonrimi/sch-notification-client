@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 export default function Bookmark() {
-  const notices = useNotices('전체' as Category); // ✅ 최상단에서 호출
+  const notices = useNotices('전체' as Category);
   const [readIds, setReadIds] = useState<string[]>([]);
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

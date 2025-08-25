@@ -1,65 +1,3 @@
-// 'use client';
-// import React, { createContext, useContext, useState, useEffect } from 'react';
-// import { categories } from '@/constants/categories';
-// import { useCategoryColors } from './CategoryColorContext';
-
-// export interface CategoryItem {
-//   id: string;
-//   name: string;
-//   color: string;
-//   notify: boolean;
-//   visible: boolean;
-// }
-
-// interface CategoryContextType {
-//   items: CategoryItem[];
-//   setItems: React.Dispatch<React.SetStateAction<CategoryItem[]>>;
-// }
-
-// const CategoryContext = createContext<CategoryContextType | undefined>(
-//   undefined
-// );
-
-// export function CategoryProvider({ children }: { children: React.ReactNode }) {
-//   const { categoryColors } = useCategoryColors();
-//   const [items, setItems] = useState<CategoryItem[]>([]);
-
-//   useEffect(() => {
-//     const saved = localStorage.getItem('categories');
-//     if (saved) {
-//       setItems(JSON.parse(saved));
-//     } else {
-//       setItems(
-//         categories.map((cat) => ({
-//           id: cat,
-//           name: cat,
-//           color: categoryColors[cat] || '#1d9ad6',
-//           notify: false,
-//           visible: true,
-//         }))
-//       );
-//     }
-//   }, []);
-
-//   useEffect(() => {
-//     if (items.length > 0) {
-//       localStorage.setItem('categories', JSON.stringify(items));
-//     }
-//   }, [items]);
-
-//   return (
-//     <CategoryContext.Provider value={{ items, setItems }}>
-//       {children}
-//     </CategoryContext.Provider>
-//   );
-// }
-
-// export function useCategories() {
-//   const context = useContext(CategoryContext);
-//   if (!context)
-//     throw new Error('useCategories must be used within a CategoryProvider');
-//   return context;
-// }
 'use client';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { categories, categoryColors } from '@/constants/categories';
@@ -94,7 +32,6 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
     visible: true,
   };
 
-  // ✅ 초기화
   useEffect(() => {
     const saved = localStorage.getItem('categories');
     if (saved) {
@@ -116,7 +53,7 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // ✅ 저장 시에도 항상 "전체" 포함
+  // 저장 시에도 항상 "전체" 포함
   useEffect(() => {
     if (items.length > 0) {
       const hasAll = items.some((c) => c.id === 'all');
@@ -145,7 +82,7 @@ export function getDefaultCategories(): CategoryItem[] {
       id: 'all',
       name: '전체',
       color: categoryColors['전체'],
-      notify: true, // ✅ 초기값: 알림 켜짐
+      notify: true,
       visible: true,
     },
     ...categories
@@ -154,7 +91,7 @@ export function getDefaultCategories(): CategoryItem[] {
         id: cat,
         name: cat,
         color: categoryColors[cat] || '#1d9ad6',
-        notify: true, // ✅ 초기값: 알림 켜짐
+        notify: true,
         visible: true,
       })),
   ];

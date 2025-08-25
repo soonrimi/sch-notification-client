@@ -49,7 +49,7 @@ export default function HomeHeaderCategorys({
       }}
     >
       {items.map((item) =>
-        item.name === '전체' || item.visible ? ( // ✅ "전체"는 항상 보이게
+        item.name === '전체' || item.visible ? ( // "전체"는 항상 보이게
           <Button
             key={item.id}
             variant={category === item.name ? 'contained' : 'outlined'}

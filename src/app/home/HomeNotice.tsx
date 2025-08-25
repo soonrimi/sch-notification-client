@@ -5,7 +5,7 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import { Box, Typography, IconButton, Button } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { Notice } from '@/types/notice';
 import { useCategoryColors } from '@/contexts/CategoryColorContext';
 import styles from './Home.module.css';

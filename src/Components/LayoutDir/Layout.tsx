@@ -26,7 +26,7 @@ export default function Layout({
   return (
     <div
       className={styles.layout_container}
-      style={{ backgroundColor: backgroundColor || '#fff' }} // 기본 흰색
+      style={{ backgroundColor: backgroundColor || '#fff' }}
     >
       {/* Header */}
       <div className={styles.header_wrapper} style={{ height: HEADER_HEIGHT }}>

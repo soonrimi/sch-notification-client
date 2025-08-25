@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import { PageType } from '@/constants/pageTypes';
 import HomeHeader from './HomeHeader';
 import BookmarkHeader from './BookmarkHeader';
 import CalendarHeader from './CalendarHeader';
