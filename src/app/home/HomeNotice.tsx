@@ -5,26 +5,18 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import styles from './Home.module.css';
+import { Box, Typography, IconButton, Button } from '@mui/material';
 import { Notice } from '@/types/notice';
+import { useCategoryColors } from '@/contexts/CategoryColorContext';
+import styles from './Home.module.css';
 
 interface HomeNoticeProps extends Notice {
   isBookmarked: boolean;
-  onToggleBookmark: (id: string) => void;
+  onToggleBookmark: () => void;
   isRead: boolean;
   selectionMode?: boolean;
   isSelected?: boolean;
 }
-
-const categoryColors: Record<string, string> = {
-  전체: '#1d9ad6',
-  학교: '#e74c3c',
-  대학: '#27ae60',
-  학년: '#8e44ad',
-  채용: '#f39c12',
-  활동: '#16a085',
-  홍보: '#d35400',
-};
 
 export default function HomeNotice({
   id,
@@ -39,9 +31,10 @@ export default function HomeNotice({
   selectionMode = false,
   isSelected = false,
 }: HomeNoticeProps) {
+  const { categoryColors } = useCategoryColors();
+
   const noticeContent = (
     <div className={styles.home_notice_content}>
-      {/* 상단 정보 */}
       <div className={styles.home_notice_info}>
         <div
           style={{
@@ -64,7 +57,6 @@ export default function HomeNotice({
         </div>
       </div>
 
-      {/* 제목 / 내용 */}
       <div className={styles.home_notice_text}>
         <div
           className={`${styles.home_notice_title} ${isRead ? styles.read : ''}`}
@@ -115,18 +107,19 @@ export default function HomeNotice({
         {selectionMode ? (
           noticeContent
         ) : (
-          <Link href={`/home/${encodeURIComponent(id)}`}>{noticeContent}</Link>
+          <Link href={`/home/${encodeURIComponent(id)}`} prefetch={false}>
+            {noticeContent}
+          </Link>
         )}
       </div>
 
-      {/* 북마크 버튼 */}
       {!selectionMode && (
         <div className={styles.home_notic_bookmark}>
-          <button
+          <IconButton
             className={styles.home_notic_bookmark_btn}
             onClick={(e) => {
-              e.preventDefault(); // 링크 이동 방지
-              onToggleBookmark(id);
+              e.preventDefault();
+              onToggleBookmark();
             }}
           >
             {isBookmarked ? (
@@ -134,7 +127,7 @@ export default function HomeNotice({
             ) : (
               <BookmarkBorderIcon sx={{ fontSize: 22, color: '#A1A1A1' }} />
             )}
-          </button>
+          </IconButton>
         </div>
       )}
 

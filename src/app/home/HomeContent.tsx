@@ -1,32 +1,30 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Home.module.css';
 import HomeNotice from './HomeNotice';
 import HomeHeaderCategorys from './HomeHeaderCategorys';
-import { Category } from '@/types/notice';
 import type { Notice } from '@/types/notice';
-import { getNoticesByCategory } from '@/mock/notices';
+import { useNotices } from '@/hooks/useNotices';
 import { useBookmark } from '@/hooks/useBookmark';
 import { useRouter } from 'next/navigation';
 import Layout from '@/Components/LayoutDir/Layout';
+import { useCategories } from '@/contexts/CategoryContext';
 
 export default function HomeContent() {
-  const [category, setCategory] = useState<Category>('전체');
-  const [notices, setNotices] = useState<Notice[]>([]);
+  const { items } = useCategories();
+  const [category, setCategory] = useState(items[0]?.name || '전체');
+  const notices = useNotices(category);
   const [readIds, setReadIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
-    setNotices(getNoticesByCategory(category));
-
     if (typeof window !== 'undefined') {
       const savedReads = localStorage.getItem('readNotices');
       if (savedReads) setReadIds(JSON.parse(savedReads));
     }
-
     setLoading(false);
-  }, [category]);
+  }, [category, items]);
 
   return (
     <Layout headerProps={{ pageType: 'home' }}>
@@ -64,7 +62,6 @@ function HomeNoticeWrapper({
 
   const handleClick = () => {
     const url = `/home?id=${encodeURIComponent(notice.id)}`;
-    console.log('클릭한 공지 URL:', url);
     router.push(url);
   };
 
@@ -80,6 +77,8 @@ function HomeNoticeWrapper({
         isBookmarked={bookmarked}
         onToggleBookmark={toggleBookmark}
         isRead={isRead}
+        selectionMode={false}
+        isSelected={false}
       />
     </div>
   );
