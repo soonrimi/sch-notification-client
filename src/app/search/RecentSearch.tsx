@@ -16,7 +16,7 @@ export default function RecentSearch({
   onDelete,
   onDeleteAll,
 }: RecentSearchProps) {
-  if (recentKeywords.length === 0) return <div>최근 검색어가 없습니다.</div>;
+  if (recentKeywords.length === 0) return <div></div>;
 
   return (
     <div className={styles.recent_wrapper}>
