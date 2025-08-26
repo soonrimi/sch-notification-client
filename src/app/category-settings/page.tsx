@@ -17,14 +17,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import {
-  Box,
-  List,
-  ListItem,
-  IconButton,
-  Popover,
-  Button,
-} from '@mui/material';
+import { Box, List, ListItem, IconButton, Popover } from '@mui/material';
 import Layout from '../../Components/LayoutDir/Layout';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -314,28 +307,35 @@ export default function CategorySettingsPage() {
       }}
       hideBottomNav
       backgroundColor="#EEEEEE"
+      fullHeight={true}
     >
+      {/* 안내 영역 90px */}
       <div
         style={{
           padding: '20px 20px 40px 40px',
           fontSize: '13px',
           height: '90px',
+          boxSizing: 'border-box',
         }}
       >
         카테고리 표시, 색상, 알림, 순서를 설정할 수 있습니다.
         <br />
         원하는 카테고리 공지만 확인할 수 있어요.
       </div>
+
+      {/* DnD 컨테이너 */}
       <div
         style={{
-          border: '1px solid #ffffffff',
-          borderTopLeftRadius: '30px',
-          borderTopRightRadius: '30px',
-          backgroundColor: '#ffffffff',
-          height: `calc(100vh - 45px - 48px - 90px )`,
+          flex: 1, // 남은 영역 꽉 채움
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
+          backgroundColor: '#fff',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden', // 스크롤 제거
         }}
       >
-        <Box sx={{ p: 1, marginTop: -1 }}>
+        <Box sx={{ p: 1, marginTop: -1, flex: 1 }}>
           <DndContext
             sensors={sensors}
             onDragStart={handleDragStart}
@@ -347,7 +347,7 @@ export default function CategorySettingsPage() {
               items={items.map((i) => i.id)}
               strategy={verticalListSortingStrategy}
             >
-              <List>
+              <List sx={{ flex: 1, overflow: 'hidden' }}>
                 {items.map((item, index) => (
                   <React.Fragment key={item.id}>
                     <SortableItem
@@ -357,13 +357,7 @@ export default function CategorySettingsPage() {
                       onToggleActive={handleToggleActive}
                       onOpenColorPicker={handleOpenColorPicker}
                     />
-
-                    <hr
-                      style={{
-                        color: '#414141ff',
-                        margin: 0,
-                      }}
-                    />
+                    <hr style={{ color: '#414141ff', margin: 0 }} />
                   </React.Fragment>
                 ))}
               </List>

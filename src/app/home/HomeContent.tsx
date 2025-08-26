@@ -22,10 +22,10 @@ export default function HomeContent() {
 
   useEffect(() => {
     setLoading(true);
-    if (typeof window !== 'undefined') {
-      const savedReads = localStorage.getItem('readNotices');
-      if (savedReads) setReadIds(JSON.parse(savedReads));
-    }
+
+    const savedReads = localStorage.getItem('readNotices');
+    if (savedReads) setReadIds(JSON.parse(savedReads));
+
     setLoading(false);
   }, [category, items]);
 

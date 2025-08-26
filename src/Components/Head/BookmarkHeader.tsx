@@ -10,15 +10,6 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import Image from 'next/image';
 import { BookmarkHeaderProps } from './Header';
 
-interface Props {
-  selectionMode: boolean;
-  selectedCount: number;
-  totalCount: number;
-  onToggleSelectionMode: () => void;
-  onSelectAll: () => void;
-  onCancelSelection?: () => void;
-}
-
 export default function BookmarkHeader({
   selectionMode,
   selectedCount,
@@ -38,7 +29,6 @@ export default function BookmarkHeader({
         px: 2,
         height: 50,
         backgroundColor: '#ffffff',
-        borderBottom: '1px solid #E0E0E0',
       }}
     >
       {/* 왼쪽: 뒤로가기 + 제목 */}
