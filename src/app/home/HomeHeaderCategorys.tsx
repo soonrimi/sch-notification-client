@@ -1,29 +1,35 @@
 'use client';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import Stack from '@mui/material/Stack';
-import { categories, categoryColors, Category } from '@/constants/categories';
+import { useCategories } from '@/contexts/CategoryContext';
+import { useCategoryColors } from '@/contexts/CategoryColorContext';
 
 interface HomeHeaderCategorysProps {
-  category: Category;
-  setCategory: (cat: Category) => void;
-}
-
-function getButtonStyles(cat: Category, selected: boolean) {
-  return selected
-    ? {
-        border: `1px solid ${categoryColors[cat]}`,
-        backgroundColor: categoryColors[cat],
-        color: '#fff',
-      }
-    : { border: '1px solid #6b6b6b', backgroundColor: '#fff', color: '#000' };
+  category: string;
+  setCategory: (cat: string) => void;
 }
 
 export default function HomeHeaderCategorys({
   category,
   setCategory,
 }: HomeHeaderCategorysProps) {
+  const router = useRouter();
+  const { items } = useCategories();
+  const { categoryColors } = useCategoryColors();
+
+  function getButtonStyles(catName: string, selected: boolean) {
+    return selected
+      ? {
+          border: `1px solid ${categoryColors[catName]}`,
+          backgroundColor: categoryColors[catName],
+          color: '#fff',
+        }
+      : { border: '1px solid #6b6b6b', backgroundColor: '#fff', color: '#000' };
+  }
+
   return (
     <Stack
       direction="row"
@@ -42,29 +48,33 @@ export default function HomeHeaderCategorys({
         '&::-webkit-scrollbar': { display: 'none' },
       }}
     >
-      {categories.map((cat) => (
-        <Button
-          key={cat}
-          variant={category === cat ? 'contained' : 'outlined'}
-          onClick={() => setCategory(cat)}
-          sx={{
-            minWidth: 0,
-            padding: '0 12px',
-            height: 32,
-            borderRadius: '9999px',
-            fontSize: 15,
-            flexShrink: 0,
-            textTransform: 'none',
-            justifyContent: 'center',
-            alignItems: 'center',
-            ...getButtonStyles(cat, category === cat),
-          }}
-          aria-pressed={category === cat}
-        >
-          {cat}
-        </Button>
-      ))}
+      {items.map((item) =>
+        item.name === '전체' || item.visible ? ( // "전체"는 항상 보이게
+          <Button
+            key={item.id}
+            variant={category === item.name ? 'contained' : 'outlined'}
+            onClick={() => setCategory(item.name)}
+            sx={{
+              minWidth: 0,
+              padding: '0 12px',
+              height: 32,
+              borderRadius: '9999px',
+              fontSize: 15,
+              flexShrink: 0,
+              textTransform: 'none',
+              justifyContent: 'center',
+              alignItems: 'center',
+              ...getButtonStyles(item.name, category === item.name),
+            }}
+            aria-pressed={category === item.name}
+          >
+            {item.name}
+          </Button>
+        ) : null
+      )}
+
       <Button
+        onClick={() => router.push('/category-settings')}
         sx={{
           minWidth: 50,
           height: 32,

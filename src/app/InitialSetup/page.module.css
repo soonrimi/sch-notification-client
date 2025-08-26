@@ -44,7 +44,7 @@
   border: 0.1rem solid #5f779f;
   font-size: clamp(0.9rem, 3vw, 1.3rem);
   font-weight: bold;
-  color: #26539C;
+  color: #26539c;
   white-space: nowrap;
 }
 
@@ -81,9 +81,8 @@
   margin: 0 auto;
 }
 
-
 .startbtn {
-  background-color: #26539C !important;
+  background-color: #26539c !important;
   font-weight: bold !important;
   font-size: clamp(1.1rem, 2vw, 1.5rem) !important;
   border-radius: 10px !important;

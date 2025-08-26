@@ -4,9 +4,8 @@ import Layout from '@/Components/LayoutDir/Layout';
 
 export default function Notices() {
   return (
-    <Layout pageType="notice">
+    <Layout headerProps={{ pageType: 'notice' }}>
       <h1>알림 화면입니다</h1>
-      {/* 알림 관련 컴포넌트들 */}
     </Layout>
   );
 }

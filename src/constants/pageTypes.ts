@@ -4,6 +4,8 @@ export const PAGE_TYPES = {
   CALENDAR: 'calendar',
   NOTICE: 'notice',
   MYPAGE: 'mypage',
+  CONTENT_DETAIL: 'contentdetail',
+  CATEGORY_SETTINGS: 'categorysettings',
 } as const;
 
 export type PageType = (typeof PAGE_TYPES)[keyof typeof PAGE_TYPES];

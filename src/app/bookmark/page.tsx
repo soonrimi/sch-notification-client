@@ -3,53 +3,177 @@ import React, { useEffect, useState } from 'react';
 import styles from '../page.module.css';
 import HomeNotice from '../home/HomeNotice';
 import Layout from '../../Components/LayoutDir/Layout';
-import { Category } from '@/types/notice';
-import type { Notice } from '@/types/notice';
-import { getNoticesByCategory } from '@/mock/notices';
+import { Category, Notice } from '@/types/notice';
+import { useNotices } from '@/hooks/useNotices';
+import { useBookmark } from '@/hooks/useBookmark';
+import { useRouter } from 'next/navigation';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 export default function Bookmark() {
-  const [notices, setNotices] = useState<Notice[]>([]);
-  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
+  const notices = useNotices('전체' as Category);
+  const [readIds, setReadIds] = useState<string[]>([]);
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const router = useRouter();
 
-  // 로컬스토리지에서 북마크 불러오기
+  // 읽은 목록 불러오기
   useEffect(() => {
-    const saved = localStorage.getItem('bookmarkedIds');
-    if (saved) setBookmarkedIds(JSON.parse(saved));
+    const savedReads = localStorage.getItem('readNotices');
+    if (savedReads) setReadIds(JSON.parse(savedReads));
   }, []);
 
-  useEffect(() => {
-    const data = getNoticesByCategory('전체' as Category);
-    setNotices(data);
-  }, []);
+  // 북마크된 공지 필터링
+  const bookmarkedNotices = notices.filter((n) => {
+    const savedBookmarks = JSON.parse(
+      localStorage.getItem('bookmarkedIds') || '[]'
+    );
+    return savedBookmarks.includes(n.id);
+  });
 
-  const handleToggleBookmark = (id: string) => {
-    const newBookmarked = bookmarkedIds.includes(id)
-      ? bookmarkedIds.filter((x) => x !== id)
-      : [...bookmarkedIds, id];
-
-    setBookmarkedIds(newBookmarked);
-    localStorage.setItem('bookmarkedIds', JSON.stringify(newBookmarked));
+  // 선택 토글
+  const toggleSelect = (id: string) => {
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter((sid) => sid !== id));
+    } else {
+      setSelectedIds([...selectedIds, id]);
+    }
   };
 
-  // 북마크된 공지만 필터링
-  const bookmarkedNotices = notices.filter((n) => bookmarkedIds.includes(n.id));
+  // 전체 선택/해제
+  const toggleSelectAll = () => {
+    if (selectedIds.length === bookmarkedNotices.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(bookmarkedNotices.map((n) => n.id));
+    }
+  };
+
+  // 선택된 북마크 삭제
+  const deleteSelected = () => {
+    const savedBookmarks = JSON.parse(
+      localStorage.getItem('bookmarkedIds') || '[]'
+    );
+    const updated = savedBookmarks.filter(
+      (id: string) => !selectedIds.includes(id)
+    );
+    localStorage.setItem('bookmarkedIds', JSON.stringify(updated));
+    setSelectedIds([]);
+    setSelectionMode(false);
+  };
+
+  const deleteColor = selectedIds.length > 0 ? '#333333' : '#A1A1A1';
 
   return (
-    <Layout pageType="bookmark">
+    <Layout
+      headerProps={{
+        pageType: 'bookmark',
+        bookmarkProps: {
+          selectionMode,
+          selectedCount: selectedIds.length,
+          totalCount: bookmarkedNotices.length,
+          onSelectAll: toggleSelectAll,
+          onCancelSelection: () => setSelectionMode(false),
+          onToggleSelectionMode: () => {
+            if (!selectionMode && selectedIds.length === 0) setSelectedIds([]);
+            setSelectionMode(!selectionMode);
+          },
+        },
+      }}
+      hideBottomNav={selectionMode}
+      footerSlot={
+        selectionMode && (
+          <div
+            style={{
+              height: '48px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              cursor: selectedIds.length > 0 ? 'pointer' : 'default',
+            }}
+            onClick={selectedIds.length > 0 ? deleteSelected : undefined}
+          >
+            <DeleteOutlineIcon
+              sx={{
+                fontSize: 28,
+                color: deleteColor,
+              }}
+            />
+            <span
+              style={{
+                fontSize: 10,
+                marginTop: -2,
+                color: deleteColor,
+              }}
+            >
+              삭제
+            </span>
+          </div>
+        )
+      }
+    >
       <div className={styles.page_content}>
         {bookmarkedNotices.length === 0 ? (
-          <div>북마크된 공지가 없습니다.</div>
+          <div></div>
         ) : (
           bookmarkedNotices.map((notice) => (
-            <HomeNotice
+            <BookmarkNoticeWrapper
               key={notice.id}
-              {...notice}
-              isBookmarked={true}
-              onToggleBookmark={handleToggleBookmark}
+              notice={notice}
+              isRead={readIds.includes(notice.id)}
+              router={router}
+              selectionMode={selectionMode}
+              isSelected={selectedIds.includes(notice.id)}
+              toggleSelect={toggleSelect}
             />
           ))
         )}
       </div>
     </Layout>
+  );
+}
+
+// 개별 공지 Wrapper
+function BookmarkNoticeWrapper({
+  notice,
+  isRead,
+  router,
+  selectionMode,
+  isSelected,
+  toggleSelect,
+}: {
+  notice: Notice;
+  isRead: boolean;
+  router: ReturnType<typeof useRouter>;
+  selectionMode: boolean;
+  isSelected: boolean;
+  toggleSelect: (id: string) => void;
+}) {
+  const { bookmarked, toggleBookmark } = useBookmark(notice.id);
+
+  const handleClick = () => {
+    if (selectionMode) {
+      toggleSelect(notice.id);
+    } else {
+      router.push(`/home?id=${encodeURIComponent(notice.id)}`);
+    }
+  };
+
+  return (
+    <div style={{ cursor: 'pointer', marginBottom: 0 }} onClick={handleClick}>
+      <HomeNotice
+        id={notice.id}
+        category={notice.category}
+        upload_time={notice.upload_time}
+        application_period={notice.application_period}
+        title={notice.title}
+        detail={notice.detail}
+        isBookmarked={bookmarked}
+        onToggleBookmark={toggleBookmark}
+        isRead={isRead}
+        selectionMode={selectionMode}
+        isSelected={isSelected}
+      />
+    </div>
   );
 }

@@ -3,7 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type AttachmentResponse = {
-    fileName?: string;
-    fileUrl?: string;
+  fileName?: string;
+  fileUrl?: string;
 };
-

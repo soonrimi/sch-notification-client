@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
+import { CategoryColorProvider } from '@/contexts/CategoryColorContext';
+import { CategoryProvider } from '@/contexts/CategoryContext';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -20,17 +22,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <CategoryColorProvider>
+          <CategoryProvider>{children}</CategoryProvider>
+        </CategoryColorProvider>
       </body>
     </html>
   );

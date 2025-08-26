@@ -10,11 +10,11 @@ export const categories = [
 export type Category = (typeof categories)[number];
 
 export const categoryColors: Record<Category, string> = {
-  전체: '#1d9ad6',
-  학교: '#e74c3c',
-  대학: '#27ae60',
-  학년: '#8e44ad',
-  채용: '#f39c12',
-  활동: '#16a085',
-  홍보: '#d35400',
+  전체: '#7986CC',
+  학교: '#69B054',
+  대학: '#EA9E5A',
+  학년: '#F17298',
+  채용: '#81AAE8',
+  활동: '#B192E7',
+  홍보: '#A9A9A9',
 };
