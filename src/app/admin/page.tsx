@@ -78,7 +78,7 @@ export default function AdminHomePage() {
   };
 
   return (
-    <Layout pageType="home">
+    <Layout>
       <div className={styles.adminRoot}>
         <div className={styles.headerBar}>
           <h1 className={styles.title}>등록된 공지</h1>
