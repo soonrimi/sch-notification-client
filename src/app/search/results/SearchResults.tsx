@@ -21,10 +21,11 @@ function NoticeWithBookmark({ notice }: { notice: Notice }) {
   );
 }
 
-export default function SearchResultsClient() {
+export default function SearchResults() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const keyword = searchParams.get('keyword') || '';
+  const scope = searchParams.get('scope') || 'all';
 
   const [searchKeyword, setSearchKeyword] = useState(keyword);
 
@@ -32,21 +33,33 @@ export default function SearchResultsClient() {
     setSearchKeyword(keyword);
   }, [keyword]);
 
+  // scope와 keyword에 따라 필터링
+  const results = allNotices.filter((notice) => {
+    const matchesKeyword =
+      notice.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+      notice.detail.toLowerCase().includes(searchKeyword.toLowerCase());
+
+    if (scope === 'bookmark') {
+      const savedBookmarks = JSON.parse(
+        localStorage.getItem('bookmarkedIds') || '[]'
+      );
+      return matchesKeyword && savedBookmarks.includes(notice.id);
+    }
+
+    return matchesKeyword; // 전체 공지
+  });
+
   const handleBackToSearchInput = () => {
-    router.push('/search');
+    router.push(`/search?scope=${scope}`);
   };
 
   const handleSearch = (newKeyword: string) => {
     if (!newKeyword) return;
     setSearchKeyword(newKeyword);
-    router.push(`/search/results?keyword=${encodeURIComponent(newKeyword)}`);
+    router.push(
+      `/search/results?keyword=${encodeURIComponent(newKeyword)}&scope=${scope}`
+    );
   };
-
-  const results = allNotices.filter(
-    (notice) =>
-      notice.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-      notice.detail.toLowerCase().includes(searchKeyword.toLowerCase())
-  );
 
   return (
     <Layout

@@ -36,7 +36,6 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
     const saved = localStorage.getItem('categories');
     if (saved) {
       const parsed: CategoryItem[] = JSON.parse(saved);
-      // "전체"가 없으면 강제로 추가
       const hasAll = parsed.some((c) => c.id === 'all');
       setItems(hasAll ? parsed : [defaultAll, ...parsed]);
     } else {
@@ -51,6 +50,7 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
         })),
       ]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 저장 시에도 항상 "전체" 포함
@@ -60,6 +60,7 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
       const toSave = hasAll ? items : [defaultAll, ...items];
       localStorage.setItem('categories', JSON.stringify(toSave));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items]);
 
   return (
