@@ -61,7 +61,6 @@ export default function Bookmark() {
     setSelectionMode(false);
   };
 
-  // 아이콘과 글씨 색상
   const deleteColor = selectedIds.length > 0 ? '#333333' : '#A1A1A1';
 
   return (
@@ -115,7 +114,7 @@ export default function Bookmark() {
     >
       <div className={styles.page_content}>
         {bookmarkedNotices.length === 0 ? (
-          <div>북마크된 공지가 없습니다.</div>
+          <div></div>
         ) : (
           bookmarkedNotices.map((notice) => (
             <BookmarkNoticeWrapper

@@ -9,15 +9,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import Image from 'next/image';
 import { BookmarkHeaderProps } from './Header';
-
-interface Props {
-  selectionMode: boolean;
-  selectedCount: number;
-  totalCount: number;
-  onToggleSelectionMode: () => void;
-  onSelectAll: () => void;
-  onCancelSelection?: () => void;
-}
+import { useRouter } from 'next/navigation';
 
 export default function BookmarkHeader({
   selectionMode,
@@ -29,6 +21,8 @@ export default function BookmarkHeader({
 }: BookmarkHeaderProps) {
   const isAnySelected = selectedCount > 0;
   const iconColor = isAnySelected ? '#333333' : '#A1A1A1';
+  const router = useRouter();
+
   return (
     <Stack
       direction="row"
@@ -38,7 +32,6 @@ export default function BookmarkHeader({
         px: 2,
         height: 50,
         backgroundColor: '#ffffff',
-        borderBottom: '1px solid #E0E0E0',
       }}
     >
       {/* 왼쪽: 뒤로가기 + 제목 */}
@@ -83,7 +76,11 @@ export default function BookmarkHeader({
           </IconButton>
         ) : (
           <>
-            <IconButton>
+            <IconButton
+              onClick={() => {
+                router.push('/search?scope=bookmark');
+              }}
+            >
               <Image
                 src="/icons/search_icon.png"
                 alt="검색"
