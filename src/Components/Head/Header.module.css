@@ -1,10 +1,12 @@
-.header_wrapper {
+.header_wrapper,
+.bookmarkheader_wrapper {
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 16px;
-  background-color: #fff;
+  padding: 8px 16px;
+  height: 60px;
+  background-color: white;
 }
 
 .header_right_home {
@@ -44,3 +46,10 @@
   font-size: 14px;
   font-weight: bold;
 }
+
+.header_left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* ---------------------------------------------------------------------------------------- */
