@@ -5,6 +5,7 @@ import BookmarkHeader from './BookmarkHeader';
 import CalendarHeader from './CalendarHeader';
 import NoticeHeader, { NoticeHeaderProps } from './NoticeHeader';
 import CategorySettingsHeader from './CategorySettingsHeader';
+import SearchHeader from './SearchHeader';
 import styles from './Header.module.css';
 
 export interface BookmarkHeaderProps {
@@ -16,7 +17,6 @@ export interface BookmarkHeaderProps {
   onCancelSelection?: () => void;
 }
 
-// pageType별 추가 props 정의
 type HeaderExtraProps = {
   notice: { noticeHeaderProps: NoticeHeaderProps };
   bookmark: { bookmarkProps: BookmarkHeaderProps };
@@ -37,6 +37,14 @@ export type HeaderProps =
   | {
       pageType: 'categorysettings';
       categoryHeaderProps: { onReset: () => void };
+    }
+  | {
+      pageType: 'search';
+      searchKeyword: string;
+      setSearchKeyword: (val: string) => void;
+      onBack: () => void;
+      onSearch?: (keyword: string) => void;
+      disableInput?: boolean;
     };
 
 export default function Header(props: HeaderProps) {
@@ -58,6 +66,14 @@ export default function Header(props: HeaderProps) {
         <div>마이페이지 헤더</div>
       ) : pageType === 'categorysettings' && props.categoryHeaderProps ? (
         <CategorySettingsHeader {...props.categoryHeaderProps} />
+      ) : pageType === 'search' ? (
+        <SearchHeader
+          searchKeyword={props.searchKeyword}
+          setSearchKeyword={props.setSearchKeyword}
+          onBack={props.onBack}
+          onSearch={props.onSearch}
+          disableInput={props.disableInput}
+        />
       ) : null}
     </div>
   );

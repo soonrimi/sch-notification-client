@@ -38,7 +38,6 @@ export default function BookmarkHeader({
         px: 2,
         height: 50,
         backgroundColor: '#ffffff',
-        borderBottom: '1px solid #E0E0E0',
       }}
     >
       {/* 왼쪽: 뒤로가기 + 제목 */}

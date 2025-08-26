@@ -4,8 +4,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 16px;
-  background-color: #fff;
+  padding: 8px 16px;
+  height: 60px;
+  background-color: white;
 }
 
 .header_right_home {
@@ -51,3 +52,4 @@
   align-items: center;
   gap: 8px;
 }
+/* ---------------------------------------------------------------------------------------- */
