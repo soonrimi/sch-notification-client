@@ -17,14 +17,6 @@ export interface BookmarkHeaderProps {
   onCancelSelection?: () => void;
 }
 
-type HeaderExtraProps = {
-  notice: { noticeHeaderProps: NoticeHeaderProps };
-  bookmark: { bookmarkProps: BookmarkHeaderProps };
-  home: Record<string, never>;
-  calendar: Record<string, never>;
-  mypage: Record<string, never>;
-};
-
 export type HeaderProps =
   | { pageType: 'home' }
   | { pageType: 'bookmark'; bookmarkProps: BookmarkHeaderProps }
