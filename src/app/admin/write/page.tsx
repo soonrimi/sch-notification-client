@@ -30,7 +30,7 @@ export default function AdminWritePage() {
 
   const numberedFiles = useMemo(
     () => files.map((f, i) => ({ no: i + 1, name: f.file.name, id: f.id })),
-    [files],
+    [files]
   );
 
   const appendFiles = (list: FileList | null) => {

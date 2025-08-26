@@ -63,9 +63,9 @@ export default function AdminHomePage() {
         .slice()
         .sort(
           (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         ),
-    [notices],
+    [notices]
   );
 
   const handleDelete = (id: string, createdAt: string) => {

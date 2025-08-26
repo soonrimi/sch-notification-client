@@ -60,8 +60,7 @@ export function seedIfEmpty() {
     {
       id: 'seed-1',
       title: '2025학년도 2학기 생활관 모집 안내',
-      content:
-        '신청기간: 07.20~30 / 대상: 전체 / 제출서류 확인 바랍니다.',
+      content: '신청기간: 07.20~30 / 대상: 전체 / 제출서류 확인 바랍니다.',
       category: '대학',
       createdAt: new Date(now - 2 * 60 * 1000).toISOString(), // 2분 전 → 삭제 가능
       attachments: [{ name: '모집요강.pdf' }],
