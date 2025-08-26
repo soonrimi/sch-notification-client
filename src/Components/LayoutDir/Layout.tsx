@@ -14,6 +14,7 @@ interface LayoutProps {
   hideBottomNav?: boolean;
   footerSlot?: ReactNode;
   backgroundColor?: string;
+  fullHeight?: boolean;
 }
 
 export default function Layout({
@@ -22,11 +23,15 @@ export default function Layout({
   hideBottomNav,
   footerSlot,
   backgroundColor,
+  fullHeight = false,
 }: LayoutProps) {
   return (
     <div
       className={styles.layout_container}
-      style={{ backgroundColor: backgroundColor || '#fff' }}
+      style={{
+        backgroundColor: backgroundColor || '#fff',
+        height: fullHeight ? '100vh' : 'auto', // 조건부 적용
+      }}
     >
       {/* Header */}
       <div className={styles.header_wrapper} style={{ height: HEADER_HEIGHT }}>
@@ -49,12 +54,17 @@ export default function Layout({
       </main>
 
       {/* Footer Slot or Bottom Navigation */}
-      <div
-        className={styles.bottom_nav_wrapper}
-        style={{ height: BOTTOM_NAV_HEIGHT }}
-      >
-        {footerSlot ? footerSlot : !hideBottomNav && <BottomNav />}
-      </div>
+      {!(hideBottomNav && !footerSlot) && (
+        <div
+          className={styles.bottom_nav_wrapper}
+          style={{
+            height: BOTTOM_NAV_HEIGHT,
+            position: 'fixed',
+          }}
+        >
+          {footerSlot ? footerSlot : <BottomNav />}
+        </div>
+      )}
     </div>
   );
 }

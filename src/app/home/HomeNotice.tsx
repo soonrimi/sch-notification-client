@@ -17,7 +17,7 @@ interface HomeNoticeProps extends Notice {
   selectionMode?: boolean;
   isSelected?: boolean;
 }
-// 기존 코드 상단에
+
 function formatUploadTime(date: Date) {
   const now = new Date();
 
