@@ -7,13 +7,18 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { Admin } from './models/Admin';
+export type { Attachment } from './models/Attachment';
 export type { AttachmentResponse } from './models/AttachmentResponse';
-export type { BoardDto_Request } from './models/BoardDto_Request';
-export type { BoardDto_Response } from './models/BoardDto_Response';
+export type { CalenderDto_Response } from './models/CalenderDto_Response';
+export type { CreateRequest } from './models/CreateRequest';
 export type { LoginRequest } from './models/LoginRequest';
 export type { LoginResponse } from './models/LoginResponse';
+export type { Notice } from './models/Notice';
+export type { Pageable } from './models/Pageable';
 export type { PageableObject } from './models/PageableObject';
-export type { PageBoardDto_Response } from './models/PageBoardDto_Response';
+export type { PageCalenderDto_Response } from './models/PageCalenderDto_Response';
+export type { PageResponse } from './models/PageResponse';
 export type { ResetPasswordRequest } from './models/ResetPasswordRequest';
 export type { ResetPasswordResponse } from './models/ResetPasswordResponse';
 export type { Response } from './models/Response';
@@ -23,5 +28,6 @@ export type { SortObject } from './models/SortObject';
 
 export { AdminControllerService } from './services/AdminControllerService';
 export { BoardApiService } from './services/BoardApiService';
+export { CalenderApiService } from './services/CalenderApiService';
 export { HealthCheckService } from './services/HealthCheckService';
 export { NoticeControllerService } from './services/NoticeControllerService';

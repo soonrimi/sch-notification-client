@@ -2,11 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type SignupRequest = {
+export type Admin = {
+    id?: number;
     username?: string;
-    password?: string;
+    passwordHash?: string;
     name?: string;
     role?: string;
-    registerPassword?: string;
 };
 

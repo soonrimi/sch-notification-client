@@ -2,8 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type ResetPasswordResponse = {
-    username?: string;
-    tempPassword?: string;
+export type Attachment = {
+    id?: number;
+    fileName?: string;
+    fileUrl?: string;
 };
 

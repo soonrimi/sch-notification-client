@@ -3,8 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export type LoginResponse = {
-  username?: string;
-  name?: string;
-  role?: string;
-  message?: string;
+    username?: string;
+    name?: string;
+    role?: string;
+    message?: string;
 };
+

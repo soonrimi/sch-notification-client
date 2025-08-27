@@ -3,8 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export type SignupResponse = {
-  id?: number;
-  username?: string;
-  name?: string;
-  role?: string;
+    id?: number;
+    username?: string;
+    name?: string;
+    role?: string;
 };
+

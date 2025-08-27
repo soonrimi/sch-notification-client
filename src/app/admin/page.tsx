@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import styles from './Admin.module.css';
-import Layout from '@/Components/LayoutDir/Layout';
 import {
   loadNotices,
   deleteNotice as lsDelete,
@@ -11,6 +10,8 @@ import {
   type LocalNotice,
   type Category,
 } from './localNotice';
+import useAdminInfo from './useAdminInfo';
+import { useRouter } from 'next/navigation';
 
 const CATEGORY_COLOR: Record<Category, string> = {
   전체: '#1d9ad6',
@@ -34,10 +35,17 @@ const fmtMMSS = (ms: number) => {
 };
 
 export default function AdminHomePage() {
-  const [notices, setNotices] = useState<LocalNotice[]>([]);
   const [, setTick] = useState(0); // 카운트다운 재렌더용
+  const [notices, setNotices] = useState<LocalNotice[]>([]);
+  const { adminInfo } = useAdminInfo();
+  const { push } = useRouter();
 
   useEffect(() => {
+    if (!adminInfo) {
+      push('/admin/login');
+      return;
+    }
+
     let mounted = true;
     seedIfEmpty();
     const refresh = () => mounted && setNotices(loadNotices());
@@ -78,72 +86,70 @@ export default function AdminHomePage() {
   };
 
   return (
-    <Layout>
-      <div className={styles.adminRoot}>
-        <div className={styles.headerBar}>
-          <h1 className={styles.title}>등록된 공지</h1>
-        </div>
-
-        <div className={styles.listWrap}>
-          {view.length === 0 ? (
-            <div className={styles.empty}>등록된 공지가 없습니다.</div>
-          ) : (
-            view.map((n) => {
-              const left = msLeft(n.createdAt);
-              const canDelete = left > 0;
-              const color = CATEGORY_COLOR[n.category] || '#1d9ad6';
-              const created = new Date(n.createdAt).toLocaleString(undefined, {
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-              });
-              const files = n.attachments?.length || 0;
-
-              return (
-                <article key={n.id} className={styles.card}>
-                  <div className={styles.cardRowTop}>
-                    <span
-                      className={styles.catDot}
-                      style={{ backgroundColor: color }}
-                      aria-hidden
-                    />
-                    <span className={styles.catText}>{n.category}</span>
-                    <span className={styles.metaRight}>{created}</span>
-                  </div>
-
-                  <div className={styles.cardMain}>
-                    <h2 className={styles.cardTitle}>{n.title}</h2>
-                    <p className={styles.cardDetail}>{n.content}</p>
-                  </div>
-
-                  <div className={styles.metaRow}>
-                    <span className={styles.metaLeft}>
-                      관리자{files > 0 ? ` · 첨부 ${files}` : ''}
-                    </span>
-
-                    {canDelete ? (
-                      <button
-                        className={styles.btnDelete}
-                        onClick={() => handleDelete(n.id, n.createdAt)}
-                        title="작성 후 5분 이내에만 삭제 가능"
-                      >
-                        삭제 ({fmtMMSS(left)})
-                      </button>
-                    ) : (
-                      <span className={styles.deleteDisabled}>삭제 불가</span>
-                    )}
-                  </div>
-                </article>
-              );
-            })
-          )}
-        </div>
-
-        <Link href="/admin/write" className={styles.fab} aria-label="글쓰기">
-          +
-        </Link>
+    <div className={styles.adminRoot}>
+      <div className={styles.headerBar}>
+        <h1 className={styles.title}>등록된 공지</h1>
       </div>
-    </Layout>
+
+      <div className={styles.listWrap}>
+        {view.length === 0 ? (
+          <div className={styles.empty}>등록된 공지가 없습니다.</div>
+        ) : (
+          view.map((n) => {
+            const left = msLeft(n.createdAt);
+            const canDelete = left > 0;
+            const color = CATEGORY_COLOR[n.category] || '#1d9ad6';
+            const created = new Date(n.createdAt).toLocaleString(undefined, {
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+            });
+            const files = n.attachments?.length || 0;
+
+            return (
+              <article key={n.id} className={styles.card}>
+                <div className={styles.cardRowTop}>
+                  <span
+                    className={styles.catDot}
+                    style={{ backgroundColor: color }}
+                    aria-hidden
+                  />
+                  <span className={styles.catText}>{n.category}</span>
+                  <span className={styles.metaRight}>{created}</span>
+                </div>
+
+                <div className={styles.cardMain}>
+                  <h2 className={styles.cardTitle}>{n.title}</h2>
+                  <p className={styles.cardDetail}>{n.content}</p>
+                </div>
+
+                <div className={styles.metaRow}>
+                  <span className={styles.metaLeft}>
+                    관리자{files > 0 ? ` · 첨부 ${files}` : ''}
+                  </span>
+
+                  {canDelete ? (
+                    <button
+                      className={styles.btnDelete}
+                      onClick={() => handleDelete(n.id, n.createdAt)}
+                      title="작성 후 5분 이내에만 삭제 가능"
+                    >
+                      삭제 ({fmtMMSS(left)})
+                    </button>
+                  ) : (
+                    <span className={styles.deleteDisabled}>삭제 불가</span>
+                  )}
+                </div>
+              </article>
+            );
+          })
+        )}
+      </div>
+
+      <Link href="/admin/write" className={styles.fab} aria-label="글쓰기">
+        +
+      </Link>
+    </div>
   );
 }
