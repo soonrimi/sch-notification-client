@@ -134,7 +134,7 @@ export default function Bookmark() {
 }
 
 // 개별 공지 Wrapper
-function BookmarkNoticeWrapper({
+export function BookmarkNoticeWrapper({
   notice,
   isRead,
   router,

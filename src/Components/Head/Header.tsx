@@ -22,7 +22,7 @@ export type HeaderProps =
   | { pageType: 'bookmark'; bookmarkProps: BookmarkHeaderProps }
   | { pageType: 'calendar' }
   | {
-      pageType: 'notice' | 'contentdetail';
+      pageType: 'notification' | 'contentdetail';
       noticeHeaderProps?: NoticeHeaderProps;
     }
   | { pageType: 'mypage' }
@@ -45,7 +45,7 @@ export default function Header(props: HeaderProps) {
 
   return (
     <div className={styles.header}>
-      {(pageType === 'notice' || pageType === 'contentdetail') &&
+      {(pageType === 'notification' || pageType === 'contentdetail') &&
       props.noticeHeaderProps ? (
         <NoticeHeader {...props.noticeHeaderProps} />
       ) : pageType === 'bookmark' && props.bookmarkProps ? (
