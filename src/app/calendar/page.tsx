@@ -1,7 +1,7 @@
 'use client';
 import { useState, useMemo } from 'react';
 import styles from './page.module.css';
-import { useMonthNavigation } from './hooks/useMonthNavigation';
+import { useSwipe } from './hooks/useMonthNavigation';
 import useCalendarCells, { CalendarCell } from './hooks/useCalendarCells';
 import EventItem from './Components/EventItem';
 import { CalendarEvent } from '@/types/calendar';
@@ -18,10 +18,9 @@ dayjs.extend(customParseFormat);
 export default function Calendar() {
   const [current, setCurrent] = useState<Dayjs>(dayjs());
 
-  const nav = useMonthNavigation(setCurrent, {
+  const nav = useSwipe(setCurrent, {
+    swipeThreshold: 60,
     wheelThreshold: 100,
-    swipeThreshold: 40,
-    cooldownMs: 250,
   });
 
   const weeks = useCalendarCells(current);
@@ -64,6 +63,9 @@ export default function Calendar() {
         tabIndex={0}
         style={{ outline: 'none' }}
         onWheel={nav.onWheel}
+        onPointerDown={nav.onPointerDown}
+        onPointerMove={nav.onPointerMove}
+        onPointerUp={nav.onPointerUp}
       >
         <div className={styles.calendar_body_box}>
           {weeks.map(
