@@ -53,7 +53,7 @@ export default function HomeContent() {
   );
 }
 
-function HomeNoticeWrapper({
+export function HomeNoticeWrapper({
   notice,
   isRead,
 }: {

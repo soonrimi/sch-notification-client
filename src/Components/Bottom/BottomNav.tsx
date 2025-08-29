@@ -11,7 +11,7 @@ import styles from './BottomNav.module.css';
 const navItems = [
   { href: '/home', label: '홈', Icon: HomeFilledIcon },
   { href: '/bookmark', label: '북마크', Icon: BookmarkIcon },
-  { href: '/notices', label: '알림', Icon: NotificationsIcon },
+  { href: '/notification', label: '알림', Icon: NotificationsIcon },
   { href: '/calendar', label: '달력', Icon: CalendarTodayIcon },
 ];
 
