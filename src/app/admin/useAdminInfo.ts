@@ -1,4 +1,4 @@
-import { Admin, AdminControllerService } from '@/api';
+import { Admin, AdminControllerService, NoticeControllerService } from '@/api';
 import { atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
 

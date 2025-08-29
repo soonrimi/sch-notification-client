@@ -13,8 +13,8 @@ export type PageCalenderDto_Response = {
     number?: number;
     sort?: SortObject;
     pageable?: PageableObject;
-    numberOfElements?: number;
     last?: boolean;
+    numberOfElements?: number;
     first?: boolean;
     empty?: boolean;
 };

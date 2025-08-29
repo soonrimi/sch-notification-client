@@ -10,6 +10,7 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 export type { Admin } from './models/Admin';
 export type { Attachment } from './models/Attachment';
 export type { AttachmentResponse } from './models/AttachmentResponse';
+export type { Board } from './models/Board';
 export type { CalenderDto_Response } from './models/CalenderDto_Response';
 export type { CreateRequest } from './models/CreateRequest';
 export type { LoginRequest } from './models/LoginRequest';

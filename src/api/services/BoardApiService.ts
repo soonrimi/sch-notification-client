@@ -71,4 +71,16 @@ export class BoardApiService {
             },
         });
     }
+    /**
+     * 학과명 조회
+     * 중복을 제거한 학과명을 조회합니다.
+     * @returns string OK
+     * @throws ApiError
+     */
+    public static getDistinctTitles(): CancelablePromise<Array<string>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/api/boards/departments',
+        });
+    }
 }

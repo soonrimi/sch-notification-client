@@ -2,9 +2,13 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Board } from './Board';
+import type { Notice } from './Notice';
 export type Attachment = {
     id?: number;
     fileName?: string;
     fileUrl?: string;
+    notice?: Notice;
+    board?: Board;
 };
 
