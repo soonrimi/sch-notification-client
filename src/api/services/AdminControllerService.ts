@@ -44,13 +44,13 @@ export class AdminControllerService {
         });
     }
     /**
-     * @param adminId
+     * @param authorization
      * @param requestBody
      * @returns Response OK
      * @throws ApiError
      */
     public static createNotice(
-        adminId: number,
+        authorization: string,
         requestBody?: {
             notice: string;
             file?: Array<Blob>;
@@ -59,8 +59,8 @@ export class AdminControllerService {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/admin/notice',
-            query: {
-                'adminId': adminId,
+            headers: {
+                'Authorization': authorization,
             },
             body: requestBody,
             mediaType: 'application/json',

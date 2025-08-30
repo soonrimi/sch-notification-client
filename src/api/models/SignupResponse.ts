@@ -4,8 +4,8 @@
 /* eslint-disable */
 export type SignupResponse = {
     id?: number;
-    username?: string;
+    userId?: string;
     name?: string;
-    role?: string;
+    affiliation?: string;
 };
 

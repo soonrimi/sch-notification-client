@@ -7,14 +7,13 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
-export type { Admin } from './models/Admin';
 export type { Attachment } from './models/Attachment';
 export type { AttachmentResponse } from './models/AttachmentResponse';
 export type { Board } from './models/Board';
 export type { CalenderDto_Response } from './models/CalenderDto_Response';
 export type { CreateRequest } from './models/CreateRequest';
 export type { LoginRequest } from './models/LoginRequest';
-export type { LoginResponse } from './models/LoginResponse';
+export { LoginResponse } from './models/LoginResponse';
 export type { Notice } from './models/Notice';
 export type { Pageable } from './models/Pageable';
 export type { PageableObject } from './models/PageableObject';

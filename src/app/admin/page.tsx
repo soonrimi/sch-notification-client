@@ -37,11 +37,11 @@ const fmtMMSS = (ms: number) => {
 export default function AdminHomePage() {
   const [, setTick] = useState(0); // 카운트다운 재렌더용
   const [notices, setNotices] = useState<LocalNotice[]>([]);
-  const { adminInfo } = useAdminInfo();
+  const { adminToken } = useAdminInfo();
   const { push } = useRouter();
 
   useEffect(() => {
-    if (!adminInfo) {
+    if (!adminToken) {
       push('/admin/login');
       return;
     }
