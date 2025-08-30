@@ -139,7 +139,7 @@ export default function HomeNotice({
         {selectionMode ? (
           noticeContent
         ) : (
-          <Link href={`/home/${encodeURIComponent(id)}`} prefetch={false}>
+          <Link href={`/home?id=${id}`} prefetch={false}>
             {noticeContent}
           </Link>
         )}
