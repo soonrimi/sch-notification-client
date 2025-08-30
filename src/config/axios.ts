@@ -1,42 +1,21 @@
 import axios, {
-  AxiosInstance,
   AxiosRequestConfig,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
 
-// API 기본 URL 설정
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
-
 // Axios 인스턴스 생성
-const axiosInstance: AxiosInstance = axios.create({
-  baseURL: BASE_URL,
-  timeout: 10000, // 10초 타임아웃
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+const axiosInstance = axios;
 
 // 요청 인터셉터
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // 토큰이 있으면 헤더에 추가 (클라이언트 사이드에서만)
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('accessToken');
       if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
       }
     }
-
-    // 요청 로깅 (개발 환경에서만)
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🚀 Request:', {
-        method: config.method?.toUpperCase(),
-        url: config.url,
-        data: config.data,
-      });
-    }
-
     return config;
   },
   (error) => {
@@ -48,15 +27,6 @@ axiosInstance.interceptors.request.use(
 // 응답 인터셉터
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
-    // 응답 로깅 (개발 환경에서만)
-    if (process.env.NODE_ENV === 'development') {
-      console.log('✅ Response:', {
-        status: response.status,
-        url: response.config.url,
-        data: response.data,
-      });
-    }
-
     return response;
   },
   (error) => {
