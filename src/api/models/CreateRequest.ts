@@ -2,8 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type ResetPasswordResponse = {
-    username?: string;
-    tempPassword?: string;
+export type CreateRequest = {
+    title?: string;
+    content?: string;
 };
 

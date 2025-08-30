@@ -2,12 +2,15 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { AttachmentResponse } from './AttachmentResponse';
-export type Response = {
+/**
+ * 캘린더 일정 응답 DTO
+ */
+export type CalenderDto_Response = {
     id?: number;
     title?: string;
     content?: string;
-    createdAt?: string;
-    attachments?: Array<AttachmentResponse>;
+    startDate?: string;
+    endDate?: string;
+    type?: string;
 };
 
