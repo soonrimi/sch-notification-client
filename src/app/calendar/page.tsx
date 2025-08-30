@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import styles from './page.module.css';
 import { useSwipe } from './hooks/useMonthNavigation';
 import useCalendarCells, { CalendarCell } from './hooks/useCalendarCells';
@@ -12,16 +12,37 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SearchIcon from '@mui/icons-material/Search';
 import BottomNav from '@/Components/Bottom/BottomNav';
+
 dayjs.extend(isSameOrBefore);
 dayjs.extend(customParseFormat);
 
 export default function Calendar() {
   const [current, setCurrent] = useState<Dayjs>(dayjs());
-
   const nav = useSwipe(setCurrent, {
     swipeThreshold: 60,
     wheelThreshold: 100,
   });
+
+  const headRef = useRef<HTMLDivElement>(null);
+  const [headH, setHeadH] = useState<number>(0);
+
+  // 🔧 헤더 실제 높이를 측정해 상단 패딩에 반영
+  useEffect(() => {
+    const measure = () => {
+      const h = headRef.current?.getBoundingClientRect().height ?? 0;
+      setHeadH(h);
+      // CSS 변수로도 내려줘서 CSS에서 기본값 대신 사용
+      document.documentElement.style.setProperty('--cal-head-h', `${h}px`);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (headRef.current) ro.observe(headRef.current);
+    window.addEventListener('resize', measure);
+    return () => {
+      window.removeEventListener('resize', measure);
+      ro.disconnect();
+    };
+  }, []);
 
   const weeks = useCalendarCells(current);
 
@@ -45,7 +66,7 @@ export default function Calendar() {
 
   return (
     <div className={styles.App}>
-      <div className={styles.calendar_head}>
+      <div ref={headRef} className={styles.calendar_head}>
         <div className={styles.head_top}>
           <div className={styles.header_year}>{current.year()}년</div>
           <div className={styles.header_right}>
@@ -58,10 +79,11 @@ export default function Calendar() {
           <DayKor />
         </div>
       </div>
+
       <div
         className={styles.calendar_body}
         tabIndex={0}
-        style={{ outline: 'none' }}
+        style={{ outline: 'none', paddingTop: headH }}
         onWheel={nav.onWheel}
         onPointerDown={nav.onPointerDown}
         onPointerMove={nav.onPointerMove}
@@ -71,11 +93,10 @@ export default function Calendar() {
           {weeks.map(
             (
               row: CalendarCell[],
-              wIdx: number //주단위 렌더링
+              wIdx: number // 주 단위 렌더링
             ) => (
               <div className={styles.calendar_body_line} key={wIdx}>
                 {row.map((cell: CalendarCell, idx: number) => {
-                  //각 날짜 렌더링
                   const ymd = cell.ymd;
                   const dayEvents = eventsByYmd.get(ymd) ?? [];
 
@@ -93,11 +114,9 @@ export default function Calendar() {
                       </span>
 
                       <div>
-                        {dayEvents.map((ev) => {
-                          return (
-                            <EventItem key={`${ymd}-${ev.id}`} event={ev} />
-                          );
-                        })}
+                        {dayEvents.map((ev) => (
+                          <EventItem key={`${ymd}-${ev.id}`} event={ev} />
+                        ))}
                       </div>
                     </div>
                   );
@@ -107,6 +126,7 @@ export default function Calendar() {
           )}
         </div>
       </div>
+
       <div className={styles.bottom_nav_wrapper} style={{ height: 48 }}>
         <BottomNav />
       </div>
@@ -116,7 +136,6 @@ export default function Calendar() {
 
 function cellColor(day: Dayjs, idx: number, isOtherMonth: boolean) {
   if (day.isSame(dayjs(), 'day')) {
-    //오늘
     return {
       backgroundColor: 'black',
       color: 'white',
@@ -125,24 +144,10 @@ function cellColor(day: Dayjs, idx: number, isOtherMonth: boolean) {
       display: 'inline-block',
     };
   }
-  if (idx === 0 && isOtherMonth) {
-    //다른달 일요일
-    return { color: '#FFADAD' };
-  }
-  if (idx === 6 && isOtherMonth) {
-    //다른달 토요일
-    return { color: '#E6D47F' };
-  }
-  if (isOtherMonth) {
-    //다른달 평일
-    return { color: '#b1b1b1' };
-  }
-  if (idx === 0) {
-    //해당달 일요일
-    return { color: '#FF6060' };
-  }
-  if (idx === 6) {
-    //해당달 토요일
-    return { color: '#D5B829' };
-  }
+  if (idx === 0 && isOtherMonth) return { color: '#FFADAD' };
+  if (idx === 6 && isOtherMonth) return { color: '#E6D47F' };
+  if (isOtherMonth) return { color: '#b1b1b1' };
+  if (idx === 0) return { color: '#FF6060' };
+  if (idx === 6) return { color: '#D5B829' };
+  return undefined;
 }
