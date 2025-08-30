@@ -302,8 +302,11 @@ export default function CategorySettingsPage() {
   return (
     <Layout
       headerProps={{
-        pageType: 'categorysettings',
-        categoryHeaderProps: { onReset: handleReset },
+        pageType: 'settings',
+        settingsHeaderProps: {
+          title: '카테고리 설정',
+          onReset: handleReset,
+        },
       }}
       hideBottomNav
       backgroundColor="#EEEEEE"
