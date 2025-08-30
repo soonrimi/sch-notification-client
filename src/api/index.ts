@@ -27,5 +27,5 @@ export type { SortObject } from './models/SortObject';
 export { AdminControllerService } from './services/AdminControllerService';
 export { BoardApiService } from './services/BoardApiService';
 export { CalenderApiService } from './services/CalenderApiService';
+export { CrawlPostControllerService } from './services/CrawlPostControllerService';
 export { HealthCheckService } from './services/HealthCheckService';
-export { NoticeControllerService } from './services/NoticeControllerService';
