@@ -1,14 +1,11 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import styles from './Home.module.css';
-import HomeNotice from './HomeNotice';
 import HomeHeaderCategorys from './HomeHeaderCategorys';
-import type { Notice } from '@/types/notice';
 import { useNotices } from '@/hooks/useNotices';
-import { useBookmark } from '@/hooks/useBookmark';
-import { useRouter } from 'next/navigation';
 import Layout from '@/Components/LayoutDir/Layout';
 import { useCategories } from '@/contexts/CategoryContext';
+import SharedNoticeItem from '@/Components/Head/SharedNoticeItem';
 
 export default function HomeContent() {
   const { items } = useCategories();
@@ -40,7 +37,7 @@ export default function HomeContent() {
             <div className={styles.no_notice}>공지 없음</div>
           ) : (
             sortedNotices.map((notice) => (
-              <HomeNoticeWrapper
+              <SharedNoticeItem
                 key={notice.id}
                 notice={notice}
                 isRead={readIds.includes(notice.id)}
@@ -50,39 +47,5 @@ export default function HomeContent() {
         </div>
       </div>
     </Layout>
-  );
-}
-
-export function HomeNoticeWrapper({
-  notice,
-  isRead,
-}: {
-  notice: Notice;
-  isRead: boolean;
-}) {
-  const { bookmarked, toggleBookmark } = useBookmark(notice.id);
-  const router = useRouter();
-
-  const handleClick = () => {
-    const url = `/home?id=${encodeURIComponent(notice.id)}`;
-    router.push(url);
-  };
-
-  return (
-    <div style={{ marginBottom: 0, cursor: 'pointer' }} onClick={handleClick}>
-      <HomeNotice
-        id={notice.id}
-        category={notice.category}
-        upload_time={notice.upload_time}
-        application_period={notice.application_period}
-        title={notice.title}
-        detail={notice.detail}
-        isBookmarked={bookmarked}
-        onToggleBookmark={toggleBookmark}
-        isRead={isRead}
-        selectionMode={false}
-        isSelected={false}
-      />
-    </div>
   );
 }

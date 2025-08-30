@@ -16,6 +16,7 @@ export default function InitialSetup() {
   const [grade, setGrade] = useState('');
 
   const [hydrated, setHydrated] = useState(false);
+
   useEffect(() => {
     setHydrated(true);
     const saved = localStorage.getItem(STORAGE_KEY);
