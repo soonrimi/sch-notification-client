@@ -4,7 +4,7 @@ import HomeHeader from './HomeHeader';
 import BookmarkHeader from './BookmarkHeader';
 import CalendarHeader from './CalendarHeader';
 import NoticeHeader, { NoticeHeaderProps } from './NoticeHeader';
-import CategorySettingsHeader from './CategorySettingsHeader';
+import SettingsHeader from './CategorySettingsHeader';
 import SearchHeader from './SearchHeader';
 import styles from './Header.module.css';
 
@@ -27,8 +27,8 @@ export type HeaderProps =
     }
   | { pageType: 'mypage' }
   | {
-      pageType: 'categorysettings';
-      categoryHeaderProps: { onReset: () => void };
+      pageType: 'settings';
+      settingsHeaderProps: { title: string; onReset?: () => void };
     }
   | {
       pageType: 'search';
@@ -57,8 +57,8 @@ export default function Header(props: HeaderProps) {
         <CalendarHeader />
       ) : pageType === 'mypage' ? (
         <div>마이페이지 헤더</div>
-      ) : pageType === 'categorysettings' && props.categoryHeaderProps ? (
-        <CategorySettingsHeader {...props.categoryHeaderProps} />
+      ) : pageType === 'settings' && props.settingsHeaderProps ? (
+        <SettingsHeader {...props.settingsHeaderProps} />
       ) : pageType === 'search' ? (
         <SearchHeader
           searchKeyword={props.searchKeyword}

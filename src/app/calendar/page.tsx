@@ -6,7 +6,7 @@ import useCalendarCells, { CalendarCell } from './hooks/useCalendarCells';
 import EventItem from './Components/EventItem';
 import { CalendarEvent } from '@/types/calendar';
 import DayKor from './Components/DayKor';
-import { DUMMY_EVENTS } from '@/data/calendarDummy';
+import { DUMMY_EVENTS } from '@/mock/calendarDummy';
 import dayjs, { Dayjs } from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
