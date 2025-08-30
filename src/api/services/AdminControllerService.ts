@@ -96,4 +96,20 @@ export class AdminControllerService {
             mediaType: 'application/json',
         });
     }
+    /**
+     * @param authorization
+     * @returns Response OK
+     * @throws ApiError
+     */
+    public static getMyNotices(
+        authorization: string,
+    ): CancelablePromise<Array<Response>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/admin/myNotices',
+            headers: {
+                'Authorization': authorization,
+            },
+        });
+    }
 }

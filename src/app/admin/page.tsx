@@ -12,7 +12,7 @@ import {
 } from './localNotice';
 import useAdminInfo from './useAdminInfo';
 import { useRouter } from 'next/navigation';
-import { NoticeControllerService } from '@/api';
+import { AdminControllerService } from '@/api';
 
 const CATEGORY_COLOR: Record<Category, string> = {
   전체: '#1d9ad6',
@@ -47,7 +47,7 @@ export default function AdminHomePage() {
       return;
     }
 
-    NoticeControllerService.getAllNotices();
+    AdminControllerService.getMyNotices(adminToken);
 
     let mounted = true;
     seedIfEmpty();
