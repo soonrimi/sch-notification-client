@@ -1,8 +1,8 @@
-import type { CalendarEvent } from '@/types/calendar';
 import styles from './styles.module.css';
+import { CalenderDto_Response } from '@/api';
 
 interface EventItemProps {
-  event: CalendarEvent;
+  event: CalenderDto_Response;
 }
 
 export default function EventItem({ event }: EventItemProps) {
@@ -14,7 +14,7 @@ export default function EventItem({ event }: EventItemProps) {
     etc: '#B1B1B1',
   };
 
-  const category = event.category ?? 'etc';
+  const category = event.type ?? 'etc';
   const bgColor = thisMonthEventColors[category];
 
   return (

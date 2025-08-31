@@ -4,14 +4,14 @@ import styles from './page.module.css';
 import { useSwipe } from './hooks/useMonthNavigation';
 import useCalendarCells, { CalendarCell } from './hooks/useCalendarCells';
 import EventItem from './Components/EventItem';
-import { CalendarEvent } from '@/types/calendar';
 import DayKor from './Components/DayKor';
-import { DUMMY_EVENTS } from '@/mock/calendarDummy';
 import dayjs, { Dayjs } from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SearchIcon from '@mui/icons-material/Search';
 import BottomNav from '@/Components/Bottom/BottomNav';
+import { CalenderApiService } from '@/api';
+import { CalenderDto_Response } from '@/api/models/CalenderDto_Response';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(customParseFormat);
@@ -26,12 +26,10 @@ export default function Calendar() {
   const headRef = useRef<HTMLDivElement>(null);
   const [headH, setHeadH] = useState<number>(0);
 
-  // 🔧 헤더 실제 높이를 측정해 상단 패딩에 반영
   useEffect(() => {
     const measure = () => {
       const h = headRef.current?.getBoundingClientRect().height ?? 0;
       setHeadH(h);
-      // CSS 변수로도 내려줘서 CSS에서 기본값 대신 사용
       document.documentElement.style.setProperty('--cal-head-h', `${h}px`);
     };
     measure();
@@ -45,23 +43,33 @@ export default function Calendar() {
   }, []);
 
   const weeks = useCalendarCells(current);
+  const [calendar, setCalendar] = useState<CalenderDto_Response[]>([]);
 
   const eventsByYmd = useMemo(() => {
-    const map = new Map<string, CalendarEvent[]>();
-    for (const ev of DUMMY_EVENTS) {
-      const start = dayjs(ev.start);
-      const end = dayjs(ev.end ?? ev.start);
+    const map = new Map<string, CalenderDto_Response[]>();
+    for (const ev of calendar) {
+      const start = dayjs(ev.startDate);
+      const end = dayjs(ev.endDate ?? ev.startDate);
       let cursor = start.startOf('day');
       const last = end.startOf('day');
 
       while (cursor.isSameOrBefore(last)) {
         const key = cursor.format('YYYYMMDD');
         if (!map.has(key)) map.set(key, []);
-        map.get(key)!.push(ev);
         cursor = cursor.add(1, 'day');
       }
     }
     return map;
+  }, []);
+
+  useEffect(() => {
+    CalenderApiService.getAllCalenders({
+      page: 0,
+      size: 1000,
+      sort: [],
+    }).then((data) => {
+      setCalendar(data.content ?? []);
+    });
   }, []);
 
   return (
@@ -114,8 +122,11 @@ export default function Calendar() {
                       </span>
 
                       <div>
-                        {dayEvents.map((ev) => (
-                          <EventItem key={`${ymd}-${ev.id}`} event={ev} />
+                        {dayEvents.map((calendar) => (
+                          <EventItem
+                            key={`${ymd}-${calendar.id}`}
+                            event={calendar}
+                          />
                         ))}
                       </div>
                     </div>
