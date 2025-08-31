@@ -8,9 +8,11 @@ interface EventItemProps {
 export default function EventItem({ event }: EventItemProps) {
   const thisMonthEventColors: Record<string, string> = {
     holiday: '#FF9999',
-    academic: '#A5D7EF',
-    evaluation: '#D1A4F3',
-    seasonal: '#FFDF99',
+    general: '#ade4b2ff',
+    registration: '#',
+    grading: '#FFDF99',
+    course_registration: '#A5D7EF',
+    tuition: '#D1A4F3',
     etc: '#B1B1B1',
   };
 
