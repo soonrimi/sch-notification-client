@@ -18,7 +18,7 @@ export default function HomeHeader() {
             className={styles.icon_small}
           />
         </Link>
-        <Link href="/Settings">
+        <Link href="/settings">
           <SettingsIcon className={styles.icon_settings} />
         </Link>
       </div>

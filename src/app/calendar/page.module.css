@@ -53,8 +53,10 @@
   border-bottom: 1px solid #d9d9d9;
 }
 
+/* 🔧 상단 패딩은 JS에서 측정한 헤더 높이로 설정 (기본값 120px) */
 .calendar_body {
-  padding: 100px 0px 47px 0px;
+  padding: 0 0 47px 0;
+  padding-top: var(--cal-head-h, 120px);
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -72,19 +74,29 @@
   flex-direction: column;
 }
 
+/* 한 주(한 행) */
 .calendar_body_line {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   border-bottom: 1px solid #d9d9d9;
+
+  /* 🔧 행은 내용에 맞게 자동으로 커짐, 최소 높이는 보장 */
+  grid-auto-rows: minmax(clamp(4.5rem, 10vw, 7.5rem), auto);
+  align-items: start;
 }
 
+/* 각 날짜 셀 */
 .calendar_body_days {
   background: #fff;
-  height: 100%;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
   min-height: clamp(4.5rem, 10vw, 7.5rem);
   padding-top: clamp(0.1rem, 2vw, 0.4rem);
   padding-left: clamp(0.1rem, 2vw, 0.7rem);
+  box-sizing: border-box;
 }
 
 .date_num {
