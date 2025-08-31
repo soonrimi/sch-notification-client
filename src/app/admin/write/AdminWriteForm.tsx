@@ -1,41 +1,30 @@
 import React from 'react';
 import styles from '../Admin.module.css';
-import { CATEGORIES, FileItem } from './useAdminWrite';
-import type { Category } from '@/app/admin/localNotice';
+import { useAdminWrite } from './useAdminWrite';
+import { MenuItem, Select } from '@mui/material';
 
-interface AdminWriteFormProps {
-  title: string;
-  setTitle: (v: string) => void;
-  content: string;
-  setContent: (v: string) => void;
-  category: Category;
-  setCategory: (v: Category) => void;
-  numberedFiles: { no: number; name: string; id: string }[];
-  dragOver: boolean;
-  inputRef: React.RefObject<HTMLInputElement | null>;
-  onAddFiles: React.ChangeEventHandler<HTMLInputElement>;
-  onRemoveFile: (id: string) => void;
-  onDrop: React.DragEventHandler<HTMLDivElement>;
-  onDragOver: React.DragEventHandler<HTMLDivElement>;
-  onDragLeave: () => void;
-}
+interface AdminWriteFormProps {}
 
-export function AdminWriteForm({
-  title,
-  setTitle,
-  content,
-  setContent,
-  category,
-  setCategory,
-  numberedFiles,
-  dragOver,
-  inputRef,
-  onAddFiles,
-  onRemoveFile,
-  onDrop,
-  onDragOver,
-  onDragLeave,
-}: AdminWriteFormProps) {
+export function AdminWriteForm({}: AdminWriteFormProps) {
+  const {
+    title,
+    setTitle,
+    content,
+    setContent,
+    dragOver,
+    departmentList,
+    onDrop,
+    onDragOver,
+    onDragLeave,
+    inputRef,
+    onAddFiles,
+    numberedFiles,
+    onRemoveFile,
+    targetDepartment,
+    setTargetDepartment,
+    targetYear,
+    setTargetYear,
+  } = useAdminWrite();
   return (
     <div className={styles.formWrap}>
       <label className={styles.label}>제목</label>
@@ -57,19 +46,34 @@ export function AdminWriteForm({
       />
 
       <div className={styles.section}>
-        <div className={styles.sectionTitle}>카테고리 선택</div>
-        <div className={styles.chips}>
-          {CATEGORIES.map((c) => (
-            <button
-              key={c}
-              type="button"
-              className={`${styles.chip} ${category === c ? styles.chipActive : ''}`}
-              onClick={() => setCategory(c)}
-            >
-              {c}
-            </button>
+        <div className={styles.sectionTitle}>대상 선택</div>
+        <Select
+          value={targetDepartment?.id}
+          onChange={(e) => {
+            const dept = departmentList.find((d) => d.id === e.target.value);
+            setTargetDepartment(dept || null);
+          }}
+        >
+          <MenuItem value="">전체</MenuItem>
+          {departmentList.map((department) => (
+            <MenuItem key={department.id} value={department.id}>
+              {department.name}
+            </MenuItem>
           ))}
-        </div>
+        </Select>
+      </div>
+      <div className={styles.section}>
+        <div className={styles.sectionTitle}>학년 선택</div>
+        <Select
+          value={targetYear}
+          onChange={(e) => setTargetYear(e.target.value as number)}
+        >
+          <MenuItem value={0}>전체</MenuItem>
+          <MenuItem value={1}>1학년</MenuItem>
+          <MenuItem value={2}>2학년</MenuItem>
+          <MenuItem value={3}>3학년</MenuItem>
+          <MenuItem value={4}>4학년</MenuItem>
+        </Select>
       </div>
 
       <div className={styles.section}>

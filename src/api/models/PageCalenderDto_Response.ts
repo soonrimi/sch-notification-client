@@ -6,16 +6,16 @@ import type { CalenderDto_Response } from './CalenderDto_Response';
 import type { PageableObject } from './PageableObject';
 import type { SortObject } from './SortObject';
 export type PageCalenderDto_Response = {
-    totalElements?: number;
     totalPages?: number;
-    size?: number;
-    content?: Array<CalenderDto_Response>;
+    totalElements?: number;
     number?: number;
-    sort?: SortObject;
-    pageable?: PageableObject;
+    size?: number;
     numberOfElements?: number;
-    last?: boolean;
+    content?: Array<CalenderDto_Response>;
+    sort?: SortObject;
     first?: boolean;
+    last?: boolean;
+    pageable?: PageableObject;
     empty?: boolean;
 };
 
