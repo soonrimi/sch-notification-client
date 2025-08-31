@@ -4,40 +4,29 @@ import SharedNoticeItem from '@/Components/Head/SharedNoticeItem';
 import type { Notice } from '@/types/notice';
 import { mockKeywordNotices } from '@/mock/noticesKeywords';
 import Link from 'next/link';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Settings } from '@mui/icons-material';
+import styles from './styles.module.css';
 
 export default function KeywordTab() {
   const [notices, setNotices] = useState<Notice[]>([]);
-  useState(true);
+  const [includeCount, setIncludeCount] = useState(0);
 
   useEffect(() => {
     setNotices(mockKeywordNotices);
+    const saved = JSON.parse(localStorage.getItem('keywords') || '{}');
+    setIncludeCount(saved.include ? saved.include.length : 0);
   }, []);
-
-  if (notices.length === 0) {
-    return (
-      <div style={{ padding: '1rem', textAlign: 'center' }}>
-        키워드 알림에 해당하는 공지가 없습니다.
-      </div>
-    );
-  }
 
   return (
     <div>
-      <Link
-        href="./keywordSettings"
-        style={{
-          display: 'block',
-          padding: '0.5rem 1rem',
-          background: '#f8f8f8',
-          cursor: 'pointer',
-        }}
-      >
-        <Settings />
-        알림 받는 키워드 {notices.length}개
-      </Link>
-
+      <div className={styles.keywordNum}>
+        <NotificationsActiveIcon sx={{ mr: 1, color: '#212121' }} />
+        알림 받는 키워드 {includeCount}개
+        <Link href="./keywordSettings" style={{ marginLeft: 'auto' }}>
+          <SettingsIcon sx={{ color: '#B7B7B7' }} />
+        </Link>
+      </div>
       {notices.map((n) => (
         <SharedNoticeItem key={n.id} notice={n} isRead={false} />
       ))}
