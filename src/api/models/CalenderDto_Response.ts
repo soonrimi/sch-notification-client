@@ -8,7 +8,6 @@
 export type CalenderDto_Response = {
     id?: number;
     title?: string;
-    content?: string;
     startDate?: string;
     endDate?: string;
     type?: string;

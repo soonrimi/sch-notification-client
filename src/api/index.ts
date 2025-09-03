@@ -8,11 +8,8 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { Attachment } from './models/Attachment';
-export type { AttachmentResponse } from './models/AttachmentResponse';
 export type { CalenderDto_Response } from './models/CalenderDto_Response';
 export type { CreateRequest } from './models/CreateRequest';
-export type { Department } from './models/Department';
-export { InternalNoticeResponse } from './models/InternalNoticeResponse';
 export type { LoginRequest } from './models/LoginRequest';
 export { LoginResponse } from './models/LoginResponse';
 export type { Notice } from './models/Notice';
@@ -32,3 +29,4 @@ export { BoardApiService } from './services/BoardApiService';
 export { CalenderApiService } from './services/CalenderApiService';
 export { CrawlPostControllerService } from './services/CrawlPostControllerService';
 export { HealthCheckService } from './services/HealthCheckService';
+export { SourceControllerService } from './services/SourceControllerService';

@@ -8,14 +8,14 @@ import type { SortObject } from './SortObject';
 export type PageCalenderDto_Response = {
     totalPages?: number;
     totalElements?: number;
-    first?: boolean;
-    last?: boolean;
     size?: number;
     content?: Array<CalenderDto_Response>;
     number?: number;
     sort?: SortObject;
     pageable?: PageableObject;
     numberOfElements?: number;
+    last?: boolean;
+    first?: boolean;
     empty?: boolean;
 };
 

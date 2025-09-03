@@ -2,13 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CreateRequest } from '../models/CreateRequest';
-import type { Department } from '../models/Department';
-import type { InternalNoticeResponse } from '../models/InternalNoticeResponse';
 import type { LoginRequest } from '../models/LoginRequest';
 import type { LoginResponse } from '../models/LoginResponse';
 import type { ResetPasswordRequest } from '../models/ResetPasswordRequest';
 import type { ResetPasswordResponse } from '../models/ResetPasswordResponse';
+import type { Response } from '../models/Response';
 import type { SignupRequest } from '../models/SignupRequest';
 import type { SignupResponse } from '../models/SignupResponse';
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -46,6 +44,29 @@ export class AdminControllerService {
         });
     }
     /**
+     * @param authorization
+     * @param requestBody
+     * @returns Response OK
+     * @throws ApiError
+     */
+    public static createNotice(
+        authorization: string,
+        requestBody?: {
+            notice: string;
+            file?: Array<Blob>;
+        },
+    ): CancelablePromise<Response> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/admin/notice',
+            headers: {
+                'Authorization': authorization,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
      * @param requestBody
      * @returns LoginResponse OK
      * @throws ApiError
@@ -58,29 +79,6 @@ export class AdminControllerService {
             url: '/api/admin/login',
             body: requestBody,
             mediaType: 'application/json',
-        });
-    }
-    /**
-     * @param authorization
-     * @param formData
-     * @returns InternalNoticeResponse OK
-     * @throws ApiError
-     */
-    public static createInternalNotice(
-        authorization: string,
-        formData?: {
-            internalNotice: CreateRequest;
-            file?: Array<Blob>;
-        },
-    ): CancelablePromise<InternalNoticeResponse> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/admin/internal-notice',
-            headers: {
-                'Authorization': authorization,
-            },
-            formData: formData,
-            mediaType: 'multipart/form-data',
         });
     }
     /**
@@ -100,28 +98,18 @@ export class AdminControllerService {
     }
     /**
      * @param authorization
-     * @returns InternalNoticeResponse OK
+     * @returns Response OK
      * @throws ApiError
      */
     public static getMyNotices(
         authorization: string,
-    ): CancelablePromise<Array<InternalNoticeResponse>> {
+    ): CancelablePromise<Array<Response>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/admin/my-notices',
+            url: '/api/admin/myNotices',
             headers: {
                 'Authorization': authorization,
             },
-        });
-    }
-    /**
-     * @returns Department OK
-     * @throws ApiError
-     */
-    public static getAllDepartment(): CancelablePromise<Array<Department>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/admin/departments',
         });
     }
 }

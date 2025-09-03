@@ -25,7 +25,7 @@ export class BoardApiService {
     ): CancelablePromise<PageResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/api/boards',
+            url: '/api/boards',
             query: {
                 'page': page,
                 'size': size,
@@ -48,7 +48,7 @@ export class BoardApiService {
     ): CancelablePromise<Response> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/api/boards',
+            url: '/api/boards',
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -65,22 +65,10 @@ export class BoardApiService {
     ): CancelablePromise<Response> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/api/boards/{id}',
+            url: '/api/boards/{id}',
             path: {
                 'id': id,
             },
-        });
-    }
-    /**
-     * 학과명 조회
-     * 중복을 제거한 학과명을 조회합니다.
-     * @returns string OK
-     * @throws ApiError
-     */
-    public static getDistinctTitles(): CancelablePromise<Array<string>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/api/boards/departments',
         });
     }
 }
