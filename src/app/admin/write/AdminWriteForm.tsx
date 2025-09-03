@@ -2,6 +2,7 @@ import React from 'react';
 import styles from '../Admin.module.css';
 import { useAdminWrite } from './useAdminWrite';
 import { MenuItem, Select } from '@mui/material';
+import { CreateRequest } from '@/api';
 
 interface AdminWriteFormProps {}
 
@@ -66,13 +67,19 @@ export function AdminWriteForm({}: AdminWriteFormProps) {
         <div className={styles.sectionTitle}>학년 선택</div>
         <Select
           value={targetYear}
-          onChange={(e) => setTargetYear(e.target.value as number)}
+          onChange={(e) =>
+            setTargetYear(e.target.value as CreateRequest.targetYear)
+          }
         >
-          <MenuItem value={0}>전체</MenuItem>
-          <MenuItem value={1}>1학년</MenuItem>
-          <MenuItem value={2}>2학년</MenuItem>
-          <MenuItem value={3}>3학년</MenuItem>
-          <MenuItem value={4}>4학년</MenuItem>
+          <MenuItem value={CreateRequest.targetYear.ALL_YEARS}>전체</MenuItem>
+          <MenuItem value={CreateRequest.targetYear.FIRST_YEAR}>1학년</MenuItem>
+          <MenuItem value={CreateRequest.targetYear.SECOND_YEAR}>
+            2학년
+          </MenuItem>
+          <MenuItem value={CreateRequest.targetYear.THIRD_YEAR}>3학년</MenuItem>
+          <MenuItem value={CreateRequest.targetYear.FOURTH_YEAR}>
+            4학년
+          </MenuItem>
         </Select>
       </div>
 

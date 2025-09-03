@@ -8,14 +8,14 @@ import type { SortObject } from './SortObject';
 export type PageResponse = {
     totalPages?: number;
     totalElements?: number;
-    number?: number;
-    size?: number;
-    numberOfElements?: number;
-    content?: Array<Response>;
-    sort?: SortObject;
     first?: boolean;
     last?: boolean;
+    size?: number;
+    content?: Array<Response>;
+    number?: number;
+    sort?: SortObject;
     pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 };
 

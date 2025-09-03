@@ -1,6 +1,6 @@
 import useAdminInfo from '../useAdminInfo';
 import { useRouter } from 'next/navigation';
-import { AdminControllerService, Department } from '@/api';
+import { AdminControllerService, CreateRequest, Department } from '@/api';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { atom, useAtom } from 'jotai';
 
@@ -11,7 +11,9 @@ const contentAtom = atom('');
 const filesAtom = atom<FileItem[]>([]);
 const submittingAtom = atom(false);
 const targetDepartmentAtom = atom<Department | null>(null);
-const targetYearAtom = atom(0);
+const targetYearAtom = atom<CreateRequest.targetYear>(
+  CreateRequest.targetYear.ALL_YEARS
+);
 
 export function useAdminWrite() {
   const { push } = useRouter();
@@ -81,8 +83,8 @@ export function useAdminWrite() {
         internalNotice: {
           title: title.trim(),
           content: content.trim(),
-          //targetDept: targetDepartment?.id || 0,
-          //targetYear: targetYear,
+          targetDept: targetDepartment?.id || 0,
+          targetYear: targetYear,
         },
         file: files.map((f) => f.file),
       });

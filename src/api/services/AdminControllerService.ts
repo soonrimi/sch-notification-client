@@ -4,11 +4,11 @@
 /* eslint-disable */
 import type { CreateRequest } from '../models/CreateRequest';
 import type { Department } from '../models/Department';
+import type { InternalNoticeResponse } from '../models/InternalNoticeResponse';
 import type { LoginRequest } from '../models/LoginRequest';
 import type { LoginResponse } from '../models/LoginResponse';
 import type { ResetPasswordRequest } from '../models/ResetPasswordRequest';
 import type { ResetPasswordResponse } from '../models/ResetPasswordResponse';
-import type { Response } from '../models/Response';
 import type { SignupRequest } from '../models/SignupRequest';
 import type { SignupResponse } from '../models/SignupResponse';
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -63,7 +63,7 @@ export class AdminControllerService {
     /**
      * @param authorization
      * @param formData
-     * @returns Response OK
+     * @returns InternalNoticeResponse OK
      * @throws ApiError
      */
     public static createInternalNotice(
@@ -72,7 +72,7 @@ export class AdminControllerService {
             internalNotice: CreateRequest;
             file?: Array<Blob>;
         },
-    ): CancelablePromise<Response> {
+    ): CancelablePromise<InternalNoticeResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/admin/internal-notice',
@@ -100,15 +100,15 @@ export class AdminControllerService {
     }
     /**
      * @param authorization
-     * @returns Response OK
+     * @returns InternalNoticeResponse OK
      * @throws ApiError
      */
     public static getMyNotices(
         authorization: string,
-    ): CancelablePromise<Array<Response>> {
+    ): CancelablePromise<Array<InternalNoticeResponse>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/admin/myNotices',
+            url: '/api/admin/my-notices',
             headers: {
                 'Authorization': authorization,
             },
