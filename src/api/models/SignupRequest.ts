@@ -3,10 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 export type SignupRequest = {
-    username?: string;
+    userId?: string;
     password?: string;
     name?: string;
-    role?: string;
+    affiliation?: string;
     registerPassword?: string;
 };
 

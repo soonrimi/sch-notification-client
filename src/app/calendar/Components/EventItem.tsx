@@ -1,20 +1,22 @@
-import type { CalendarEvent } from '@/types/calendar';
 import styles from './styles.module.css';
+import { CalenderDto_Response } from '@/api';
 
 interface EventItemProps {
-  event: CalendarEvent;
+  event: CalenderDto_Response;
 }
 
 export default function EventItem({ event }: EventItemProps) {
   const thisMonthEventColors: Record<string, string> = {
     holiday: '#FF9999',
-    academic: '#A5D7EF',
-    evaluation: '#D1A4F3',
-    seasonal: '#FFDF99',
+    general: '#ade4b2ff',
+    registration: '#',
+    grading: '#FFDF99',
+    course_registration: '#A5D7EF',
+    tuition: '#D1A4F3',
     etc: '#B1B1B1',
   };
 
-  const category = event.category ?? 'etc';
+  const category = event.type ?? 'etc';
   const bgColor = thisMonthEventColors[category];
 
   return (
