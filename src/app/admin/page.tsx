@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import styles from './Admin.module.css';
-import { type LocalNotice, type Category } from './localNotice';
 import useAdminInfo from './useAdminInfo';
 import { useRouter } from 'next/navigation';
 import { AdminControllerService, InternalNoticeResponse } from '@/api';
@@ -37,12 +36,9 @@ export default function AdminHomePage() {
       setNotices(data);
     });
 
-    let mounted = true;
-
     const t = setInterval(() => setTick((v) => v + 1), 1000);
 
     return () => {
-      mounted = false;
       clearInterval(t);
     };
   }, []);

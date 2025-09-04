@@ -1,6 +1,10 @@
 import useAdminInfo from '../useAdminInfo';
 import { useRouter } from 'next/navigation';
-import { AdminControllerService, CreateRequest, Department } from '@/api';
+import {
+  AdminControllerService,
+  InternalNoticeResponse,
+  Department,
+} from '@/api';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { atom, useAtom } from 'jotai';
 
@@ -11,8 +15,8 @@ const contentAtom = atom('');
 const filesAtom = atom<FileItem[]>([]);
 const submittingAtom = atom(false);
 const targetDepartmentAtom = atom<Department | null>(null);
-const targetYearAtom = atom<CreateRequest.targetYear>(
-  CreateRequest.targetYear.ALL_YEARS
+const targetYearAtom = atom<InternalNoticeResponse.targetYear>(
+  InternalNoticeResponse.targetYear.ALL_YEARS
 );
 
 export function useAdminWrite() {
@@ -83,8 +87,10 @@ export function useAdminWrite() {
         internalNotice: {
           title: title.trim(),
           content: content.trim(),
-          targetDept: targetDepartment?.id || 0,
-          targetYear: targetYear,
+
+          //Todo: 임시 주석, 왜 안되는지 확인 필요
+          //targetDept: targetDepartment?.id || 0,
+          //targetYear: targetYear,
         },
         file: files.map((f) => f.file),
       });

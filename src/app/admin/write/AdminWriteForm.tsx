@@ -2,11 +2,9 @@ import React from 'react';
 import styles from '../Admin.module.css';
 import { useAdminWrite } from './useAdminWrite';
 import { MenuItem, Select } from '@mui/material';
-import { CreateRequest } from '@/api';
+import { InternalNoticeResponse } from '@/api';
 
-interface AdminWriteFormProps {}
-
-export function AdminWriteForm({}: AdminWriteFormProps) {
+export function AdminWriteForm() {
   const {
     title,
     setTitle,
@@ -68,16 +66,22 @@ export function AdminWriteForm({}: AdminWriteFormProps) {
         <Select
           value={targetYear}
           onChange={(e) =>
-            setTargetYear(e.target.value as CreateRequest.targetYear)
+            setTargetYear(e.target.value as InternalNoticeResponse.targetYear)
           }
         >
-          <MenuItem value={CreateRequest.targetYear.ALL_YEARS}>전체</MenuItem>
-          <MenuItem value={CreateRequest.targetYear.FIRST_YEAR}>1학년</MenuItem>
-          <MenuItem value={CreateRequest.targetYear.SECOND_YEAR}>
+          <MenuItem value={InternalNoticeResponse.targetYear.ALL_YEARS}>
+            전체
+          </MenuItem>
+          <MenuItem value={InternalNoticeResponse.targetYear.FIRST_YEAR}>
+            1학년
+          </MenuItem>
+          <MenuItem value={InternalNoticeResponse.targetYear.SECOND_YEAR}>
             2학년
           </MenuItem>
-          <MenuItem value={CreateRequest.targetYear.THIRD_YEAR}>3학년</MenuItem>
-          <MenuItem value={CreateRequest.targetYear.FOURTH_YEAR}>
+          <MenuItem value={InternalNoticeResponse.targetYear.THIRD_YEAR}>
+            3학년
+          </MenuItem>
+          <MenuItem value={InternalNoticeResponse.targetYear.FOURTH_YEAR}>
             4학년
           </MenuItem>
         </Select>
