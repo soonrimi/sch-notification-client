@@ -4,9 +4,7 @@ import { useAdminWrite } from './useAdminWrite';
 import { MenuItem, Select } from '@mui/material';
 import { InternalNoticeResponse } from '@/api';
 
-interface AdminWriteFormProps {}
-
-export function AdminWriteForm({}: AdminWriteFormProps) {
+export function AdminWriteForm() {
   const {
     title,
     setTitle,
