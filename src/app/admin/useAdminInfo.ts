@@ -3,7 +3,7 @@ import { atom, useAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-const adminJwt = atom<string | null>(null);
+const adminJwt = atom<string>('');
 
 export default function useAdminInfo() {
   const { push } = useRouter();
@@ -24,7 +24,7 @@ export default function useAdminInfo() {
       userId: id,
       password: password,
     });
-    setAdminToken(data.token || null);
+    setAdminToken(data.token || '');
     localStorage.setItem('accessToken', data.token || '');
     push('/admin');
   }

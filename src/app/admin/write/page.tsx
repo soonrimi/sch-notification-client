@@ -4,28 +4,11 @@ import Layout from '@/Components/LayoutDir/Layout';
 import styles from '../Admin.module.css';
 import { useAdminWrite } from './useAdminWrite';
 import { AdminWriteForm } from './AdminWriteForm';
+import { useRouter } from 'next/navigation';
 
 export default function AdminWritePage() {
-  const {
-    router,
-    inputRef,
-    title,
-    setTitle,
-    content,
-    setContent,
-    category,
-    setCategory,
-    numberedFiles,
-    dragOver,
-    onAddFiles,
-    onRemoveFile,
-    onDrop,
-    onDragOver,
-    onDragLeave,
-    isValid,
-    submitting,
-    handleSubmit,
-  } = useAdminWrite();
+  const router = useRouter();
+  const { isValid, submitting, handleSubmit } = useAdminWrite();
 
   return (
     <Layout>
@@ -43,22 +26,7 @@ export default function AdminWritePage() {
             {submitting ? '등록 중…' : '등록'}
           </button>
         </header>
-        <AdminWriteForm
-          title={title}
-          setTitle={setTitle}
-          content={content}
-          setContent={setContent}
-          category={category}
-          setCategory={setCategory}
-          numberedFiles={numberedFiles}
-          dragOver={dragOver}
-          inputRef={inputRef}
-          onAddFiles={onAddFiles}
-          onRemoveFile={onRemoveFile}
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-          onDragLeave={onDragLeave}
-        />
+        <AdminWriteForm />
       </div>
     </Layout>
   );
