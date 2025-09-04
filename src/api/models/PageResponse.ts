@@ -6,8 +6,8 @@ import type { PageableObject } from './PageableObject';
 import type { Response } from './Response';
 import type { SortObject } from './SortObject';
 export type PageResponse = {
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: Array<Response>;
     number?: number;

@@ -6,8 +6,8 @@ import type { CalenderDto_Response } from './CalenderDto_Response';
 import type { PageableObject } from './PageableObject';
 import type { SortObject } from './SortObject';
 export type PageCalenderDto_Response = {
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: Array<CalenderDto_Response>;
     number?: number;
