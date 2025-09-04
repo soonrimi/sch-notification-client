@@ -63,56 +63,55 @@ export default function Bookmark() {
   const deleteColor = selectedIds.length > 0 ? '#333333' : '#A1A1A1';
 
   return (
-      <Layout
-        headerProps={{
-          pageType: 'bookmark',
-          bookmarkProps: {
-            selectionMode,
-            selectedCount: selectedIds.length,
-            totalCount: bookmarkedNotices.length,
-            onSelectAll: toggleSelectAll,
-            onCancelSelection: () => setSelectionMode(false),
-            onToggleSelectionMode: () => {
-              if (!selectionMode && selectedIds.length === 0)
-                setSelectedIds([]);
-              setSelectionMode(!selectionMode);
-            },
+    <Layout
+      headerProps={{
+        pageType: 'bookmark',
+        bookmarkProps: {
+          selectionMode,
+          selectedCount: selectedIds.length,
+          totalCount: bookmarkedNotices.length,
+          onSelectAll: toggleSelectAll,
+          onCancelSelection: () => setSelectionMode(false),
+          onToggleSelectionMode: () => {
+            if (!selectionMode && selectedIds.length === 0) setSelectedIds([]);
+            setSelectionMode(!selectionMode);
           },
-        }}
-        hideBottomNav={selectionMode}
-        footerSlot={
-          selectionMode && (
-            <div
-              style={{
-                height: '48px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                cursor: selectedIds.length > 0 ? 'pointer' : 'default',
+        },
+      }}
+      hideBottomNav={selectionMode}
+      footerSlot={
+        selectionMode && (
+          <div
+            style={{
+              height: '48px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              cursor: selectedIds.length > 0 ? 'pointer' : 'default',
+            }}
+            onClick={selectedIds.length > 0 ? deleteSelected : undefined}
+          >
+            <DeleteOutlineIcon
+              sx={{
+                fontSize: 28,
+                color: deleteColor,
               }}
-              onClick={selectedIds.length > 0 ? deleteSelected : undefined}
+            />
+            <span
+              style={{
+                fontSize: 10,
+                marginTop: -2,
+                color: deleteColor,
+              }}
             >
-              <DeleteOutlineIcon
-                sx={{
-                  fontSize: 28,
-                  color: deleteColor,
-                }}
-              />
-              <span
-                style={{
-                  fontSize: 10,
-                  marginTop: -2,
-                  color: deleteColor,
-                }}
-              >
-                삭제
-              </span>
-            </div>
-          )
-        }
-      >
-        <div className={styles.page_wrapper}>
+              삭제
+            </span>
+          </div>
+        )
+      }
+    >
+      <div className={styles.page_wrapper}>
         <div className={styles.page_content}>
           {bookmarkedNotices.length === 0 ? (
             <div></div>
@@ -129,7 +128,7 @@ export default function Bookmark() {
             ))
           )}
         </div>
-        </div>
-      </Layout>
+      </div>
+    </Layout>
   );
 }

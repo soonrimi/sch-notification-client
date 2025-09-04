@@ -33,6 +33,15 @@ import {
 } from '@/contexts/CategoryContext';
 import { categoryColors as DEFAULT_COLORS } from '@/constants/categories';
 
+/** CategoryItem 타입 정의 */
+interface CategoryItem {
+  id: string;
+  name: string;
+  color: string;
+  visible: boolean;
+  notify: boolean;
+}
+
 /**
  * ItemView: 기본 아이템 UI
  */
@@ -44,12 +53,13 @@ function ItemView({
   onOpenColorPicker,
   dragHandleProps,
 }: {
-  item: any;
+  item: CategoryItem;
   index?: number;
   onToggleNotify?: (i: number) => void;
   onToggleActive?: (i: number) => void;
   onOpenColorPicker?: (e: React.MouseEvent<HTMLElement>) => void;
-  dragHandleProps?: any;
+  dragHandleProps?: React.HTMLAttributes<HTMLDivElement> &
+    Record<string, unknown>;
 }) {
   const { categoryColors } = useCategoryColors();
 
@@ -166,7 +176,13 @@ function SortableItem({
   onToggleNotify,
   onToggleActive,
   onOpenColorPicker,
-}: any) {
+}: {
+  item: CategoryItem; // 수정
+  index: number;
+  onToggleNotify?: (i: number) => void;
+  onToggleActive?: (i: number) => void;
+  onOpenColorPicker?: (e: React.MouseEvent<HTMLElement>) => void;
+}) {
   const {
     attributes,
     listeners,
@@ -367,7 +383,7 @@ export default function CategorySettingsPage() {
               strategy={verticalListSortingStrategy}
             >
               <List sx={{ flex: 1, overflow: 'hidden' }}>
-                {items.map((item: any, index: number) => (
+                {items.map((item: CategoryItem, index: number) => (
                   <React.Fragment key={item.id}>
                     <SortableItem
                       item={item}
@@ -382,7 +398,6 @@ export default function CategorySettingsPage() {
               </List>
             </SortableContext>
 
-            {/* DragOverlay: props 유지해서 버튼도 보이게 */}
             <DragOverlay>
               {activeId ? (
                 <ItemView

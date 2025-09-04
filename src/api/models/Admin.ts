@@ -3,10 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export type Admin = {
-    id?: number;
-    username?: string;
-    passwordHash?: string;
-    name?: string;
-    role?: string;
+  id?: number;
+  username?: string;
+  passwordHash?: string;
+  name?: string;
+  role?: string;
 };
-

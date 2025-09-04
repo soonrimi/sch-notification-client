@@ -4,10 +4,9 @@
 /* eslint-disable */
 import type { AttachmentResponse } from './AttachmentResponse';
 export type Response = {
-    id?: number;
-    title?: string;
-    content?: string;
-    createdAt?: string;
-    attachments?: Array<AttachmentResponse>;
+  id?: number;
+  title?: string;
+  content?: string;
+  createdAt?: string;
+  attachments?: Array<AttachmentResponse>;
 };
-

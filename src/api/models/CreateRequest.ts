@@ -3,7 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type CreateRequest = {
-    title?: string;
-    content?: string;
+  title?: string;
+  content?: string;
 };
-

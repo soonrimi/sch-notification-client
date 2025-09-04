@@ -9,7 +9,7 @@ export default function useAdminInfo() {
 
   useEffect(() => {
     fetchAdminInfo();
-  }, []);
+  }, [fetchAdminInfo]);
 
   async function fetchAdminInfo() {
     if (adminInfo) return;
