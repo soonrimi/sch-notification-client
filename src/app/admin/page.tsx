@@ -36,12 +36,9 @@ export default function AdminHomePage() {
       setNotices(data);
     });
 
-    let mounted = true;
-
     const t = setInterval(() => setTick((v) => v + 1), 1000);
 
     return () => {
-      mounted = false;
       clearInterval(t);
     };
   }, []);
