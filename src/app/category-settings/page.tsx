@@ -7,8 +7,8 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
-  DragOverEvent,
   Active,
+  TouchSensor,
 } from '@dnd-kit/core';
 import {
   SortableContext,
@@ -27,51 +27,34 @@ import AddIcon from '@mui/icons-material/Add';
 import CircleIcon from '@mui/icons-material/Circle';
 import { PALETTE_COLORS } from '@/constants/CategoryColorPalette';
 import { useCategoryColors } from '@/contexts/CategoryColorContext';
-import { useCategories } from '@/contexts/CategoryContext';
-import { getDefaultCategories } from '@/contexts/CategoryContext';
+import {
+  useCategories,
+  getDefaultCategories,
+} from '@/contexts/CategoryContext';
 import { categoryColors as DEFAULT_COLORS } from '@/constants/categories';
 
-interface SortableItemProps {
-  item: {
-    id: string;
-    name: string;
-    color: string;
-    notify: boolean;
-    visible: boolean;
-  };
-  index: number;
-  onToggleNotify: (index: number) => void;
-  onToggleActive: (index: number) => void;
-  onOpenColorPicker: (event: React.MouseEvent<HTMLElement>) => void;
-}
-
-function SortableItem({
+/**
+ * ItemView: 기본 아이템 UI
+ */
+function ItemView({
   item,
   index,
   onToggleNotify,
   onToggleActive,
   onOpenColorPicker,
-}: SortableItemProps) {
+  dragHandleProps,
+}: {
+  item: any;
+  index?: number;
+  onToggleNotify?: (i: number) => void;
+  onToggleActive?: (i: number) => void;
+  onOpenColorPicker?: (e: React.MouseEvent<HTMLElement>) => void;
+  dragHandleProps?: any;
+}) {
   const { categoryColors } = useCategoryColors();
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: item.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
 
   return (
     <ListItem
-      ref={setNodeRef}
-      style={style}
       sx={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -80,7 +63,7 @@ function SortableItem({
         alignItems: 'center',
       }}
     >
-      {/* 카테고리 버튼 */}
+      {/* 왼쪽: 카테고리 배지 */}
       <Box
         sx={{
           display: 'inline-flex',
@@ -98,10 +81,10 @@ function SortableItem({
         }}
       >
         {item.name}
-        {item.id !== 'all' && (
+        {item.id !== 'all' && onToggleActive && (
           <IconButton
             size="small"
-            onClick={() => onToggleActive(index)}
+            onClick={() => onToggleActive(index!)}
             sx={{
               width: 20,
               height: 20,
@@ -117,13 +100,14 @@ function SortableItem({
         )}
       </Box>
 
+      {/* 오른쪽: 색상, 알림, 드래그 핸들 */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        {/* 색상 변경 */}
         <IconButton
           onClick={onOpenColorPicker}
           size="small"
           disabled={!item.visible}
           data-category={item.name}
+          sx={{ pointerEvents: 'auto' }}
         >
           <CircleIcon
             sx={{
@@ -135,30 +119,86 @@ function SortableItem({
           />
         </IconButton>
 
-        {/* 알림 토글 */}
-        <IconButton
-          onClick={() => onToggleNotify(index)}
-          size="small"
-          disabled={!item.visible}
-        >
-          {item.notify ? (
-            <NotificationsIcon
-              sx={{ color: item.visible ? '#4d4d4dff' : '#999' }}
-            />
-          ) : (
-            <NotificationsOffIcon sx={{ color: '#999' }} />
-          )}
-        </IconButton>
+        {onToggleNotify && (
+          <IconButton
+            onClick={() => onToggleNotify(index!)}
+            size="small"
+            disabled={!item.visible}
+          >
+            {item.notify ? (
+              <NotificationsIcon
+                sx={{ color: item.visible ? '#4d4d4dff' : '#999' }}
+              />
+            ) : (
+              <NotificationsOffIcon sx={{ color: '#999' }} />
+            )}
+          </IconButton>
+        )}
 
         {/* 드래그 핸들 */}
-        <IconButton {...attributes} {...listeners} size="small">
-          <DragHandleIcon />
-        </IconButton>
+        <Box
+          {...(dragHandleProps || {})}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: '6px',
+            borderRadius: 1,
+            cursor: 'grab',
+            touchAction: 'none',
+            WebkitTapHighlightColor: 'transparent',
+          }}
+        >
+          <IconButton size="small">
+            <DragHandleIcon sx={{ color: '#494949ff' }} />
+          </IconButton>
+        </Box>
       </Box>
     </ListItem>
   );
 }
 
+/**
+ * SortableItem: 드래그 가능한 아이템
+ */
+function SortableItem({
+  item,
+  index,
+  onToggleNotify,
+  onToggleActive,
+  onOpenColorPicker,
+}: any) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: item.id });
+
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition: transition || undefined,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      <ItemView
+        item={item}
+        index={index}
+        onToggleNotify={onToggleNotify}
+        onToggleActive={onToggleActive}
+        onOpenColorPicker={onOpenColorPicker}
+        dragHandleProps={{ ...attributes, ...listeners }}
+      />
+    </div>
+  );
+}
+
+/**
+ * ColorPicker
+ */
 function ColorPicker({
   anchorEl,
   onClose,
@@ -191,6 +231,9 @@ function ColorPicker({
   );
 }
 
+/**
+ * Page
+ */
 export default function CategorySettingsPage() {
   const { items, setItems } = useCategories();
   const { setCategoryColor } = useCategoryColors();
@@ -202,99 +245,79 @@ export default function CategorySettingsPage() {
     null
   );
 
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 150, tolerance: 5 },
+    })
+  );
+
   const handleReset = () => {
-    // ✅ 카테고리 아이템 초기화
     const defaults = getDefaultCategories();
     setItems(defaults);
     localStorage.setItem('categories', JSON.stringify(defaults));
-
-    // ✅ 색상 초기화
     setCategoryColorBulk(DEFAULT_COLORS);
     localStorage.setItem('categoryColors', JSON.stringify(DEFAULT_COLORS));
   };
 
   const setCategoryColorBulk = (colors: Record<string, string>) => {
-    Object.entries(colors).forEach(([cat, color]) => {
-      setCategoryColor(cat, color);
-    });
+    Object.entries(colors).forEach(([cat, color]) =>
+      setCategoryColor(cat, color)
+    );
   };
 
-  const handleDragStart = ({ active }: { active: Active }) =>
+  const handleDragStart = ({ active }: { active: Active }) => {
     setActiveId(String(active.id));
-  const handleDragCancel = () => setActiveId(null);
-
-  const handleDragOver = ({ active, over }: DragOverEvent) => {
-    if (!over) return;
-    if (active.id !== over.id) {
-      const oldIndex = items.findIndex((i) => i.id === active.id);
-      const newIndex = items.findIndex((i) => i.id === over.id);
-      setItems(arrayMove(items, oldIndex, newIndex));
-    }
   };
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
-    if (!over) return setActiveId(null);
-    if (active.id !== over.id) {
+    if (over && active.id !== over.id) {
       const oldIndex = items.findIndex((i) => i.id === active.id);
       const newIndex = items.findIndex((i) => i.id === over.id);
-      setItems(arrayMove(items, oldIndex, newIndex));
+      if (oldIndex !== -1 && newIndex !== -1) {
+        const newItems = arrayMove(items, oldIndex, newIndex);
+        setItems(newItems);
+        localStorage.setItem('categories', JSON.stringify(newItems));
+      }
     }
     setActiveId(null);
   };
 
   const handleToggleNotify = (index: number) => {
     setItems((prev) =>
-      prev.map((item, i) =>
-        i === index ? { ...item, notify: !item.notify } : item
-      )
+      prev.map((it, i) => (i === index ? { ...it, notify: !it.notify } : it))
     );
   };
 
   const handleToggleActive = (index: number) => {
     setItems((prev) => {
       const newItems = [...prev];
-
-      // 1. visible 토글
-      const toggledItem = {
-        ...newItems[index],
-        visible: !newItems[index].visible,
-      };
-
-      // 2. 기존 위치에서 제거
+      const toggled = { ...newItems[index], visible: !newItems[index].visible };
       newItems.splice(index, 1);
-
-      if (toggledItem.visible) {
-        // true이면 'all' 바로 아래로 이동
+      if (toggled.visible) {
         const allIndex = newItems.findIndex((i) => i.id === 'all');
-        newItems.splice(allIndex + 1, 0, toggledItem);
+        newItems.splice(allIndex + 1, 0, toggled);
       } else {
-        // false이면 맨 뒤로 이동
-        newItems.push(toggledItem);
+        newItems.push(toggled);
       }
-
       return newItems;
     });
   };
 
-  const handleOpenColorPicker = (event: React.MouseEvent<HTMLElement>) => {
-    setColorPickerAnchor(event.currentTarget);
-    const categoryName = event.currentTarget.getAttribute('data-category');
-    if (categoryName) setColorPickerCategory(categoryName);
+  const handleOpenColorPicker = (e: React.MouseEvent<HTMLElement>) => {
+    setColorPickerAnchor(e.currentTarget);
+    const cn = e.currentTarget.getAttribute('data-category');
+    if (cn) setColorPickerCategory(cn);
   };
 
   const handleSelectColor = (color: string) => {
     if (!colorPickerCategory) return;
     setCategoryColor(colorPickerCategory, color);
     setItems((prev) =>
-      prev.map((item) =>
-        item.name === colorPickerCategory ? { ...item, color } : item
+      prev.map((it) =>
+        it.name === colorPickerCategory ? { ...it, color } : it
       )
     );
-    handleCloseColorPicker();
-  };
-
-  const handleCloseColorPicker = () => {
     setColorPickerAnchor(null);
     setColorPickerCategory(null);
   };
@@ -303,16 +326,13 @@ export default function CategorySettingsPage() {
     <Layout
       headerProps={{
         pageType: 'settings',
-        settingsHeaderProps: {
-          title: '카테고리 설정',
-          onReset: handleReset,
-        },
+        settingsHeaderProps: { title: '카테고리 설정', onReset: handleReset },
       }}
       hideBottomNav
-      backgroundColor="#EEEEEE"
-      fullHeight={true}
+      backgroundColor="#f3f3f3ff"
+      fullHeight
+      style={{ overflow: 'hidden' }}
     >
-      {/* 안내 영역 90px */}
       <div
         style={{
           padding: '20px 20px 40px 40px',
@@ -326,24 +346,20 @@ export default function CategorySettingsPage() {
         원하는 카테고리 공지만 확인할 수 있어요.
       </div>
 
-      {/* DnD 컨테이너 */}
       <div
         style={{
-          flex: 1, // 남은 영역 꽉 채움
+          flex: 1,
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
           backgroundColor: '#fff',
           display: 'flex',
           flexDirection: 'column',
-          overflow: 'hidden', // 스크롤 제거
         }}
       >
-        <Box sx={{ p: 1, marginTop: -1, flex: 1 }}>
+        <Box sx={{ p: 1, marginTop: -1, flex: 1, overflowY: 'auto' }}>
           <DndContext
             sensors={sensors}
             onDragStart={handleDragStart}
-            onDragCancel={handleDragCancel}
-            onDragOver={handleDragOver}
             onDragEnd={handleDragEnd}
           >
             <SortableContext
@@ -351,7 +367,7 @@ export default function CategorySettingsPage() {
               strategy={verticalListSortingStrategy}
             >
               <List sx={{ flex: 1, overflow: 'hidden' }}>
-                {items.map((item, index) => (
+                {items.map((item: any, index: number) => (
                   <React.Fragment key={item.id}>
                     <SortableItem
                       item={item}
@@ -366,14 +382,14 @@ export default function CategorySettingsPage() {
               </List>
             </SortableContext>
 
+            {/* DragOverlay: props 유지해서 버튼도 보이게 */}
             <DragOverlay>
               {activeId ? (
-                <SortableItem
+                <ItemView
                   item={items.find((i) => i.id === activeId)!}
-                  index={0}
-                  onToggleNotify={() => {}}
-                  onToggleActive={() => {}}
-                  onOpenColorPicker={() => {}}
+                  onToggleNotify={handleToggleNotify}
+                  onToggleActive={handleToggleActive}
+                  onOpenColorPicker={handleOpenColorPicker}
                 />
               ) : null}
             </DragOverlay>
@@ -381,7 +397,7 @@ export default function CategorySettingsPage() {
 
           <ColorPicker
             anchorEl={colorPickerAnchor}
-            onClose={handleCloseColorPicker}
+            onClose={() => setColorPickerAnchor(null)}
             onSelect={handleSelectColor}
           />
         </Box>

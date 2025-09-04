@@ -1,3 +1,4 @@
+// src/app/home/HomeHeaderCategorys.tsx
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
@@ -48,8 +49,9 @@ export default function HomeHeaderCategorys({
         '&::-webkit-scrollbar': { display: 'none' },
       }}
     >
-      {items.map((item) =>
-        item.name === '전체' || item.visible ? ( // "전체"는 항상 보이게
+      {items
+        .filter((item) => item.visible)
+        .map((item, index) => (
           <Button
             key={item.id}
             variant={category === item.name ? 'contained' : 'outlined'}
@@ -67,12 +69,13 @@ export default function HomeHeaderCategorys({
               ...getButtonStyles(item.name, category === item.name),
             }}
             aria-pressed={category === item.name}
+            disabled={item.id === 'all' ? false : false} // 필요시 '전체' 클릭 가능
           >
             {item.name}
           </Button>
-        ) : null
-      )}
+        ))}
 
+      {/* 설정 버튼 */}
       <Button
         onClick={() => router.push('/category-settings')}
         sx={{

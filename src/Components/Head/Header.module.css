@@ -16,6 +16,10 @@
   align-items: center;
 }
 
+.click_no_effect {
+  -webkit-tap-highlight-color: transparent !important;
+}
+
 .header_right {
   display: flex;
   align-items: center;

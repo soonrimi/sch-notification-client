@@ -29,6 +29,7 @@ body {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  -webkit-tap-highlight-color: rgba(93, 93, 93, 0.3);
 }
 
 a {

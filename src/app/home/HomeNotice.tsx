@@ -150,7 +150,7 @@ export default function HomeNotice({
           <IconButton
             className={styles.home_notic_bookmark_btn}
             onClick={(e) => {
-              e.preventDefault();
+              e.stopPropagation();
               onToggleBookmark();
             }}
           >
