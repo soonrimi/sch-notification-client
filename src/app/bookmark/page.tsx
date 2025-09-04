@@ -4,7 +4,6 @@ import styles from '../page.module.css';
 import Layout from '../../Components/LayoutDir/Layout';
 import { Category } from '@/types/notice';
 import { useNotices } from '@/hooks/useNotices';
-import { useRouter } from 'next/navigation';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SharedNoticeItem from '@/Components/Head/SharedNoticeItem';
 
@@ -13,7 +12,6 @@ export default function Bookmark() {
   const [readIds, setReadIds] = useState<string[]>([]);
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const router = useRouter();
 
   // 읽은 목록 불러오기
   useEffect(() => {

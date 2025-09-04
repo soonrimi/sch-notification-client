@@ -1,33 +1,36 @@
-import { Admin, AdminControllerService, NoticeControllerService } from '@/api';
+import { AdminControllerService } from '@/api';
 import { atom, useAtom } from 'jotai';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-const adminInfoAtom = atom<Admin | null>(null);
+const adminJwt = atom<string>('');
 
 export default function useAdminInfo() {
-  const [adminInfo, setAdminInfo] = useAtom(adminInfoAtom);
+  const { push } = useRouter();
+  const [adminToken, setAdminToken] = useAtom(adminJwt);
 
   useEffect(() => {
     fetchAdminInfo();
   }, [fetchAdminInfo]);
 
   async function fetchAdminInfo() {
-    if (adminInfo) return;
+    if (adminToken) return;
     const token = localStorage.getItem('accessToken');
     if (!token) return;
   }
 
   async function login({ id, password }: { id: string; password: string }) {
     const data = await AdminControllerService.login({
-      username: id,
+      userId: id,
       password: password,
     });
-    setAdminInfo(data);
+    setAdminToken(data.token || '');
     localStorage.setItem('accessToken', data.token || '');
+    push('/admin');
   }
 
   return {
-    adminInfo,
+    adminToken,
     login,
   };
 }

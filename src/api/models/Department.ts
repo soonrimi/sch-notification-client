@@ -2,10 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type Admin = {
+export type Department = {
   id?: number;
-  username?: string;
-  passwordHash?: string;
   name?: string;
-  role?: string;
 };

@@ -223,32 +223,6 @@
   font-weight: 700;
 }
 
-/* 카테고리 칩 */
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.chip {
-  padding: 8px 12px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: #fff;
-  font-size: 13px;
-  cursor: pointer;
-  color: var(--text);
-  user-select: none;
-}
-.chipActive {
-  border-color: var(--brand);
-  background: rgba(29, 154, 214, 0.08);
-  color: var(--brand);
-  font-weight: 800;
-}
-.chip:focus-visible {
-  outline: 3px solid rgba(29, 154, 214, 0.25);
-}
-
 /* 파일 업로드 */
 .fileBtn {
   display: inline-block;

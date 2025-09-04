@@ -13,8 +13,8 @@ export type PageResponse = {
   number?: number;
   sort?: SortObject;
   pageable?: PageableObject;
-  last?: boolean;
-  numberOfElements?: number;
   first?: boolean;
+  numberOfElements?: number;
+  last?: boolean;
   empty?: boolean;
 };
