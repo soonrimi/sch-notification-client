@@ -10,5 +10,5 @@ export type CalenderDto_Response = {
   title?: string;
   startDate?: string;
   endDate?: string;
-  type?: string; //카테고리
+  type?: string;
 };
