@@ -72,13 +72,15 @@
 }
 
 .start {
+  position: fixed;
+  bottom: 0;
   left: 0;
   right: 0;
   z-index: 30;
-  position: sticky;
   padding: clamp(1rem, 2vw, 2rem);
   width: clamp(20rem, 100vw, 70rem);
   margin: 0 auto;
+  background-color: #fff;
 }
 
 .startbtn {

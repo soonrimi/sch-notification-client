@@ -12,4 +12,3 @@ export type CalenderDto_Response = {
     endDate?: string;
     type?: string;
 };
-
