@@ -14,11 +14,10 @@ import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRound
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import styles from './page.module.css';
+import { STORAGE_KEY_USER_PROFILE } from '@/constants/localStorage';
 
 type Major = { name: string; grade: string };
-type Profile = { majors: Major[]; appVersion: string };
-
-const STORAGE_KEY = 'userProfile';
+type Profile = { majors: Major[]; createdAt: number };
 
 // 가나다 + 학년(1→4) 정렬
 const gradeRank: Record<string, number> = {
@@ -37,18 +36,10 @@ const sortMajors = (arr: Major[]) =>
 export default function SettingsPage() {
   const router = useRouter();
 
-  const [profile, setProfile] = useState<Profile>({
-    majors: [
-      { name: '컴퓨터소프트웨어공학과', grade: '3학년' },
-      { name: '사물인터넷학과', grade: '4학년' },
-      { name: '정보통신공학과', grade: '3학년' },
-    ],
-    appVersion: '11.1.1',
-  });
-
+  const [profile, setProfile] = useState<Profile>();
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY_USER_PROFILE);
       if (raw) {
         const parsed = JSON.parse(raw) as Profile;
         if (Array.isArray(parsed.majors) && parsed.majors.length > 0) {
@@ -102,7 +93,7 @@ export default function SettingsPage() {
             </span>
           </div>
 
-          {profile.majors.map((m, i) => (
+          {profile?.majors.map((m, i) => (
             <div key={`${m.name}-${i}`} className={styles.row}>
               <span
                 className={`${styles.col} ${styles.colMajor} ${styles.majorText}`}
@@ -145,7 +136,6 @@ export default function SettingsPage() {
           <Divider />
           <div className={styles.version}>
             <span className={styles.versionLabel}>앱 버전</span>
-            <span className={styles.versionValue}>{profile.appVersion}</span>
           </div>
         </List>
       </section>

@@ -7,8 +7,7 @@ import styles from './page.module.css';
 import type { Major } from '@/types/profile';
 import Grade from './Components/Grade';
 import Department from './Components/Department';
-
-const STORAGE_KEY = 'soonrimi';
+import { STORAGE_KEY_USER_PROFILE } from '@/constants/localStorage';
 
 export default function InitialSetup() {
   const { push } = useRouter();
@@ -19,7 +18,7 @@ export default function InitialSetup() {
 
   useEffect(() => {
     setHydrated(true);
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved = localStorage.getItem(STORAGE_KEY_USER_PROFILE);
     if (saved) {
       const parsed = JSON.parse(saved);
       const restored: Major[] = Array.isArray(parsed?.majors)
@@ -61,7 +60,7 @@ export default function InitialSetup() {
       majors,
       createdAt: Date.now(),
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    localStorage.setItem(STORAGE_KEY_USER_PROFILE, JSON.stringify(payload));
     push('/home');
   };
 

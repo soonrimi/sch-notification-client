@@ -39,7 +39,7 @@
 }
 
 .bookmark_title {
-  font-weight: 600;
+  font-weight: bold;
   font-size: 18px;
 }
 
@@ -56,4 +56,5 @@
   align-items: center;
   gap: 8px;
 }
+
 /* ---------------------------------------------------------------------------------------- */

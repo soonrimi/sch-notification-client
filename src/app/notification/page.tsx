@@ -5,11 +5,15 @@ import NotificationTabs from './Components/NotificationTabs';
 import CategoryTab from './Components/CategoryTab';
 import KeywordTab from './Components/KeywordTab';
 
-export default function Notices() {
+export default function Notification() {
   const [tab, setTab] = useState<'category' | 'keyword'>('category');
 
   return (
-    <Layout headerProps={{ pageType: 'notification' }}>
+    <Layout
+      headerProps={{
+        pageType: 'notification',
+      }}
+    >
       <NotificationTabs value={tab} onChange={setTab} />
       {tab === 'category' ? <CategoryTab /> : <KeywordTab />}
     </Layout>

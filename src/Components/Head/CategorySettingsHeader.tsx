@@ -39,7 +39,7 @@ export default function CategorySettingsHeader({
             onClick={() => router.back()}
             sx={{ fontSize: 20, cursor: 'pointer', mr: 1 }}
           />
-          <Typography sx={{ fontWeight: '600', fontSize: '1rem' }}>
+          <Typography sx={{ fontWeight: 'bold', fontSize: '1rem' }}>
             {title}
           </Typography>
         </Box>
