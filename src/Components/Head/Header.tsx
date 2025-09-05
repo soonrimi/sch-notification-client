@@ -4,7 +4,7 @@ import HomeHeader from './HomeHeader';
 import BookmarkHeader from './BookmarkHeader';
 import CalendarHeader from './CalendarHeader';
 import NoticeHeader, { NoticeHeaderProps } from './NoticeHeader';
-import CategorySettingsHeader from './CategorySettingsHeader';
+import SettingsHeader from './CategorySettingsHeader';
 import SearchHeader from './SearchHeader';
 import styles from './Header.module.css';
 
@@ -22,13 +22,13 @@ export type HeaderProps =
   | { pageType: 'bookmark'; bookmarkProps: BookmarkHeaderProps }
   | { pageType: 'calendar' }
   | {
-      pageType: 'notice' | 'contentdetail';
+      pageType: 'notices' | 'contentdetail';
       noticeHeaderProps?: NoticeHeaderProps;
     }
   | { pageType: 'mypage' }
   | {
-      pageType: 'categorysettings';
-      categoryHeaderProps: { onReset: () => void };
+      pageType: 'settings';
+      settingsHeaderProps: { title: string; onReset?: () => void };
     }
   | {
       pageType: 'search';
@@ -37,7 +37,8 @@ export type HeaderProps =
       onBack: () => void;
       onSearch?: (keyword: string) => void;
       disableInput?: boolean;
-    };
+    }
+  | { pageType: 'notification' };
 
 export default function Header(props: HeaderProps) {
   const { pageType } = props;
@@ -45,7 +46,7 @@ export default function Header(props: HeaderProps) {
 
   return (
     <div className={styles.header}>
-      {(pageType === 'notice' || pageType === 'contentdetail') &&
+      {(pageType === 'notices' || pageType === 'contentdetail') &&
       props.noticeHeaderProps ? (
         <NoticeHeader {...props.noticeHeaderProps} />
       ) : pageType === 'bookmark' && props.bookmarkProps ? (
@@ -56,8 +57,8 @@ export default function Header(props: HeaderProps) {
         <CalendarHeader />
       ) : pageType === 'mypage' ? (
         <div>마이페이지 헤더</div>
-      ) : pageType === 'categorysettings' && props.categoryHeaderProps ? (
-        <CategorySettingsHeader {...props.categoryHeaderProps} />
+      ) : pageType === 'settings' && props.settingsHeaderProps ? (
+        <SettingsHeader {...props.settingsHeaderProps} />
       ) : pageType === 'search' ? (
         <SearchHeader
           searchKeyword={props.searchKeyword}

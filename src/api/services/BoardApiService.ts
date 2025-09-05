@@ -2,84 +2,30 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BoardDto_Request } from '../models/BoardDto_Request';
-import type { BoardDto_Response } from '../models/BoardDto_Response';
-import type { PageBoardDto_Response } from '../models/PageBoardDto_Response';
+import type { CreateRequest } from '../models/CreateRequest';
+import type { PageResponse } from '../models/PageResponse';
+import type { Response } from '../models/Response';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class BoardApiService {
-  /**
-   * 특정 건의사항 게시물 조회
-   * ID를 이용하여 특정 건의사항 게시물을 조회합니다.
-   * @param id 조회할 게시물 ID
-   * @returns BoardDto_Response OK
-   * @throws ApiError
-   */
-  public static getBoardById(id: number): CancelablePromise<BoardDto_Response> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/api/api/boards/{id}',
-      path: {
-        id: id,
-      },
-    });
-  }
-  /**
-   * 건의사항 게시물 수정
-   * ID를 이용하여 기존 건의사항 게시물을 수정합니다.
-   * @param id 수정할 게시물 ID
-   * @param requestBody
-   * @returns BoardDto_Response OK
-   * @throws ApiError
-   */
-  public static updateBoard(
-    id: number,
-    requestBody: BoardDto_Request
-  ): CancelablePromise<BoardDto_Response> {
-    return __request(OpenAPI, {
-      method: 'PUT',
-      url: '/api/api/boards/{id}',
-      path: {
-        id: id,
-      },
-      body: requestBody,
-      mediaType: 'application/json',
-    });
-  }
-  /**
-   * 건의사항 게시물 삭제
-   * ID를 이용하여 건의사항 게시물을 삭제합니다.
-   * @param id 삭제할 게시물 ID
-   * @returns any OK
-   * @throws ApiError
-   */
-  public static deleteBoard(id: number): CancelablePromise<any> {
-    return __request(OpenAPI, {
-      method: 'DELETE',
-      url: '/api/api/boards/{id}',
-      path: {
-        id: id,
-      },
-    });
-  }
   /**
    * 모든 건의사항 게시물 페이징 조회
    * 모든 건의사항 게시물 목록을 페이징하여 조회합니다.
    * @param page Zero-based page index (0..N)
    * @param size The size of the page to be returned
    * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-   * @returns PageBoardDto_Response OK
+   * @returns PageResponse OK
    * @throws ApiError
    */
   public static getAllBoards(
     page?: number,
     size: number = 10,
     sort?: Array<string>
-  ): CancelablePromise<PageBoardDto_Response> {
+  ): CancelablePromise<PageResponse> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/api/boards',
+      url: '/api/boards',
       query: {
         page: page,
         size: size,
@@ -91,17 +37,34 @@ export class BoardApiService {
    * 건의사항 게시물 생성
    * 새로운 건의사항 게시물을 등록합니다.
    * @param requestBody
-   * @returns BoardDto_Response OK
+   * @returns Response OK
    * @throws ApiError
    */
-  public static createBoard(
-    requestBody: BoardDto_Request
-  ): CancelablePromise<BoardDto_Response> {
+  public static createBoard(requestBody: {
+    requestDto?: CreateRequest;
+    files?: Array<Blob>;
+  }): CancelablePromise<Response> {
     return __request(OpenAPI, {
       method: 'POST',
-      url: '/api/api/boards',
+      url: '/api/boards',
       body: requestBody,
       mediaType: 'application/json',
+    });
+  }
+  /**
+   * 특정 건의사항 게시물 조회
+   * ID를 이용하여 특정 건의사항 게시물을 조회합니다.
+   * @param id 조회할 게시물 ID
+   * @returns Response OK
+   * @throws ApiError
+   */
+  public static getBoardById(id: number): CancelablePromise<Response> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/api/boards/{id}',
+      path: {
+        id: id,
+      },
     });
   }
 }

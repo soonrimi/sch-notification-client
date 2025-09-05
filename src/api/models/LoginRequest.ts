@@ -3,6 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type LoginRequest = {
-  username?: string;
+  userId?: string;
   password?: string;
 };

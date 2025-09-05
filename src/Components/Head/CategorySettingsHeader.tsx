@@ -5,13 +5,15 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useRouter } from 'next/navigation';
 
-interface CategorySettingsHeaderProps {
-  onReset: () => void;
+interface SettingsHeaderProps {
+  title: string;
+  onReset?: () => void;
 }
 
 export default function CategorySettingsHeader({
+  title,
   onReset,
-}: CategorySettingsHeaderProps) {
+}: SettingsHeaderProps) {
   const router = useRouter();
 
   return (
@@ -21,38 +23,43 @@ export default function CategorySettingsHeader({
         justifyContent: 'space-between',
         alignItems: 'center',
         px: 2,
-        backgroundColor: '#EEEEEE',
+        backgroundColor: '#f3f3f3ff',
+        height: 48,
       }}
     >
-      <div
-        style={{
+      <Box
+        sx={{
           display: 'flex',
-          alignContent: 'center',
+          alignItems: 'center',
         }}
       >
         {/* 뒤로가기 */}
-        <IconButton onClick={() => router.back()} size="small">
-          <ArrowBackIosIcon fontSize="small" />
-        </IconButton>
-
-        <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '19px' }}>
-          카테고리 설정
-        </Typography>
-      </div>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <ArrowBackIosIcon
+            onClick={() => router.back()}
+            sx={{ fontSize: 20, cursor: 'pointer', mr: 1 }}
+          />
+          <Typography sx={{ fontWeight: '600', fontSize: '1rem' }}>
+            {title}
+          </Typography>
+        </Box>
+      </Box>
 
       {/* 초기화 버튼 */}
-      <IconButton
-        onClick={onReset}
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'column',
-        }}
-      >
-        <RestartAltIcon sx={{ fontSize: 22 }} />
-        <span style={{ fontSize: 8, marginTop: -3 }}>초기화</span>
-      </IconButton>
+      {onReset && (
+        <IconButton
+          onClick={onReset}
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+          }}
+        >
+          <RestartAltIcon sx={{ fontSize: 22 }} />
+          <span style={{ fontSize: 8, marginTop: -3 }}>초기화</span>
+        </IconButton>
+      )}
     </Box>
   );
 }

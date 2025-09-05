@@ -3,14 +3,23 @@
 }
 
 /* _________________________________________________________________________- */
-
 .home_content_wrapper {
-  position: relative;
-  padding-top: 50px;
-}
-.home_content {
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  padding-top: 42px;
+  padding-bottom: 93px;
+}
+
+.home_content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  box-sizing: border-box;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .loading,

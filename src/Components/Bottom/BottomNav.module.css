@@ -15,6 +15,7 @@
   position: relative;
   align-items: center;
   top: 6px;
+  -webkit-tap-highlight-color: transparent !important;
 }
 
 .bottomnav_icon_text {

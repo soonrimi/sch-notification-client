@@ -3,7 +3,6 @@ import React, { ReactNode } from 'react';
 import Header, { HeaderProps } from '@/Components/Head/Header';
 import BottomNav from '@/Components/Bottom/BottomNav';
 import styles from './Layout.module.css';
-import clsx from 'clsx';
 
 const HEADER_HEIGHT = 45;
 const BOTTOM_NAV_HEIGHT = 48;
@@ -15,6 +14,7 @@ interface LayoutProps {
   footerSlot?: ReactNode;
   backgroundColor?: string;
   fullHeight?: boolean;
+  style?: React.CSSProperties;
 }
 
 export default function Layout({
@@ -40,10 +40,10 @@ export default function Layout({
 
       {/* Main */}
       <main
-        className={clsx(
-          styles.main_scroll,
-          headerProps?.pageType === 'calendar' && styles.main_fixed
-        )}
+        className={`
+          ${styles.main_scroll}
+          ${headerProps?.pageType === 'calendar' && styles.main_fixed}
+        )`}
         style={{
           marginTop: HEADER_HEIGHT,
           marginBottom: BOTTOM_NAV_HEIGHT,

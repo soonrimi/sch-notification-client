@@ -9,7 +9,7 @@ export default function HomeHeader() {
   return (
     <div className={styles.header_wrapper}>
       <div className={styles.header_right_home}>
-        <Link href="/search">
+        <Link href="/search" className={styles.click_no_effect}>
           <Image
             src="/icons/search_icon.png"
             alt="검색"
@@ -18,7 +18,7 @@ export default function HomeHeader() {
             className={styles.icon_small}
           />
         </Link>
-        <Link href="/Settings">
+        <Link href="/settings" className={styles.click_no_effect}>
           <SettingsIcon className={styles.icon_settings} />
         </Link>
       </div>

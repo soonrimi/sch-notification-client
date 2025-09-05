@@ -1,20 +1,17 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import styles from '../page.module.css';
-import HomeNotice from '../home/HomeNotice';
 import Layout from '../../Components/LayoutDir/Layout';
-import { Category, Notice } from '@/types/notice';
+import { Category } from '@/types/notice';
 import { useNotices } from '@/hooks/useNotices';
-import { useBookmark } from '@/hooks/useBookmark';
-import { useRouter } from 'next/navigation';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import SharedNoticeItem from '@/Components/Head/SharedNoticeItem';
 
 export default function Bookmark() {
   const notices = useNotices('전체' as Category);
   const [readIds, setReadIds] = useState<string[]>([]);
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const router = useRouter();
 
   // 읽은 목록 불러오기
   useEffect(() => {
@@ -112,68 +109,24 @@ export default function Bookmark() {
         )
       }
     >
-      <div className={styles.page_content}>
-        {bookmarkedNotices.length === 0 ? (
-          <div></div>
-        ) : (
-          bookmarkedNotices.map((notice) => (
-            <BookmarkNoticeWrapper
-              key={notice.id}
-              notice={notice}
-              isRead={readIds.includes(notice.id)}
-              router={router}
-              selectionMode={selectionMode}
-              isSelected={selectedIds.includes(notice.id)}
-              toggleSelect={toggleSelect}
-            />
-          ))
-        )}
+      <div className={styles.page_wrapper}>
+        <div className={styles.page_content}>
+          {bookmarkedNotices.length === 0 ? (
+            <div></div>
+          ) : (
+            bookmarkedNotices.map((notice) => (
+              <SharedNoticeItem
+                key={notice.id}
+                notice={notice}
+                isRead={readIds.includes(notice.id)}
+                selectionMode={selectionMode}
+                isSelected={selectedIds.includes(notice.id)}
+                onSelectToggle={toggleSelect}
+              />
+            ))
+          )}
+        </div>
       </div>
     </Layout>
-  );
-}
-
-// 개별 공지 Wrapper
-function BookmarkNoticeWrapper({
-  notice,
-  isRead,
-  router,
-  selectionMode,
-  isSelected,
-  toggleSelect,
-}: {
-  notice: Notice;
-  isRead: boolean;
-  router: ReturnType<typeof useRouter>;
-  selectionMode: boolean;
-  isSelected: boolean;
-  toggleSelect: (id: string) => void;
-}) {
-  const { bookmarked, toggleBookmark } = useBookmark(notice.id);
-
-  const handleClick = () => {
-    if (selectionMode) {
-      toggleSelect(notice.id);
-    } else {
-      router.push(`/home?id=${encodeURIComponent(notice.id)}`);
-    }
-  };
-
-  return (
-    <div style={{ cursor: 'pointer', marginBottom: 0 }} onClick={handleClick}>
-      <HomeNotice
-        id={notice.id}
-        category={notice.category}
-        upload_time={notice.upload_time}
-        application_period={notice.application_period}
-        title={notice.title}
-        detail={notice.detail}
-        isBookmarked={bookmarked}
-        onToggleBookmark={toggleBookmark}
-        isRead={isRead}
-        selectionMode={selectionMode}
-        isSelected={isSelected}
-      />
-    </div>
   );
 }

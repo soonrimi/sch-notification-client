@@ -1,8 +1,10 @@
 import type { Notice, Category } from '@/types/notice';
 import { categories } from '@/constants/categories';
 
-const noticeDetails: Record<Category, (i: number) => string> = {
-  전체: () => '',
+const noticeDetails: Record<
+  Exclude<Category, '전체'>,
+  (i: number) => string
+> = {
   학교: (i) =>
     `이번 주 학사 일정 안내입니다.\n`.repeat(50) +
     `추가 안내사항 ${i + 1}입니다.`,
@@ -18,28 +20,26 @@ const noticeDetails: Record<Category, (i: number) => string> = {
     `홍보 안내 내용입니다.\n`.repeat(50) + `추가 홍보 ${i + 1}입니다.`,
 };
 
-export const allNotices: Notice[] = categories
-  .filter((cat) => cat !== '전체')
-  .flatMap((cat) =>
-    Array.from({ length: 10 }, (_, i) => {
-      const now = new Date();
-      const uploadTime = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        9, // 시
-        30 + i, // 분
-        0 // 초
-      );
+export const allNotices: Notice[] = categories.flatMap((cat) =>
+  Array.from({ length: 10 }, (_, i) => {
+    const now = new Date();
+    const uploadTime = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      9, // 시
+      30 + i, // 분
+      0 // 초
+    );
 
-      return {
-        id: `${cat}-${i + 1}`,
-        category: cat,
-        upload_time: uploadTime,
-        application_period: `07/${25 + i}~07/${31 + i}`,
-        title: `${cat} 공지 ${i + 1}`,
-        detail: noticeDetails[cat](i),
-        isRead: false,
-      };
-    })
-  );
+    return {
+      id: `${cat}-${i + 1}`,
+      category: cat,
+      upload_time: uploadTime,
+      application_period: `07/${25 + i}~07/${31 + i}`,
+      title: `${cat} 공지 ${i + 1}`,
+      detail: noticeDetails[cat](i),
+      isRead: false,
+    };
+  })
+);

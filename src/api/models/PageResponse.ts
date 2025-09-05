@@ -2,19 +2,19 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BoardDto_Response } from './BoardDto_Response';
 import type { PageableObject } from './PageableObject';
+import type { Response } from './Response';
 import type { SortObject } from './SortObject';
-export type PageBoardDto_Response = {
+export type PageResponse = {
   totalPages?: number;
   totalElements?: number;
   size?: number;
-  content?: Array<BoardDto_Response>;
+  content?: Array<Response>;
   number?: number;
   sort?: SortObject;
   pageable?: PageableObject;
+  first?: boolean;
   numberOfElements?: number;
   last?: boolean;
-  first?: boolean;
   empty?: boolean;
 };
