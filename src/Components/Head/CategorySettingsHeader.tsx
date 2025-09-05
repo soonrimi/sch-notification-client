@@ -23,7 +23,7 @@ export default function CategorySettingsHeader({
         justifyContent: 'space-between',
         alignItems: 'center',
         px: 2,
-        backgroundColor: '#fff',
+        backgroundColor: '#f3f3f3ff',
         height: 48,
       }}
     >

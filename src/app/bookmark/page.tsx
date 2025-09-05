@@ -109,21 +109,23 @@ export default function Bookmark() {
         )
       }
     >
-      <div className={styles.page_content}>
-        {bookmarkedNotices.length === 0 ? (
-          <div></div>
-        ) : (
-          bookmarkedNotices.map((notice) => (
-            <SharedNoticeItem
-              key={notice.id}
-              notice={notice}
-              isRead={readIds.includes(notice.id)}
-              selectionMode={selectionMode}
-              isSelected={selectedIds.includes(notice.id)}
-              onSelectToggle={toggleSelect}
-            />
-          ))
-        )}
+      <div className={styles.page_wrapper}>
+        <div className={styles.page_content}>
+          {bookmarkedNotices.length === 0 ? (
+            <div></div>
+          ) : (
+            bookmarkedNotices.map((notice) => (
+              <SharedNoticeItem
+                key={notice.id}
+                notice={notice}
+                isRead={readIds.includes(notice.id)}
+                selectionMode={selectionMode}
+                isSelected={selectedIds.includes(notice.id)}
+                onSelectToggle={toggleSelect}
+              />
+            ))
+          )}
+        </div>
       </div>
     </Layout>
   );

@@ -4,11 +4,10 @@
 /* eslint-disable */
 import type { Attachment } from './Attachment';
 export type Notice = {
-    id?: number;
-    title?: string;
-    content?: string;
-    createdAt?: string;
-    viewCount?: number;
-    attachments?: Array<Attachment>;
+  id?: number;
+  title?: string;
+  content?: string;
+  createdAt?: string;
+  viewCount?: number;
+  attachments?: Array<Attachment>;
 };
-

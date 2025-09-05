@@ -20,7 +20,7 @@ export default function BookmarkHeader({
   onCancelSelection,
 }: BookmarkHeaderProps) {
   const isAnySelected = selectedCount > 0;
-  const iconColor = isAnySelected ? '#333333' : '#A1A1A1';
+  const iconColor = isAnySelected ? '#bda100ff' : '#A1A1A1';
   const router = useRouter();
 
   return (
@@ -70,7 +70,7 @@ export default function BookmarkHeader({
                 sx={{ fontSize: 22, color: iconColor }}
               />
             )}
-            <Typography sx={{ fontSize: 9, color: iconColor, mt: '-1px' }}>
+            <Typography sx={{ fontSize: 9, color: '#333333', mt: '-1px' }}>
               전체
             </Typography>
           </IconButton>

@@ -3,9 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export type SignupResponse = {
-    id?: number;
-    userId?: string;
-    name?: string;
-    affiliation?: string;
+  id?: number;
+  userId?: string;
+  name?: string;
+  affiliation?: string;
 };
-

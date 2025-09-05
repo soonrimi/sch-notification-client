@@ -1,7 +1,7 @@
+// src/contexts/CategoryContext.tsx
 'use client';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { categories, categoryColors } from '@/constants/categories';
-import { useCategoryColors } from './CategoryColorContext';
 
 export interface CategoryItem {
   id: string;
@@ -21,17 +21,17 @@ const CategoryContext = createContext<CategoryContextType | undefined>(
 );
 
 export function CategoryProvider({ children }: { children: React.ReactNode }) {
-  const { categoryColors } = useCategoryColors();
   const [items, setItems] = useState<CategoryItem[]>([]);
 
   const defaultAll: CategoryItem = {
     id: 'all',
     name: '전체',
-    color: '#1d9ad6',
+    color: categoryColors['전체'],
     notify: false,
     visible: true,
   };
 
+  // 처음 로드될 때 localStorage에서 불러오기
   useEffect(() => {
     const saved = localStorage.getItem('categories');
     if (saved) {
@@ -40,7 +40,7 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
       setItems(hasAll ? parsed : [defaultAll, ...parsed]);
     } else {
       setItems([
-        defaultAll,
+        defaultAll, // 항상 '전체' 상단 고정
         ...categories.map((cat) => ({
           id: cat,
           name: cat,
@@ -53,7 +53,7 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 저장 시에도 항상 "전체" 포함
+  // 저장 시 항상 "전체" 포함
   useEffect(() => {
     if (items.length > 0) {
       const hasAll = items.some((c) => c.id === 'all');
@@ -72,8 +72,9 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
 
 export function useCategories() {
   const context = useContext(CategoryContext);
-  if (!context)
+  if (!context) {
     throw new Error('useCategories must be used within a CategoryProvider');
+  }
   return context;
 }
 
@@ -86,14 +87,12 @@ export function getDefaultCategories(): CategoryItem[] {
       notify: true,
       visible: true,
     },
-    ...categories
-      .filter((cat) => cat !== '전체')
-      .map((cat) => ({
-        id: cat,
-        name: cat,
-        color: categoryColors[cat] || '#1d9ad6',
-        notify: true,
-        visible: true,
-      })),
+    ...categories.map((cat) => ({
+      id: cat,
+      name: cat,
+      color: categoryColors[cat] || '#1d9ad6',
+      notify: true,
+      visible: true,
+    })),
   ];
 }
