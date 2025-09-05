@@ -23,7 +23,7 @@ export default function CategorySettingsHeader({
         justifyContent: 'space-between',
         alignItems: 'center',
         px: 2,
-        backgroundColor: '#fff',
+        backgroundColor: '#f3f3f3ff',
         height: 48,
       }}
     >
@@ -39,7 +39,7 @@ export default function CategorySettingsHeader({
             onClick={() => router.back()}
             sx={{ fontSize: 20, cursor: 'pointer', mr: 1 }}
           />
-          <Typography sx={{ fontWeight: 'bold', fontSize: '1rem' }}>
+          <Typography sx={{ fontWeight: '600', fontSize: '1rem' }}>
             {title}
           </Typography>
         </Box>

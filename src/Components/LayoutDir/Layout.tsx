@@ -14,6 +14,7 @@ interface LayoutProps {
   footerSlot?: ReactNode;
   backgroundColor?: string;
   fullHeight?: boolean;
+  style?: React.CSSProperties;
 }
 
 export default function Layout({

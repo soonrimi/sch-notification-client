@@ -11,7 +11,7 @@ export default function useAdminInfo() {
 
   useEffect(() => {
     fetchAdminInfo();
-  }, []);
+  }, [fetchAdminInfo]);
 
   async function fetchAdminInfo() {
     if (adminToken) return;
