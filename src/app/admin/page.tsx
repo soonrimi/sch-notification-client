@@ -1,65 +1,53 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import Link from 'next/link';
 import styles from './Admin.module.css';
-import useAdminInfo from './useAdminInfo';
-import { useRouter } from 'next/navigation';
-import { AdminControllerService, InternalNoticeResponse } from '@/api';
-import dayjs from 'dayjs';
+import {
+  loadLocalNotices,
+  deleteLocalNotice,
+  remainSeconds,
+  formatMMSS,
+  type LocalNotice,
+} from './localNotice';
 
-const CATEGORY_COLOR: Record<string, string> = {
-  전체: '#1d9ad6',
-  학교: '#e74c3c',
-  대학: '#27ae60',
-  학년: '#9b59b6',
-  채용: '#f39c12',
-  활동: '#16a085',
-  홍보: '#34495e',
+const CAT_COLOR: Record<string, string> = {
+  학교: '#2563eb',
+  대학: '#7c3aed',
+  학과: '#14b8a6',
+  학년: '#6366f1',
+  채용: '#059669',
+  활동: '#ef4444',
+  홍보: '#f59e0b',
 };
 
-const DELETE_WINDOW_MS = 5 * 60 * 1000;
-
-export default function AdminHomePage() {
-  const [, setTick] = useState(0); // 카운트다운 재렌더용
-  const [notices, setNotices] = useState<InternalNoticeResponse[]>([]);
-  const { adminToken } = useAdminInfo();
-  const { push } = useRouter();
+export default function AdminPage() {
+  const [items, setItems] = useState<LocalNotice[]>([]);
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
-    if (!adminToken) {
-      push('/admin/login');
-      return;
-    }
-
-    AdminControllerService.getMyNotices(adminToken).then((data) => {
-      setNotices(data);
-    });
-
-    const t = setInterval(() => setTick((v) => v + 1), 1000);
-
-    return () => {
-      clearInterval(t);
-    };
+    setItems(loadLocalNotices());
   }, []);
 
-  const view = useMemo(
-    () => notices.slice().sort((a, b) => dayjs(b.createdAt).diff(a.createdAt)),
-    [notices]
+  useEffect(() => {
+    const t = setInterval(() => setTick((v) => v + 1), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const list = useMemo(
+    () =>
+      items.map((n) => ({
+        ...n,
+        _remain: remainSeconds(n.createdAt),
+      })),
+    [items, tick]
   );
 
-  const handleDelete = (
-    id: number | undefined,
-    createdAt: string | undefined
-  ) => {
-    if (dayjs(createdAt).diff(dayjs(), 'minute') <= DELETE_WINDOW_MS) {
-      alert('작성 후 5분이 지나 삭제할 수 없습니다.');
-      return;
-    }
-    //Todo: delete 구현
-  };
+  const onDelete = useCallback((id: string) => {
+    deleteLocalNotice(id);
+    setItems((prev) => prev.filter((n) => n.id !== id));
+  }, []);
 
-  const canDelete = false;
   return (
     <div className={styles.adminRoot}>
       <div className={styles.headerBar}>
@@ -67,55 +55,67 @@ export default function AdminHomePage() {
       </div>
 
       <div className={styles.listWrap}>
-        {view.length === 0 ? (
+        {list.length === 0 ? (
           <div className={styles.empty}>등록된 공지가 없습니다.</div>
         ) : (
-          view.map((n) => {
-            const files = n.attachments?.length || 0;
-            const color = CATEGORY_COLOR[n.targetDept?.name || ''] || '#1d9ad6';
-            return (
-              <article key={n.id} className={styles.card}>
+          <div>
+            {list.map((n) => (
+              <div key={n.id} className={styles.card}>
                 <div className={styles.cardRowTop}>
                   <span
                     className={styles.catDot}
-                    style={{ backgroundColor: color }}
-                    aria-hidden
+                    style={{
+                      backgroundColor: CAT_COLOR[n.category] ?? '#94a3b8',
+                    }}
                   />
-                  <span className={styles.catText}>{n.targetDept?.name}</span>
+                  <span className={styles.catText}>{n.category}</span>
                   <span className={styles.metaRight}>
-                    {dayjs(n.createdAt).format('YYYY-MM-DD HH:mm')}
+                    <time dateTime={n.createdAt}>
+                      {new Date(n.createdAt).toLocaleString()}
+                    </time>
                   </span>
                 </div>
 
-                <div className={styles.cardMain}>
-                  <h2 className={styles.cardTitle}>{n.title}</h2>
-                  <p className={styles.cardDetail}>{n.content}</p>
-                </div>
+                {/* 여기만 변경: /admin/detail?id=... */}
+                <Link
+                  href={`/admin/detail?id=${n.id}`}
+                  className={styles.cardMainLink}
+                >
+                  <div className={styles.cardMain}>
+                    <h3 className={`${styles.cardTitle} ${styles.clamp2}`}>
+                      {n.title}
+                    </h3>
+                    <p className={`${styles.cardDetail} ${styles.clamp2}`}>
+                      {n.content}
+                    </p>
+                  </div>
+                </Link>
 
                 <div className={styles.metaRow}>
-                  <span className={styles.metaLeft}>
-                    관리자{files > 0 ? ` · 첨부 ${files}` : ''}
-                  </span>
+                  <div className={styles.metaLeft}>
+                    {n.category === '학년' && n.year ? `${n.year} · ` : null}
+                    첨부 {n.files?.length ?? 0}개
+                  </div>
 
-                  {canDelete ? (
+                  {n._remain > 0 ? (
                     <button
                       className={styles.btnDelete}
-                      onClick={() => handleDelete(n.id, n.createdAt)}
-                      title="작성 후 5분 이내에만 삭제 가능"
+                      onClick={() => onDelete(n.id)}
+                      title="등록 후 5분 이내에만 삭제 가능"
                     >
-                      삭제 ({dayjs(n.createdAt).format('mm:ss')})
+                      삭제 {formatMMSS(n._remain)}
                     </button>
                   ) : (
                     <span className={styles.deleteDisabled}>삭제 불가</span>
                   )}
                 </div>
-              </article>
-            );
-          })
+              </div>
+            ))}
+          </div>
         )}
       </div>
 
-      <Link href="/admin/write" className={styles.fab} aria-label="글쓰기">
+      <Link href="/admin/write" className={styles.fab} aria-label="공지 작성">
         +
       </Link>
     </div>
