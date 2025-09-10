@@ -1,0 +1,46 @@
+/* 차분한 파스텔 톤 배경 + 깔끔한 카드 */
+
+.wrap {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 50%, #f8fafc 100%);
+}
+
+.card {
+  width: min(420px, 92vw);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+  border-radius: 20px;
+  padding: 28px 24px;
+  box-shadow: 0 18px 48px rgba(17, 24, 39, 0.12);
+  border: 1px solid rgba(17, 24, 39, 0.06);
+}
+
+.header {
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.brand {
+  margin: 0;
+  font-weight: 900;
+  font-size: clamp(24px, 6vw, 36px);
+  letter-spacing: 0.04em;
+  color: #111827;
+}
+
+.sub {
+  margin: 6px 0 0 0;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.inputs {
+  margin-top: 10px;
+}
+
+.submit {
+  margin-top: 8px;
+}

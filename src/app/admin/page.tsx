@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import Link from 'next/link';
 import styles from './Admin.module.css';
+import { AdminControllerService, InternalNoticeListResponse } from '@/api';
 import useAdminInfo from './useAdminInfo';
 import { useRouter } from 'next/navigation';
-import { AdminControllerService, InternalNoticeResponse } from '@/api';
 import dayjs from 'dayjs';
 
+const DELETE_WINDOW_MS = 5 * 60 * 1000;
 const CATEGORY_COLOR: Record<string, string> = {
   전체: '#1d9ad6',
   학교: '#e74c3c',
@@ -18,13 +19,11 @@ const CATEGORY_COLOR: Record<string, string> = {
   홍보: '#34495e',
 };
 
-const DELETE_WINDOW_MS = 5 * 60 * 1000;
-
-export default function AdminHomePage() {
-  const [, setTick] = useState(0); // 카운트다운 재렌더용
-  const [notices, setNotices] = useState<InternalNoticeResponse[]>([]);
+export default function AdminPage() {
   const { adminToken } = useAdminInfo();
+  const [tick, setTick] = useState(0);
   const { push } = useRouter();
+  const [notices, setNotices] = useState<InternalNoticeListResponse[]>([]);
 
   useEffect(() => {
     if (!adminToken) {
@@ -35,12 +34,11 @@ export default function AdminHomePage() {
     AdminControllerService.getMyNotices(adminToken).then((data) => {
       setNotices(data);
     });
+  }, []);
 
+  useEffect(() => {
     const t = setInterval(() => setTick((v) => v + 1), 1000);
-
-    return () => {
-      clearInterval(t);
-    };
+    return () => clearInterval(t);
   }, []);
 
   const view = useMemo(
@@ -88,8 +86,12 @@ export default function AdminHomePage() {
                 </div>
 
                 <div className={styles.cardMain}>
-                  <h2 className={styles.cardTitle}>{n.title}</h2>
-                  <p className={styles.cardDetail}>{n.content}</p>
+                  <h2 className={`${styles.cardTitle} ${styles.clamp2}`}>
+                    {n.title}
+                  </h2>
+                  <h2 className={`${styles.cardDetail} ${styles.clamp2}`}>
+                    {n.content}
+                  </h2>
                 </div>
 
                 <div className={styles.metaRow}>
@@ -115,7 +117,7 @@ export default function AdminHomePage() {
         )}
       </div>
 
-      <Link href="/admin/write" className={styles.fab} aria-label="글쓰기">
+      <Link href="/admin/write" className={styles.fab} aria-label="공지 작성">
         +
       </Link>
     </div>
