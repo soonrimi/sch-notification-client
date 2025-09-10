@@ -4,8 +4,9 @@
 /* eslint-disable */
 import type { Notice } from './Notice';
 export type Attachment = {
-  id?: number;
-  fileName?: string;
-  fileUrl?: string;
-  notice?: Notice;
+    id?: number;
+    fileName?: string;
+    fileUrl?: string;
+    notice?: Notice;
 };
+

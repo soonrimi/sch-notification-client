@@ -2,13 +2,13 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Attachment } from './Attachment';
-export type Notice = {
+import type { AttachmentResponse } from './AttachmentResponse';
+export type CrawlPostsResponse = {
     id?: number;
     title?: string;
     content?: string;
     createdAt?: string;
     viewCount?: number;
-    attachments?: Array<Attachment>;
+    attachments?: Array<AttachmentResponse>;
 };
 

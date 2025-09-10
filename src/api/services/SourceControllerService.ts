@@ -6,14 +6,14 @@ import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class SourceControllerService {
-  /**
-   * @returns string OK
-   * @throws ApiError
-   */
-  public static getDepartments(): CancelablePromise<Array<string>> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/api/department',
-    });
-  }
+    /**
+     * @returns string OK
+     * @throws ApiError
+     */
+    public static getDepartments(): CancelablePromise<Array<string>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/department',
+        });
+    }
 }
