@@ -2,9 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type Response = {
-  id?: number;
+export type UpdateRequest = {
   category?: string;
   device?: string;
-  createdDate?: string;
 };

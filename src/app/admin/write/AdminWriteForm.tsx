@@ -12,7 +12,7 @@ import fancy from './WriteForm.module.css';
 import { useAdminWrite } from './useAdminWrite';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
-import { InternalNoticeResponse } from '@/api';
+import { InternalNoticeListResponse } from '@/api';
 
 // 게시판(단일 선택)
 type BoardCategory =
@@ -53,10 +53,10 @@ type LocalNotice = {
   content: string;
   category: BoardCategory;
   year?:
-    | typeof InternalNoticeResponse.targetYear.FIRST_YEAR
-    | typeof InternalNoticeResponse.targetYear.SECOND_YEAR
-    | typeof InternalNoticeResponse.targetYear.THIRD_YEAR
-    | typeof InternalNoticeResponse.targetYear.FOURTH_YEAR;
+    | typeof InternalNoticeListResponse.targetYear.FIRST_YEAR
+    | typeof InternalNoticeListResponse.targetYear.SECOND_YEAR
+    | typeof InternalNoticeListResponse.targetYear.THIRD_YEAR
+    | typeof InternalNoticeListResponse.targetYear.FOURTH_YEAR;
   files: { id: string; name: string }[];
   createdAt: string; // ISO
 };
@@ -93,7 +93,7 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
     const [category, setCategory] = useState<BoardCategory>('학교');
 
     // 학년 값은 항상 유효한 enum으로 유지
-    const Year = InternalNoticeResponse.targetYear;
+    const Year = InternalNoticeListResponse.targetYear;
     const selectedYear = targetYear ?? Year.FIRST_YEAR;
 
     // 카테고리 변경 시 학년 초기화/보정
@@ -115,7 +115,7 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
     const handleYearChange = (e: SelectChangeEvent) => {
       setTargetYear(
         e.target
-          .value as unknown as typeof InternalNoticeResponse.targetYear.FIRST_YEAR
+          .value as unknown as typeof InternalNoticeListResponse.targetYear.FIRST_YEAR
       );
     };
 

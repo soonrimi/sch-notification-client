@@ -3,30 +3,37 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import Link from 'next/link';
 import styles from './Admin.module.css';
-import {
-  loadLocalNotices,
-  deleteLocalNotice,
-  remainSeconds,
-  formatMMSS,
-  type LocalNotice,
-} from './localNotice';
+import { AdminControllerService, InternalNoticeListResponse } from '@/api';
+import useAdminInfo from './useAdminInfo';
+import { useRouter } from 'next/navigation';
+import dayjs from 'dayjs';
 
-const CAT_COLOR: Record<string, string> = {
-  학교: '#2563eb',
-  대학: '#7c3aed',
-  학과: '#14b8a6',
-  학년: '#6366f1',
-  채용: '#059669',
-  활동: '#ef4444',
-  홍보: '#f59e0b',
+const DELETE_WINDOW_MS = 5 * 60 * 1000;
+const CATEGORY_COLOR: Record<string, string> = {
+  전체: '#1d9ad6',
+  학교: '#e74c3c',
+  대학: '#27ae60',
+  학년: '#9b59b6',
+  채용: '#f39c12',
+  활동: '#16a085',
+  홍보: '#34495e',
 };
 
 export default function AdminPage() {
-  const [items, setItems] = useState<LocalNotice[]>([]);
+  const { adminToken } = useAdminInfo();
   const [tick, setTick] = useState(0);
+  const { push } = useRouter();
+  const [notices, setNotices] = useState<InternalNoticeListResponse[]>([]);
 
   useEffect(() => {
-    setItems(loadLocalNotices());
+    if (!adminToken) {
+      push('/admin/login');
+      return;
+    }
+
+    AdminControllerService.getMyNotices(adminToken).then((data) => {
+      setNotices(data);
+    });
   }, []);
 
   useEffect(() => {
@@ -34,20 +41,23 @@ export default function AdminPage() {
     return () => clearInterval(t);
   }, []);
 
-  const list = useMemo(
-    () =>
-      items.map((n) => ({
-        ...n,
-        _remain: remainSeconds(n.createdAt),
-      })),
-    [items, tick]
+  const view = useMemo(
+    () => notices.slice().sort((a, b) => dayjs(b.createdAt).diff(a.createdAt)),
+    [notices]
   );
 
-  const onDelete = useCallback((id: string) => {
-    deleteLocalNotice(id);
-    setItems((prev) => prev.filter((n) => n.id !== id));
-  }, []);
+  const handleDelete = (
+    id: number | undefined,
+    createdAt: string | undefined
+  ) => {
+    if (dayjs(createdAt).diff(dayjs(), 'minute') <= DELETE_WINDOW_MS) {
+      alert('작성 후 5분이 지나 삭제할 수 없습니다.');
+      return;
+    }
+    //Todo: delete 구현
+  };
 
+  const canDelete = false;
   return (
     <div className={styles.adminRoot}>
       <div className={styles.headerBar}>
@@ -55,63 +65,55 @@ export default function AdminPage() {
       </div>
 
       <div className={styles.listWrap}>
-        {list.length === 0 ? (
+        {view.length === 0 ? (
           <div className={styles.empty}>등록된 공지가 없습니다.</div>
         ) : (
-          <div>
-            {list.map((n) => (
-              <div key={n.id} className={styles.card}>
+          view.map((n) => {
+            const files = n.attachments?.length || 0;
+            const color = CATEGORY_COLOR[n.targetDept?.name || ''] || '#1d9ad6';
+            return (
+              <article key={n.id} className={styles.card}>
                 <div className={styles.cardRowTop}>
                   <span
                     className={styles.catDot}
-                    style={{
-                      backgroundColor: CAT_COLOR[n.category] ?? '#94a3b8',
-                    }}
+                    style={{ backgroundColor: color }}
+                    aria-hidden
                   />
-                  <span className={styles.catText}>{n.category}</span>
+                  <span className={styles.catText}>{n.targetDept?.name}</span>
                   <span className={styles.metaRight}>
-                    <time dateTime={n.createdAt}>
-                      {new Date(n.createdAt).toLocaleString()}
-                    </time>
+                    {dayjs(n.createdAt).format('YYYY-MM-DD HH:mm')}
                   </span>
                 </div>
 
-                {/* 여기만 변경: /admin/detail?id=... */}
-                <Link
-                  href={`/admin/detail?id=${n.id}`}
-                  className={styles.cardMainLink}
-                >
-                  <div className={styles.cardMain}>
-                    <h3 className={`${styles.cardTitle} ${styles.clamp2}`}>
-                      {n.title}
-                    </h3>
-                    <p className={`${styles.cardDetail} ${styles.clamp2}`}>
-                      {n.content}
-                    </p>
-                  </div>
-                </Link>
+                <div className={styles.cardMain}>
+                  <h2 className={`${styles.cardTitle} ${styles.clamp2}`}>
+                    {n.title}
+                  </h2>
+                  <h2 className={`${styles.cardDetail} ${styles.clamp2}`}>
+                    {n.content}
+                  </h2>
+                </div>
 
                 <div className={styles.metaRow}>
-                  <div className={styles.metaLeft}>
-                    {n.category === '학년' && n.year ? `${n.year} · ` : null}
-                    첨부 {n.files?.length ?? 0}개
-                  </div>
+                  <span className={styles.metaLeft}>
+                    관리자{files > 0 ? ` · 첨부 ${files}` : ''}
+                  </span>
 
-                  {n._remain > 0 ? (
+                  {canDelete ? (
                     <button
                       className={styles.btnDelete}
-                      onClick={() => onDelete(n.id)}
-                      title="등록 후 5분 이내에만 삭제 가능"
+                      onClick={() => handleDelete(n.id, n.createdAt)}
+                      title="작성 후 5분 이내에만 삭제 가능"
                     >
-                      삭제 {formatMMSS(n._remain)}
+                      삭제 ({dayjs(n.createdAt).format('mm:ss')})
                     </button>
                   ) : (
                     <span className={styles.deleteDisabled}>삭제 불가</span>
                   )}
                 </div>
-              </div>
-            ))}
-          </div>
+              </article>
+            );
+          })
         )}
       </div>
 
