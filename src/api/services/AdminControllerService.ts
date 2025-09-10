@@ -2,11 +2,15 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CreateRequest } from '../models/CreateRequest';
+import type { AdminDeleteRequest } from '../models/AdminDeleteRequest';
+import type { AdminUpdateRequest } from '../models/AdminUpdateRequest';
+import type { CreateInternalNoticeRequest } from '../models/CreateInternalNoticeRequest';
 import type { Department } from '../models/Department';
-import type { InternalNoticeResponse } from '../models/InternalNoticeResponse';
+import type { InternalNoticeListResponse } from '../models/InternalNoticeListResponse';
 import type { LoginRequest } from '../models/LoginRequest';
 import type { LoginResponse } from '../models/LoginResponse';
+import type { MessageResponse } from '../models/MessageResponse';
+import type { MyInfoResponse } from '../models/MyInfoResponse';
 import type { ResetPasswordRequest } from '../models/ResetPasswordRequest';
 import type { ResetPasswordResponse } from '../models/ResetPasswordResponse';
 import type { SignupRequest } from '../models/SignupRequest';
@@ -15,6 +19,46 @@ import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class AdminControllerService {
+  /**
+   * @param adminId
+   * @param requestBody
+   * @returns MyInfoResponse OK
+   * @throws ApiError
+   */
+  public static updateAdmin(
+    adminId: number,
+    requestBody: AdminUpdateRequest
+  ): CancelablePromise<MyInfoResponse> {
+    return __request(OpenAPI, {
+      method: 'PUT',
+      url: '/api/admin/{adminId}',
+      path: {
+        adminId: adminId,
+      },
+      body: requestBody,
+      mediaType: 'application/json',
+    });
+  }
+  /**
+   * @param adminId
+   * @param requestBody
+   * @returns MessageResponse OK
+   * @throws ApiError
+   */
+  public static deleteAdmin(
+    adminId: number,
+    requestBody: AdminDeleteRequest
+  ): CancelablePromise<MessageResponse> {
+    return __request(OpenAPI, {
+      method: 'DELETE',
+      url: '/api/admin/{adminId}',
+      path: {
+        adminId: adminId,
+      },
+      body: requestBody,
+      mediaType: 'application/json',
+    });
+  }
   /**
    * @param requestBody
    * @returns ResetPasswordResponse OK
@@ -63,16 +107,16 @@ export class AdminControllerService {
   /**
    * @param authorization
    * @param formData
-   * @returns InternalNoticeResponse OK
+   * @returns InternalNoticeListResponse OK
    * @throws ApiError
    */
   public static createInternalNotice(
     authorization: string,
     formData?: {
-      internalNotice: CreateRequest;
+      internalNotice: CreateInternalNoticeRequest;
       file?: Array<Blob>;
     }
-  ): CancelablePromise<InternalNoticeResponse> {
+  ): CancelablePromise<InternalNoticeListResponse> {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/api/admin/internal-notice',
@@ -100,18 +144,28 @@ export class AdminControllerService {
   }
   /**
    * @param authorization
-   * @returns InternalNoticeResponse OK
+   * @returns InternalNoticeListResponse OK
    * @throws ApiError
    */
   public static getMyNotices(
     authorization: string
-  ): CancelablePromise<Array<InternalNoticeResponse>> {
+  ): CancelablePromise<Array<InternalNoticeListResponse>> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/api/admin/my-notices',
       headers: {
         Authorization: authorization,
       },
+    });
+  }
+  /**
+   * @returns MyInfoResponse OK
+   * @throws ApiError
+   */
+  public static getAllAdmins(): CancelablePromise<Array<MyInfoResponse>> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/api/admin/list',
     });
   }
   /**

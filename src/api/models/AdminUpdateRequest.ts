@@ -2,9 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type Response = {
-  id?: number;
-  category?: string;
-  device?: string;
-  createdDate?: string;
+export type AdminUpdateRequest = {
+  name?: string;
+  affiliation?: string;
+  password?: string;
+  registerPassword?: string;
 };

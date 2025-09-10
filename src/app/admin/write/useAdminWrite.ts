@@ -2,8 +2,9 @@ import useAdminInfo from '../useAdminInfo';
 import { useRouter } from 'next/navigation';
 import {
   AdminControllerService,
-  InternalNoticeResponse,
+  CreateInternalNoticeRequest,
   Department,
+  InternalNoticeListResponse,
 } from '@/api';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { atom, useAtom } from 'jotai';
@@ -15,8 +16,8 @@ const contentAtom = atom('');
 const filesAtom = atom<FileItem[]>([]);
 const submittingAtom = atom(false);
 const targetDepartmentAtom = atom<Department | null>(null);
-const targetYearAtom = atom<InternalNoticeResponse.targetYear>(
-  InternalNoticeResponse.targetYear.ALL_YEARS
+const targetYearAtom = atom<InternalNoticeListResponse.targetYear>(
+  InternalNoticeListResponse.targetYear.ALL_YEARS
 );
 
 export function useAdminWrite() {
@@ -85,12 +86,10 @@ export function useAdminWrite() {
     try {
       await AdminControllerService.createInternalNotice(adminToken, {
         internalNotice: {
+          targetYear: targetYear,
           title: title.trim(),
           content: content.trim(),
-
-          //Todo: 임시 주석, 왜 안되는지 확인 필요
-          //targetDept: targetDepartment?.id || 0,
-          //targetYear: targetYear,
+          targetDept: targetDepartment?.id,
         },
         file: files.map((f) => f.file),
       });

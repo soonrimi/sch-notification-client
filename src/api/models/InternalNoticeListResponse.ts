@@ -2,20 +2,20 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { AttachmentResponse } from './AttachmentResponse';
 import type { Department } from './Department';
-export type InternalNoticeResponse = {
+import type { InternalNoticeAttachmentResponse } from './InternalNoticeAttachmentResponse';
+export type InternalNoticeListResponse = {
   id?: number;
   title?: string;
   content?: string;
   createdAt?: string;
   viewCount?: number;
   writerName?: string;
-  targetYear?: InternalNoticeResponse.targetYear;
+  targetYear?: InternalNoticeListResponse.targetYear;
   targetDept?: Department;
-  attachments?: Array<AttachmentResponse>;
+  attachments?: Array<InternalNoticeAttachmentResponse>;
 };
-export namespace InternalNoticeResponse {
+export namespace InternalNoticeListResponse {
   export enum targetYear {
     ALL_YEARS = 'ALL_YEARS',
     FIRST_YEAR = 'FIRST_YEAR',

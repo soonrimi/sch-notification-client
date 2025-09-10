@@ -2,9 +2,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type Response = {
-  id?: number;
-  category?: string;
-  device?: string;
-  createdDate?: string;
+export type AdminDeleteRequest = {
+  registerPassword?: string;
 };
