@@ -8,11 +8,13 @@ import { useRouter } from 'next/navigation';
 interface SettingsHeaderProps {
   title: string;
   onReset?: () => void;
+  backgroundColor?: string;
 }
 
 export default function CategorySettingsHeader({
   title,
   onReset,
+  backgroundColor = '#f3f3f3ff',
 }: SettingsHeaderProps) {
   const router = useRouter();
 
@@ -23,7 +25,7 @@ export default function CategorySettingsHeader({
         justifyContent: 'space-between',
         alignItems: 'center',
         px: 2,
-        backgroundColor: '#f3f3f3ff',
+        backgroundColor,
         height: 48,
       }}
     >

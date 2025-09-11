@@ -29,7 +29,11 @@ export type HeaderProps =
   | { pageType: 'mypage' }
   | {
       pageType: 'settings';
-      settingsHeaderProps: { title: string; onReset?: () => void };
+      settingsHeaderProps: {
+        title: string;
+        onReset?: () => void;
+        backgroundColor?: string;
+      };
     }
   | {
       pageType: 'search';
