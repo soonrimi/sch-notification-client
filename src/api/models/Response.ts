@@ -3,9 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export type Response = {
-    id?: number;
-    category?: string;
-    device?: string;
-    createdDate?: string;
+  id?: number;
+  category?: string;
+  device?: string;
+  createdDate?: string;
 };
 

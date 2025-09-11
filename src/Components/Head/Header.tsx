@@ -7,6 +7,7 @@ import NoticeHeader, { NoticeHeaderProps } from './NoticeHeader';
 import SettingsHeader from './CategorySettingsHeader';
 import SearchHeader from './SearchHeader';
 import styles from './Header.module.css';
+import NotificationHeader from './NotificationHeader';
 
 export interface BookmarkHeaderProps {
   selectionMode: boolean;
@@ -67,6 +68,8 @@ export default function Header(props: HeaderProps) {
           onSearch={props.onSearch}
           disableInput={props.disableInput}
         />
+      ) : pageType === 'notification' ? (
+        <NotificationHeader />
       ) : null}
     </div>
   );

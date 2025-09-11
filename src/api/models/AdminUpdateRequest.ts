@@ -3,9 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export type AdminUpdateRequest = {
-    name?: string;
-    affiliation?: string;
-    password?: string;
-    registerPassword?: string;
+  name?: string;
+  affiliation?: string;
+  password?: string;
+  registerPassword?: string;
 };
-

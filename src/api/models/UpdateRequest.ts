@@ -3,7 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type UpdateRequest = {
-    category?: string;
-    device?: string;
+  category?: string;
+  device?: string;
 };
-

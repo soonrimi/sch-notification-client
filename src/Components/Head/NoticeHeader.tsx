@@ -44,7 +44,7 @@ export default function NoticeHeader({
 
       {/* 카테고리 */}
       <Typography variant="subtitle1" fontWeight="bold" fontSize={18}>
-        {category} 공지
+        {category.name} 공지
       </Typography>
 
       {/* 공유 + 북마크 */}
@@ -52,7 +52,7 @@ export default function NoticeHeader({
         <IconButton
           onClick={async () => {
             const url = window.location.href;
-            const title = `${category} 공지`;
+            const title = `${category.name} 공지`;
 
             if (navigator.share) {
               try {

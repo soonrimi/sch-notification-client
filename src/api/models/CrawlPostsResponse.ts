@@ -4,11 +4,10 @@
 /* eslint-disable */
 import type { AttachmentResponse } from './AttachmentResponse';
 export type CrawlPostsResponse = {
-    id?: number;
-    title?: string;
-    content?: string;
-    createdAt?: string;
-    viewCount?: number;
-    attachments?: Array<AttachmentResponse>;
+  id?: number;
+  title?: string;
+  content?: string;
+  createdAt?: string;
+  viewCount?: number;
+  attachments?: Array<AttachmentResponse>;
 };
-

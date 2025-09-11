@@ -19,5 +19,8 @@ jobs:
       - name: npm install client
         run: npm install
 
+      - name: api document refresh
+        run: npm run generate-api
+
       - name: build test
         run: npm run build
