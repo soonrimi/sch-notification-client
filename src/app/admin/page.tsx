@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useMemo, useState, useCallback } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import styles from './Admin.module.css';
 import { AdminControllerService, InternalNoticeListResponse } from '@/api';
 import useAdminInfo from './useAdminInfo';
 import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
+import Header from './components/Header';
 
 const DELETE_WINDOW_MS = 5 * 60 * 1000;
 const CATEGORY_COLOR: Record<string, string> = {
@@ -60,6 +61,7 @@ export default function AdminPage() {
   const canDelete = false;
   return (
     <div className={styles.adminRoot}>
+      <Header />
       <div className={styles.headerBar}>
         <h1 className={styles.title}>등록된 공지</h1>
       </div>

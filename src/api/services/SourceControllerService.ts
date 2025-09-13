@@ -2,18 +2,19 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { CategoryResponse } from '../models/CategoryResponse';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class SourceControllerService {
   /**
-   * @returns string OK
+   * @returns CategoryResponse OK
    * @throws ApiError
    */
-  public static getDepartments(): CancelablePromise<Array<string>> {
+  public static getAllTags(): CancelablePromise<Array<CategoryResponse>> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/department',
+      url: '/api/tag',
     });
   }
 }
