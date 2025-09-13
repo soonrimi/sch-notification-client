@@ -14,7 +14,6 @@ export type PageResponse = {
   content?: Array<Response>;
   number?: number;
   sort?: SortObject;
-  pageable?: PageableObject;
   numberOfElements?: number;
   empty?: boolean;
 };

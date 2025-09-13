@@ -14,7 +14,6 @@ export type PageCalenderDto_Response = {
   content?: Array<CalenderDto_Response>;
   number?: number;
   sort?: SortObject;
-  pageable?: PageableObject;
   numberOfElements?: number;
   empty?: boolean;
 };

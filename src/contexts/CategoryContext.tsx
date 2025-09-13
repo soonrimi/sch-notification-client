@@ -92,10 +92,10 @@ export function getDefaultCategories(
       notify: true,
       visible: true,
     },
-    ...serverCategories.map((category) => ({
-      id: category,
-      name: getCategoryName(category),
-      color: CATEGORY_COLORS[category] || '#1d9ad6',
+    ...Object.keys(CATEGORY_COLORS).map(([id, color]) => ({
+      id,
+      name: getCategoryName(id as CrawlPostsResponse['category'] | 'ALL'),
+      color: color || '#1d9ad6',
       notify: true,
       visible: true,
     })),
