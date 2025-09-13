@@ -9,8 +9,8 @@ type Props = {
   isRead: boolean;
   selectionMode?: boolean;
   isSelected?: boolean;
-  onSelectToggle?: (id: string) => void;
-  hrefBuilder?: (id: string) => string;
+  onSelectToggle?: (id: number) => void;
+  hrefBuilder?: (id: number) => string;
 };
 
 export default function SharedNoticeItem({

@@ -7,9 +7,10 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { IconButton } from '@mui/material';
-import { Notice } from '@/types/notice';
 import { useCategoryColors } from '@/contexts/CategoryColorContext';
 import styles from './Home.module.css';
+import { Notice } from '@/api';
+import { CATEGORY_COLORS, getCategoryName } from '@/constants/categories';
 
 interface HomeNoticeProps extends Notice {
   isBookmarked: boolean;
@@ -50,14 +51,14 @@ function formatUploadTime(date: Date) {
 export default function HomeNotice({
   id,
   category,
-  upload_time,
   title,
-  detail,
   isBookmarked,
   onToggleBookmark,
   isRead,
+  content,
   selectionMode = false,
   isSelected = false,
+  createdAt,
 }: HomeNoticeProps) {
   const { categoryColors } = useCategoryColors();
 
@@ -75,13 +76,13 @@ export default function HomeNotice({
             justifyContent: 'center',
             alignItems: 'center',
             marginRight: 5,
-            backgroundColor: categoryColors[category.name] || '#000',
+            backgroundColor: CATEGORY_COLORS[category] || '#000',
           }}
         >
-          {category.name}
+          {getCategoryName(category)}
         </div>
         <div className={styles.home_notice_upload_info}>
-          | {formatUploadTime(upload_time)}
+          | {formatUploadTime(createdAt)}
         </div>
       </div>
 
@@ -117,7 +118,7 @@ export default function HomeNotice({
         <div
           className={`${styles.home_notice_detail} ${isRead ? styles.read : ''}`}
         >
-          {detail}
+          {content}
         </div>
       </div>
     </div>

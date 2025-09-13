@@ -6,7 +6,8 @@ import HomeNotice from '@/app/home/HomeNotice';
 import { useBookmark } from '@/hooks/useBookmark';
 import { useCategories } from '@/contexts/CategoryContext';
 import { useNotices } from '@/hooks/useNotices';
-import type { Notice, Category } from '@/types/notice';
+import type { Notice } from '@/types/notice';
+import { Category } from '@/constants/categories';
 
 function NoticeWithBookmark({ notice }: { notice: Notice }) {
   const { bookmarked, toggleBookmark } = useBookmark(notice.id);
@@ -36,12 +37,9 @@ export default function SearchResults() {
 
   const { items: categories } = useCategories();
 
-  const selectedCategory: Category = {
-    id: 0,
-    name: '전체',
-  };
+  const selectedCategory: Category = 'ALL';
 
-  const notices = useNotices(selectedCategory);
+  const { notices } = useNotices(selectedCategory);
 
   const results: Notice[] = notices.filter((notice) => {
     const matchesKeyword =
