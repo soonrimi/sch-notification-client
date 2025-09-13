@@ -1,4 +1,5 @@
 'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -20,26 +21,22 @@ interface HomeNoticeProps extends Notice {
 
 function formatUploadTime(date: Date) {
   const now = new Date();
-
   const isToday =
     date.getFullYear() === now.getFullYear() &&
     date.getMonth() === now.getMonth() &&
     date.getDate() === now.getDate();
 
-  if (isToday) {
+  if (isToday)
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  }
 
   const isThisYear = date.getFullYear() === now.getFullYear();
-
-  if (isThisYear) {
+  if (isThisYear)
     return date.toLocaleString([], {
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
     });
-  }
 
   return date.toLocaleString([], {
     year: 'numeric',
@@ -54,7 +51,6 @@ export default function HomeNotice({
   id,
   category,
   upload_time,
-  application_period,
   title,
   detail,
   isBookmarked,
@@ -79,22 +75,45 @@ export default function HomeNotice({
             justifyContent: 'center',
             alignItems: 'center',
             marginRight: 5,
-            backgroundColor: categoryColors[category] || '#000',
+            backgroundColor: categoryColors[category.name] || '#000',
           }}
         >
-          {category}
+          {category.name}
         </div>
         <div className={styles.home_notice_upload_info}>
-          | {formatUploadTime(upload_time)} | 신청: {application_period}
+          | {formatUploadTime(upload_time)}
         </div>
       </div>
 
-      <div className={styles.home_notice_text}>
-        <div
-          className={`${styles.home_notice_title} ${isRead ? styles.read : ''}`}
-        >
-          {title}
+      <div className={styles.home_notice_bottom}>
+        <div className={styles.title_bookmark_wrapper}>
+          <div
+            className={`${styles.home_notice_title} ${isRead ? styles.read : ''}`}
+          >
+            {title}
+          </div>
+
+          {!selectionMode && (
+            <div className={styles.home_notic_bookmark}>
+              <IconButton
+                className={styles.home_notic_bookmark_btn}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onToggleBookmark();
+                }}
+                sx={{ padding: '2px 6px 6px 6px' }}
+              >
+                {isBookmarked ? (
+                  <BookmarkIcon sx={{ fontSize: 22, color: '#FFD700' }} />
+                ) : (
+                  <BookmarkBorderIcon sx={{ fontSize: 22, color: '#A1A1A1' }} />
+                )}
+              </IconButton>
+            </div>
+          )}
         </div>
+
         <div
           className={`${styles.home_notice_detail} ${isRead ? styles.read : ''}`}
         >
@@ -112,17 +131,17 @@ export default function HomeNotice({
           selectionMode && isSelected ? '#bda10030' : 'transparent',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div
-          style={{
-            width: 0,
-            marginRight: 0,
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          {selectionMode ? (
-            isSelected ? (
+      <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+        {selectionMode && (
+          <div
+            style={{
+              width: 0,
+              marginRight: 0,
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            {isSelected ? (
               <CheckCircleIcon
                 className={styles.selection_circle}
                 sx={{ color: '#bda100ff', fontSize: 22 }}
@@ -132,36 +151,22 @@ export default function HomeNotice({
                 className={styles.selection_circle}
                 sx={{ color: '#A1A1A1', fontSize: 22 }}
               />
-            )
-          ) : null}
-        </div>
+            )}
+          </div>
+        )}
 
         {selectionMode ? (
           noticeContent
         ) : (
-          <Link href={`/home?id=${id}`} prefetch={false}>
+          <Link
+            href={`/home?id=${id}`}
+            prefetch={false}
+            style={{ display: 'block', width: '100%' }}
+          >
             {noticeContent}
           </Link>
         )}
       </div>
-
-      {!selectionMode && (
-        <div className={styles.home_notic_bookmark}>
-          <IconButton
-            className={styles.home_notic_bookmark_btn}
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleBookmark();
-            }}
-          >
-            {isBookmarked ? (
-              <BookmarkIcon sx={{ fontSize: 22, color: '#FFD700' }} />
-            ) : (
-              <BookmarkBorderIcon sx={{ fontSize: 22, color: '#A1A1A1' }} />
-            )}
-          </IconButton>
-        </div>
-      )}
 
       <hr className={styles.home_notice_hr} />
     </div>

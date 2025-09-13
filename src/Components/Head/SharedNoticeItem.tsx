@@ -38,7 +38,6 @@ export default function SharedNoticeItem({
         id={notice.id}
         category={notice.category}
         upload_time={notice.upload_time}
-        application_period={notice.application_period}
         title={notice.title}
         detail={notice.detail}
         isBookmarked={bookmarked}

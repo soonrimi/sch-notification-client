@@ -84,8 +84,8 @@ function ItemView({
           borderRadius: '9999px',
           fontSize: 15,
           backgroundColor: item.visible
-            ? categoryColors[item.name] || item.color
-            : '#ccc',
+            ? item.color || categoryColors[item.name] || '#000'
+            : '#ccc', // 안보이면 회색
           color: '#fff',
           cursor: 'pointer',
         }}
@@ -122,7 +122,7 @@ function ItemView({
           <CircleIcon
             sx={{
               color: item.visible
-                ? categoryColors[item.name] || item.color
+                ? item.color || categoryColors[item.name] || '#000'
                 : '#999',
               fontSize: 19,
             }}

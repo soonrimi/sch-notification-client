@@ -1,8 +1,11 @@
-.home_notice > *:not(.home_notice_hr) {
-  transform: scale(0.9);
+.title_bookmark_wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
-/* _________________________________________________________________________- */
 .home_content_wrapper {
   display: flex;
   flex-direction: column;
@@ -10,6 +13,12 @@
   overflow: hidden;
   padding-top: 42px;
   padding-bottom: 93px;
+}
+.title_bookmark_wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  position: relative;
 }
 
 .home_content {
@@ -35,7 +44,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  padding-top: 10px;
+  width: 100%;
 }
 
 .home_notice_info {
@@ -49,29 +58,48 @@
 }
 
 .home_notice_text {
-  width: 337px;
-  height: 70px;
+  flex: 1 1 auto;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   margin: 2px 0 0 0;
 }
 
+.home_notice_content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 13px 21px 13px 21px;
+}
+
+.home_notice_bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 4px;
+  width: 100%;
+}
+
 .home_notice_title {
   color: black;
-  font-size: 17px;
+  font-size: 15px;
   margin: 0 0 5px 0;
+  font-weight: 530;
 }
 
 .home_notice_detail {
   display: -webkit-box;
   -webkit-line-clamp: 2;
-  line-clamp: 2; /* 표준 속성 */
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 13px;
+  font-size: 15px;
   color: #000;
-  font-weight: 340;
+  font-weight: 320;
 }
 
 .selection_circle {
@@ -81,9 +109,10 @@
 }
 
 .home_notic_bookmark {
-  position: absolute;
-  right: 12px;
-  top: 22px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  margin-right: -16px;
 }
 
 .home_notic_bookmark_btn {
@@ -96,9 +125,7 @@
   border: none;
   border-top: 1px solid #242424;
   transform: scaleY(0.3);
-  margin-top: 5px;
 }
 .read {
   color: #5e5e5e !important;
 }
-/* _________________________________________________________________________- */

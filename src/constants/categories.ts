@@ -1,15 +1,15 @@
-export const categories = [
-  '학교',
-  '대학',
-  '학년',
-  '채용',
-  '활동',
-  '홍보',
-] as const;
-export type Category = (typeof categories)[number];
+// export const categories = [
+//   '학교',
+//   '대학',
+//   '학년',
+//   '채용',
+//   '활동',
+//   '홍보',
+// ] as const;
+// export type Category = (typeof categories)[number];
 
-export const categoryColors: Record<Category | '전체', string> = {
-  전체: '#7986CC', // ✅ 전체도 색상 필요
+export const categoryColors: Record<string, string> = {
+  전체: '#7986CC',
   학교: '#69B054',
   대학: '#EA9E5A',
   학년: '#F17298',
