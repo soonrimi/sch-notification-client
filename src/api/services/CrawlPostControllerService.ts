@@ -49,7 +49,6 @@ export class CrawlPostControllerService {
     });
   }
   /**
-   * @param categoryId
    * @returns CrawlPostsResponse OK
    * @throws ApiError
    */

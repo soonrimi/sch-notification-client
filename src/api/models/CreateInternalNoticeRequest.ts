@@ -3,12 +3,21 @@
 /* tslint:disable */
 /* eslint-disable */
 export type CreateInternalNoticeRequest = {
-  title?: string;
-  content?: string;
-  targetYear?: CreateInternalNoticeRequest.targetYear;
-  targetDept?: number;
+  title: string;
+  content: string;
+  category: CreateInternalNoticeRequest.category;
+  targetYear: CreateInternalNoticeRequest.targetYear;
+  targetDepartmentIds: Array<number>;
 };
 export namespace CreateInternalNoticeRequest {
+  export enum category {
+    UNIVERSITY = 'UNIVERSITY',
+    DEPARTMENT = 'DEPARTMENT',
+    GRADE = 'GRADE',
+    RECRUIT = 'RECRUIT',
+    ACTIVITY = 'ACTIVITY',
+    PROMOTION = 'PROMOTION',
+  }
   export enum targetYear {
     ALL_YEARS = 'ALL_YEARS',
     FIRST_YEAR = 'FIRST_YEAR',

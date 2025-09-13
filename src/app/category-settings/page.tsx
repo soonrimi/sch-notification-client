@@ -31,7 +31,7 @@ import {
   useCategories,
   getDefaultCategories,
 } from '@/contexts/CategoryContext';
-import { categoryColors as DEFAULT_COLORS } from '@/constants/categories';
+import { CATEGORY_COLORS } from '@/constants/categories';
 
 /** CategoryItem 타입 정의 */
 interface CategoryItem {
@@ -272,8 +272,8 @@ export default function CategorySettingsPage() {
     const defaults = getDefaultCategories();
     setItems(defaults);
     localStorage.setItem('categories', JSON.stringify(defaults));
-    setCategoryColorBulk(DEFAULT_COLORS);
-    localStorage.setItem('categoryColors', JSON.stringify(DEFAULT_COLORS));
+    setCategoryColorBulk(CATEGORY_COLORS);
+    localStorage.setItem('categoryColors', JSON.stringify(CATEGORY_COLORS));
   };
 
   const setCategoryColorBulk = (colors: Record<string, string>) => {

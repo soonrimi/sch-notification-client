@@ -8,6 +8,17 @@ export type CrawlPostsResponse = {
   title?: string;
   content?: string;
   createdAt?: string;
+  category?: CrawlPostsResponse.category;
   viewCount?: number;
   attachments?: Array<AttachmentResponse>;
 };
+export namespace CrawlPostsResponse {
+  export enum category {
+    UNIVERSITY = 'UNIVERSITY',
+    DEPARTMENT = 'DEPARTMENT',
+    GRADE = 'GRADE',
+    RECRUIT = 'RECRUIT',
+    ACTIVITY = 'ACTIVITY',
+    PROMOTION = 'PROMOTION',
+  }
+}
