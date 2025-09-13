@@ -42,6 +42,19 @@ export default function KakaoChatAdminPage() {
     departmentsError,
   } = useKakaoChatRooms();
 
+  // 필터 상태
+  const [filterDepartment, setFilterDepartment] = React.useState<number>(0);
+  const [filterYear, setFilterYear] = React.useState<string>('ALL');
+
+  // 필터링된 rooms
+  const filteredRooms = rooms.filter((room: KakaoRoomInfoResponse) => {
+    const matchDepartment =
+      filterDepartment === 0 || room.department?.id === filterDepartment;
+    const matchYear =
+      filterYear === 'ALL' || String(room.targetYear) === filterYear;
+    return matchDepartment && matchYear;
+  });
+
   // 선택된 학과 상태 (id)
   const [selectedDepartment, setSelectedDepartment] = React.useState<number>(0);
 
@@ -72,10 +85,9 @@ export default function KakaoChatAdminPage() {
     if (loading) {
       return <CircularProgress />;
     }
-
     return (
       <List>
-        {rooms.map((room: KakaoRoomInfoResponse) => (
+        {filteredRooms.map((room: KakaoRoomInfoResponse) => (
           <ListItem
             key={room.id}
             secondaryAction={
@@ -115,6 +127,58 @@ export default function KakaoChatAdminPage() {
         <Typography variant="h5" gutterBottom>
           카카오 채팅방 관리
         </Typography>
+        {/* 필터 영역 */}
+        <Stack
+          direction="row"
+          spacing={2}
+          mb={2}
+          border="1px solid #ccc"
+          p={2}
+          borderRadius={1}
+        >
+          <Select
+            value={filterDepartment}
+            onChange={(e) => setFilterDepartment(Number(e.target.value))}
+            size="small"
+            sx={{ minWidth: 120 }}
+            disabled={departmentsLoading}
+          >
+            <MenuItem value={0}>전체 학과</MenuItem>
+            {departments.map((dept) => (
+              <MenuItem key={dept.id} value={dept.id}>
+                {dept.name}
+              </MenuItem>
+            ))}
+          </Select>
+          <Select
+            value={filterYear}
+            onChange={(e) => setFilterYear(e.target.value)}
+            size="small"
+            sx={{ minWidth: 100 }}
+          >
+            <MenuItem value="ALL">전체 학년</MenuItem>
+            <MenuItem
+              value={String(CreateInternalNoticeRequest.targetYear.FIRST_YEAR)}
+            >
+              1학년
+            </MenuItem>
+            <MenuItem
+              value={String(CreateInternalNoticeRequest.targetYear.SECOND_YEAR)}
+            >
+              2학년
+            </MenuItem>
+            <MenuItem
+              value={String(CreateInternalNoticeRequest.targetYear.THIRD_YEAR)}
+            >
+              3학년
+            </MenuItem>
+            <MenuItem
+              value={String(CreateInternalNoticeRequest.targetYear.FOURTH_YEAR)}
+            >
+              4학년
+            </MenuItem>
+          </Select>
+        </Stack>
         <Stack direction="row" spacing={2} mb={2}>
           <Select
             label="학과"
