@@ -4,6 +4,15 @@
 /* eslint-disable */
 export type CreateKakaoRoomInfoRequest = {
   departmentId?: number;
-  targetYear?: string;
+  targetYear?: CreateKakaoRoomInfoRequest.targetYear;
   roomName?: string;
 };
+export namespace CreateKakaoRoomInfoRequest {
+  export enum targetYear {
+    ALL_YEARS = 'ALL_YEARS',
+    FIRST_YEAR = 'FIRST_YEAR',
+    SECOND_YEAR = 'SECOND_YEAR',
+    THIRD_YEAR = 'THIRD_YEAR',
+    FOURTH_YEAR = 'FOURTH_YEAR',
+  }
+}

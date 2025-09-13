@@ -15,7 +15,7 @@ export type { CalenderDto_Response } from './models/CalenderDto_Response';
 export type { CategoryResponse } from './models/CategoryResponse';
 export type { CrawlPostsResponse } from './models/CrawlPostsResponse';
 export { CreateInternalNoticeRequest } from './models/CreateInternalNoticeRequest';
-export type { CreateKakaoRoomInfoRequest } from './models/CreateKakaoRoomInfoRequest';
+export { CreateKakaoRoomInfoRequest } from './models/CreateKakaoRoomInfoRequest';
 export type { CreateRequest } from './models/CreateRequest';
 export type { Department } from './models/Department';
 export type { InternalNoticeAttachmentResponse } from './models/InternalNoticeAttachmentResponse';
@@ -36,7 +36,7 @@ export type { Response } from './models/Response';
 export type { SignupRequest } from './models/SignupRequest';
 export type { SignupResponse } from './models/SignupResponse';
 export type { SortObject } from './models/SortObject';
-export type { UpdateKakaoRoomInfoRequest } from './models/UpdateKakaoRoomInfoRequest';
+export { UpdateKakaoRoomInfoRequest } from './models/UpdateKakaoRoomInfoRequest';
 export type { UpdateRequest } from './models/UpdateRequest';
 
 export { Service } from './services/Service';

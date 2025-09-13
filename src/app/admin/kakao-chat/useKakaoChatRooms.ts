@@ -55,7 +55,7 @@ export function useKakaoChatRooms() {
     try {
       const data = await AdminControllerService.getAllDepartment();
       setDepartments(data);
-    } catch (e: any) {
+    } catch (e) {
       setDepartmentsError(e?.message || '학과 목록을 불러오지 못했습니다.');
     } finally {
       setDepartmentsLoading(false);
@@ -70,7 +70,7 @@ export function useKakaoChatRooms() {
       // 전체 목록 조회 (필터 없이)
       const data = await Service.getRoomsByFilter();
       setRooms(data);
-    } catch (e: any) {
+    } catch (e) {
       setError(e?.message || '채팅방 목록을 불러오지 못했습니다.');
     } finally {
       setLoading(false);
@@ -100,7 +100,7 @@ export function useKakaoChatRooms() {
       setRoomName('');
       setDepartmentId(0);
       await fetchRooms();
-    } catch (e: any) {
+    } catch (e) {
       setError(e?.message || '채팅방 추가에 실패했습니다.');
     } finally {
       setAdding(false);
@@ -114,7 +114,7 @@ export function useKakaoChatRooms() {
     try {
       await KakaoRoomInfoControllerService.deleteRoom(id);
       await fetchRooms();
-    } catch (e: any) {
+    } catch (e) {
       setError(e?.message || '채팅방 삭제에 실패했습니다.');
     } finally {
       setLoading(false);
@@ -143,7 +143,7 @@ export function useKakaoChatRooms() {
       });
       setEditingId(null);
       await fetchRooms();
-    } catch (e: any) {
+    } catch (e) {
       setError(e?.message || '채팅방 수정에 실패했습니다.');
     } finally {
       setEditing(false);
