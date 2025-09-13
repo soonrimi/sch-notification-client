@@ -26,13 +26,25 @@ function formatUploadTime(date: Date) {
     date.getMonth() === now.getMonth() &&
     date.getDate() === now.getDate();
 
-  if (isToday) return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  if (isToday)
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   const isThisYear = date.getFullYear() === now.getFullYear();
   if (isThisYear)
-    return date.toLocaleString([], { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleString([], {
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
 
-  return date.toLocaleString([], { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+  return date.toLocaleString([], {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 }
 
 export default function HomeNotice({
@@ -73,11 +85,38 @@ export default function HomeNotice({
         </div>
       </div>
 
-      <div className={styles.home_notice_text}>
-        <div className={`${styles.home_notice_title} ${isRead ? styles.read : ''}`}>
-          {title}
+      <div className={styles.home_notice_bottom}>
+        <div className={styles.title_bookmark_wrapper}>
+          <div
+            className={`${styles.home_notice_title} ${isRead ? styles.read : ''}`}
+          >
+            {title}
+          </div>
+
+          {!selectionMode && (
+            <div className={styles.home_notic_bookmark}>
+              <IconButton
+                className={styles.home_notic_bookmark_btn}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onToggleBookmark();
+                }}
+                sx={{ padding: '2px 6px 6px 6px' }}
+              >
+                {isBookmarked ? (
+                  <BookmarkIcon sx={{ fontSize: 22, color: '#FFD700' }} />
+                ) : (
+                  <BookmarkBorderIcon sx={{ fontSize: 22, color: '#A1A1A1' }} />
+                )}
+              </IconButton>
+            </div>
+          )}
         </div>
-        <div className={`${styles.home_notice_detail} ${isRead ? styles.read : ''}`}>
+
+        <div
+          className={`${styles.home_notice_detail} ${isRead ? styles.read : ''}`}
+        >
           {detail}
         </div>
       </div>
@@ -87,32 +126,47 @@ export default function HomeNotice({
   return (
     <div
       className={styles.home_notice}
-      style={{ backgroundColor: selectionMode && isSelected ? '#bda10030' : 'transparent' }}
+      style={{
+        backgroundColor:
+          selectionMode && isSelected ? '#bda10030' : 'transparent',
+      }}
     >
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div style={{ width: 0, marginRight: 0, display: 'flex', justifyContent: 'center' }}>
-          {selectionMode
-            ? isSelected
-              ? <CheckCircleIcon className={styles.selection_circle} sx={{ color: '#bda100ff', fontSize: 22 }} />
-              : <RadioButtonUncheckedIcon className={styles.selection_circle} sx={{ color: '#A1A1A1', fontSize: 22 }} />
-            : null}
-        </div>
-
-        {selectionMode ? noticeContent : <Link href={`/home?id=${id}`} prefetch={false}>{noticeContent}</Link>}
-      </div>
-
-      {!selectionMode && (
-        <div className={styles.home_notic_bookmark}>
-          <IconButton
-            className={styles.home_notic_bookmark_btn}
-            onClick={(e) => { e.stopPropagation(); onToggleBookmark(); }}
+      <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+        {selectionMode && (
+          <div
+            style={{
+              width: 0,
+              marginRight: 0,
+              display: 'flex',
+              justifyContent: 'center',
+            }}
           >
-            {isBookmarked
-              ? <BookmarkIcon sx={{ fontSize: 22, color: '#FFD700' }} />
-              : <BookmarkBorderIcon sx={{ fontSize: 22, color: '#A1A1A1' }} />}
-          </IconButton>
-        </div>
-      )}
+            {isSelected ? (
+              <CheckCircleIcon
+                className={styles.selection_circle}
+                sx={{ color: '#bda100ff', fontSize: 22 }}
+              />
+            ) : (
+              <RadioButtonUncheckedIcon
+                className={styles.selection_circle}
+                sx={{ color: '#A1A1A1', fontSize: 22 }}
+              />
+            )}
+          </div>
+        )}
+
+        {selectionMode ? (
+          noticeContent
+        ) : (
+          <Link
+            href={`/home?id=${id}`}
+            prefetch={false}
+            style={{ display: 'block', width: '100%' }}
+          >
+            {noticeContent}
+          </Link>
+        )}
+      </div>
 
       <hr className={styles.home_notice_hr} />
     </div>

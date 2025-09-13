@@ -8,4 +8,3 @@ export type Response = {
   device?: string;
   createdDate?: string;
 };
-

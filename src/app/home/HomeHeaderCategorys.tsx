@@ -10,14 +10,15 @@ import { useCategories, CategoryItem } from '@/contexts/CategoryContext';
 interface HomeHeaderCategorysProps {
   category: CategoryItem;
   setCategory: React.Dispatch<React.SetStateAction<CategoryItem>>;
+  categories: CategoryItem[];
 }
 
 export default function HomeHeaderCategorys({
   category,
   setCategory,
+  categories,
 }: HomeHeaderCategorysProps) {
   const router = useRouter();
-  const { items } = useCategories();
 
   function getButtonStyles(item: CategoryItem, selected: boolean) {
     return selected
@@ -51,7 +52,7 @@ export default function HomeHeaderCategorys({
         '&::-webkit-scrollbar': { display: 'none' },
       }}
     >
-      {items
+      {categories
         .filter((item) => item.visible)
         .map((item) => (
           <Button

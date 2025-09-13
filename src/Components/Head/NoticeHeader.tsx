@@ -34,21 +34,22 @@ export default function NoticeHeader({
         px: 2,
         height: 40,
         backgroundColor: '#ffffff',
-        marginTop: '15px',
+        marginTop: '10px',
       }}
     >
-      {/* 뒤로가기 */}
-      <IconButton onClick={() => router.back()}>
-        <ArrowBackIosIcon fontSize="small" sx={{ color: '#333333' }} />
-      </IconButton>
+      {/* 왼쪽: 뒤로가기 + 제목 */}
+      <Stack direction="row" alignItems="center" spacing={0}>
+        <IconButton onClick={() => router.back()}>
+          <ArrowBackIosIcon fontSize="small" sx={{ color: '#333333' }} />
+        </IconButton>
 
-      {/* 카테고리 */}
-      <Typography variant="subtitle1" fontWeight="bold" fontSize={18}>
-        {category.name} 공지
-      </Typography>
+        <Typography variant="subtitle1" fontWeight="550" fontSize={17}>
+          {category.name} 공지
+        </Typography>
+      </Stack>
 
-      {/* 공유 + 북마크 */}
-      <Stack direction="row" spacing={-0.9}>
+      {/* 오른쪽: 공유 + 북마크 */}
+      <Stack direction="row" spacing={0.3}>
         <IconButton
           onClick={async () => {
             const url = window.location.href;

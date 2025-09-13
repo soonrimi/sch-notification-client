@@ -11,22 +11,33 @@ import { categoryColors } from '@/constants/categories';
 export default function HomeContent() {
   const { items } = useCategories();
 
-  // 초기값: items[0]이 없으면 임시 전체 카테고리
-  const [category, setCategory] = useState<CategoryItem>({
+  // 전체 카테고리 프론트에서 기본값으로 생성
+  const allCategory: CategoryItem = {
     id: '0',
     name: '전체',
     color: categoryColors['전체'],
     notify: false,
     visible: true,
-  });
+  };
 
-  // items가 로드되면 category 초기화
+  // 초기값: 전체 카테고리
+  const [category, setCategory] = useState<CategoryItem>(allCategory);
+
+  // items가 로드되면 전체 카테고리 + 서버 카테고리 합치기
+  const [categoriesForUI, setCategoriesForUI] = useState<CategoryItem[]>([
+    allCategory,
+  ]);
   useEffect(() => {
-    if (items.length > 0) setCategory(items[0]);
+    if (items.length > 0) {
+      // items에 id '0' 있는 경우 제거 후 합치기
+      const filteredItems = items.filter((c) => c.id !== '0');
+      setCategoriesForUI([allCategory, ...filteredItems]);
+    }
   }, [items]);
 
+  // notices 가져오기
   const notices = useNotices({
-    id: Number(category.id), // string → number
+    id: Number(category.id),
     name: category.name,
   });
 
@@ -51,12 +62,16 @@ export default function HomeContent() {
     }
 
     setLoading(false);
-  }, [category, items]);
+  }, [category]);
 
   return (
     <Layout headerProps={{ pageType: 'home' }}>
       <div className={styles.home_content_wrapper}>
-        <HomeHeaderCategorys category={category} setCategory={setCategory} />
+        <HomeHeaderCategorys
+          category={category}
+          setCategory={setCategory}
+          categories={categoriesForUI}
+        />
         <div className={styles.home_content}>
           {loading ? (
             <div className={styles.loading}>로딩중...</div>
