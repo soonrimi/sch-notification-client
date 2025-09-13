@@ -47,6 +47,7 @@ export default function KeywordSettings() {
         pageType: 'settings',
         settingsHeaderProps: {
           title: '키워드 알림 설정',
+          backgroundColor: '#fff',
         },
       }}
       hideBottomNav
