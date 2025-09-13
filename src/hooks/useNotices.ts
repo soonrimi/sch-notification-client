@@ -30,10 +30,8 @@ function mapApiResponseToNotice(
   categoriesList: Category[],
   fallbackCategory: Category
 ): Notice {
-  const rawDate = (resp as any).createdAt;
-  const upload_time = (resp as any).createdAt
-    ? new Date((resp as any).createdAt)
-    : new Date(0);
+  const rawDate: string | undefined = resp.createdAt;
+  const upload_time = rawDate ? new Date(rawDate) : new Date(0);
   console.log('resp.createdAt:', resp.createdAt, 'raw resp:', resp);
   const category =
     categoriesList.find((c) => c.id === Number((resp as any).categoryId)) ??
