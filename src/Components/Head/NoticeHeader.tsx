@@ -7,7 +7,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import { useRouter } from 'next/navigation';
-import { Category } from '@/types/notice';
+import { Category, getCategoryName } from '@/constants/categories';
 
 export interface NoticeHeaderProps {
   category: Category;
@@ -44,7 +44,7 @@ export default function NoticeHeader({
         </IconButton>
 
         <Typography variant="subtitle1" fontWeight="550" fontSize={17}>
-          {category.name} 공지
+          {getCategoryName(category)} 공지
         </Typography>
       </Stack>
 
@@ -53,7 +53,7 @@ export default function NoticeHeader({
         <IconButton
           onClick={async () => {
             const url = window.location.href;
-            const title = `${category.name} 공지`;
+            const title = `${getCategoryName(category)} 공지`;
 
             if (navigator.share) {
               try {

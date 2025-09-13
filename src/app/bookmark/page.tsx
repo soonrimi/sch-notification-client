@@ -3,25 +3,25 @@ import React, { useEffect, useState } from 'react';
 import styles from '../page.module.css';
 import Layout from '../../Components/LayoutDir/Layout';
 import { useCategories, CategoryItem } from '@/contexts/CategoryContext';
-import { Category } from '@/types/notice';
 import { useNotices } from '@/hooks/useNotices';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SharedNoticeItem from '@/Components/Head/SharedNoticeItem';
+import { Category } from '@/constants/categories';
 
 export default function Bookmark() {
   // 기본 카테고리 설정
   const { items } = useCategories();
   // category 상태 생성 (items 로드 후 업데이트)
-  const [category, setCategory] = useState<Category>({ id: 0, name: '전체' });
+  const [category, setCategory] = useState<Category>('ALL');
 
   useEffect(() => {
     if (items.length > 0) {
-      setCategory({ id: Number(items[0].id), name: items[0].name });
+      setCategory(items[0] as unknown as Category);
     }
   }, [items]);
 
   // 선택된 category 기반으로 공지 가져오기
-  const notices = useNotices(category);
+  const { notices } = useNotices(category);
   const [readIds, setReadIds] = useState<string[]>([]);
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

@@ -35,3 +35,5 @@ export function getCategoryName(
       return '알 수 없음';
   }
 }
+
+export type Category = keyof typeof CATEGORY_COLORS;

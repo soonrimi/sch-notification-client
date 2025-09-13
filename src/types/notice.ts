@@ -1,7 +1,4 @@
-export interface Category {
-  id: number;
-  name: string;
-}
+import { Category } from '@/constants/categories';
 
 export interface Notice {
   id: string;

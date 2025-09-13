@@ -49,15 +49,25 @@ export class CrawlPostControllerService {
     });
   }
   /**
+   * @param categoryId
    * @returns CrawlPostsResponse OK
    * @throws ApiError
    */
-  public static getNoticesByCategoryId(): CancelablePromise<
-    Array<CrawlPostsResponse>
-  > {
+  public static getNoticesByCategoryId(
+    categoryId:
+      | 'UNIVERSITY'
+      | 'DEPARTMENT'
+      | 'GRADE'
+      | 'RECRUIT'
+      | 'ACTIVITY'
+      | 'PROMOTION'
+  ): CancelablePromise<Array<CrawlPostsResponse>> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/api/notice/category/{categoryId}',
+      path: {
+        categoryId: categoryId,
+      },
     });
   }
 }
