@@ -139,7 +139,7 @@ export function useKakaoChatRooms() {
       await KakaoRoomInfoControllerService.updateRoom(editingId, {
         roomName: editRoomName,
         targetYear: editTargetYear,
-        departmentId: editDepartmentId === 0 ? undefined : editDepartmentId,
+        departmentId: editDepartmentId,
       });
       setEditingId(null);
       await fetchRooms();

@@ -4,10 +4,10 @@
 /* eslint-disable */
 import type { Department } from './Department';
 export type KakaoRoomInfoResponse = {
-  id?: number;
-  department?: Department;
-  targetYear?: KakaoRoomInfoResponse.targetYear;
-  roomName?: string;
+  id: number;
+  department: Department;
+  targetYear: KakaoRoomInfoResponse.targetYear;
+  roomName: string;
 };
 export namespace KakaoRoomInfoResponse {
   export enum targetYear {

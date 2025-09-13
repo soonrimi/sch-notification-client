@@ -1,7 +1,8 @@
 // src/contexts/CategoryContext.tsx
 'use client';
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { categories, categoryColors } from '@/constants/categories';
+import { CATEGORY_COLORS, getCategoryName } from '@/constants/categories';
+import { CrawlPostsResponse } from '@/api/models/CrawlPostsResponse';
 
 export interface CategoryItem {
   id: string;
@@ -26,7 +27,7 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
   const defaultAll: CategoryItem = {
     id: 'all',
     name: '전체',
-    color: categoryColors['전체'],
+    color: CATEGORY_COLORS['ALL'],
     notify: false,
     visible: true,
   };
@@ -41,10 +42,10 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
     } else {
       setItems([
         defaultAll, // 항상 '전체' 상단 고정
-        ...categories.map((cat) => ({
-          id: cat,
-          name: cat,
-          color: categoryColors[cat] || '#1d9ad6',
+        ...Object.entries(CATEGORY_COLORS).map(([id, color]) => ({
+          id,
+          name: getCategoryName(id as CrawlPostsResponse['category'] | 'ALL'),
+          color: color || '#1d9ad6',
           notify: false,
           visible: true,
         })),
@@ -83,14 +84,14 @@ export function getDefaultCategories(): CategoryItem[] {
     {
       id: 'all',
       name: '전체',
-      color: categoryColors['전체'],
+      color: CATEGORY_COLORS['ALL'],
       notify: true,
       visible: true,
     },
-    ...categories.map((cat) => ({
-      id: cat,
-      name: cat,
-      color: categoryColors[cat] || '#1d9ad6',
+    ...Object.keys(CATEGORY_COLORS).map(([id, color]) => ({
+      id,
+      name: getCategoryName(id as CrawlPostsResponse['category'] | 'ALL'),
+      color: color || '#1d9ad6',
       notify: true,
       visible: true,
     })),

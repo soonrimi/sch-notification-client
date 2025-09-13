@@ -3,9 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export type UpdateKakaoRoomInfoRequest = {
-  departmentId?: number;
-  targetYear?: UpdateKakaoRoomInfoRequest.targetYear;
-  roomName?: string;
+  departmentId: number;
+  targetYear: UpdateKakaoRoomInfoRequest.targetYear;
+  roomName: string;
 };
 export namespace UpdateKakaoRoomInfoRequest {
   export enum targetYear {

@@ -5,17 +5,26 @@
 import type { Department } from './Department';
 import type { InternalNoticeAttachmentResponse } from './InternalNoticeAttachmentResponse';
 export type InternalNoticeListResponse = {
-  id?: number;
-  title?: string;
-  content?: string;
-  createdAt?: string;
-  viewCount?: number;
-  writerName?: string;
-  targetYear?: InternalNoticeListResponse.targetYear;
-  targetDept?: Department;
-  attachments?: Array<InternalNoticeAttachmentResponse>;
+  id: number;
+  title: string;
+  content: string;
+  createdAt: string;
+  viewCount: number;
+  writerName: string;
+  category: InternalNoticeListResponse.category;
+  targetYear: InternalNoticeListResponse.targetYear;
+  targetDept: Array<Department>;
+  attachments: Array<InternalNoticeAttachmentResponse>;
 };
 export namespace InternalNoticeListResponse {
+  export enum category {
+    UNIVERSITY = 'UNIVERSITY',
+    DEPARTMENT = 'DEPARTMENT',
+    GRADE = 'GRADE',
+    RECRUIT = 'RECRUIT',
+    ACTIVITY = 'ACTIVITY',
+    PROMOTION = 'PROMOTION',
+  }
   export enum targetYear {
     ALL_YEARS = 'ALL_YEARS',
     FIRST_YEAR = 'FIRST_YEAR',

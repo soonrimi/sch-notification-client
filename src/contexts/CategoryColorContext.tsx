@@ -1,6 +1,6 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { categoryColors as DEFAULT_COLORS } from '@/constants/categories';
+import { CATEGORY_COLORS } from '@/constants/categories';
 
 type CategoryColorContextType = {
   categoryColors: Record<string, string>;
@@ -17,7 +17,7 @@ export function CategoryColorProvider({
   children: React.ReactNode;
 }) {
   const [categoryColors, setCategoryColors] =
-    useState<Record<string, string>>(DEFAULT_COLORS);
+    useState<Record<string, string>>(CATEGORY_COLORS);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
