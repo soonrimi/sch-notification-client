@@ -13,7 +13,7 @@ import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { useBookmark } from '@/hooks/useBookmark';
 import { useNotices } from '@/hooks/useNotices';
 import { CategoryItem, useCategories } from '@/contexts/CategoryContext';
-import { categoryColors } from '@/constants/categories';
+import { CATEGORY_COLORS, getCategoryName } from '@/constants/categories';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 interface NoticeDetailProps {
@@ -24,8 +24,8 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
   // 전체 카테고리 객체
   const allCategory: CategoryItem = {
     id: '0',
-    name: '전체',
-    color: categoryColors['전체'],
+    name: getCategoryName('ALL'),
+    color: CATEGORY_COLORS['ALL'],
     notify: false,
     visible: true,
   };

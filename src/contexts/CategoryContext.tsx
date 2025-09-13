@@ -1,9 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { categoryColors } from '@/constants/categories';
-import { mockCategories } from '@/mock/notices';
-// import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerService';
+import { CATEGORY_COLORS, getCategoryName } from '@/constants/categories';
+import { CrawlPostsResponse } from '@/api/models/CrawlPostsResponse';
 
 export interface CategoryItem {
   id: string;
@@ -28,9 +27,9 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     async function initCategories() {
       const defaultAll: CategoryItem = {
-        id: '0',
+        id: 'all',
         name: '전체',
-        color: categoryColors['전체'],
+        color: CATEGORY_COLORS['ALL'],
         notify: false,
         visible: true,
       };
@@ -44,33 +43,24 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      // 서버 API 호출 (아직 없으므로 mock)
       try {
-        // const serverCategories = await CrawlPostControllerService.getCategories();
-        const serverCategories = mockCategories;
-
-        setItems([
-          defaultAll,
-          ...serverCategories.map((cat) => ({
-            id: cat.id.toString(),
-            name: cat.name,
-            color: categoryColors[cat.name] || '#1d9ad6',
-            notify: false,
-            visible: true,
-          })),
-        ]);
+        Object.entries(CATEGORY_COLORS).forEach(([key, value]) => {
+          setItems((prevItems) => [
+            ...prevItems,
+            {
+              id: key,
+              name: getCategoryName(
+                key as CrawlPostsResponse['category'] | 'ALL'
+              ),
+              color: value || '#1d9ad6',
+              notify: false,
+              visible: true,
+            },
+          ]);
+        });
       } catch {
         // fallback mock
-        setItems([
-          defaultAll,
-          ...mockCategories.map((cat) => ({
-            id: cat.id.toString(),
-            name: cat.name,
-            color: categoryColors[cat.name] || '#1d9ad6',
-            notify: false,
-            visible: true,
-          })),
-        ]);
+        setItems([defaultAll]);
       }
     }
 
@@ -92,20 +82,20 @@ export function useCategories() {
 }
 
 export function getDefaultCategories(
-  serverCategories: { id: number; name: string }[] = []
+  serverCategories: CrawlPostsResponse.category[] = []
 ): CategoryItem[] {
   return [
     {
       id: '0',
-      name: '전체',
-      color: categoryColors['전체'],
+      name: getCategoryName('ALL'),
+      color: CATEGORY_COLORS['ALL'],
       notify: true,
       visible: true,
     },
-    ...serverCategories.map((cat) => ({
-      id: cat.id.toString(),
-      name: cat.name,
-      color: categoryColors[cat.name] || '#1d9ad6',
+    ...serverCategories.map((category) => ({
+      id: category,
+      name: getCategoryName(category),
+      color: CATEGORY_COLORS[category] || '#1d9ad6',
       notify: true,
       visible: true,
     })),

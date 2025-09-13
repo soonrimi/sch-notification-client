@@ -6,7 +6,7 @@ import { useNotices } from '@/hooks/useNotices';
 import Layout from '@/Components/LayoutDir/Layout';
 import { useCategories, CategoryItem } from '@/contexts/CategoryContext';
 import SharedNoticeItem from '@/Components/Head/SharedNoticeItem';
-import { categoryColors } from '@/constants/categories';
+import { CATEGORY_COLORS, getCategoryName } from '@/constants/categories';
 
 export default function HomeContent() {
   const { items } = useCategories();
@@ -14,8 +14,8 @@ export default function HomeContent() {
   // 전체 카테고리 프론트에서 기본값으로 생성
   const allCategory: CategoryItem = {
     id: '0',
-    name: '전체',
-    color: categoryColors['전체'],
+    name: getCategoryName('ALL'),
+    color: CATEGORY_COLORS['ALL'],
     notify: false,
     visible: true,
   };

@@ -69,7 +69,7 @@ export function useNotices(selectedCategory: Category): Notice[] {
           data = await CrawlPostControllerService.getAllNotices();
         } else {
           data = await CrawlPostControllerService.getNoticesByCategoryId(
-            Number(selectedCategory.id)
+            selectedCategory.id
           );
         }
       } catch {
