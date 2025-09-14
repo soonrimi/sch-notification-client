@@ -3,29 +3,26 @@ import { useCategories } from '@/contexts/CategoryContext';
 import { useNotices } from '@/hooks/useNotices';
 import SharedNoticeItem from '@/Components/Head/SharedNoticeItem';
 import { useEffect, useState } from 'react';
-import { Category } from '@/types/notice';
+import { Category } from '@/constants/categories';
 
 export default function AlertTab() {
   const { items } = useCategories();
 
-  // Category 객체 상태
-  const [category, setCategory] = useState<Category>({ id: 0, name: '전체' });
+  const [category, setCategory] = useState<Category>('ALL');
 
   useEffect(() => {
-    // 전체 카테고리 객체 찾기
-    const allCategory = items.find((c) => c.name === '전체');
-    if (allCategory) {
-      setCategory({ id: Number(allCategory.id), name: allCategory.name });
-    }
+    setCategory('ALL');
   }, [items]);
 
   // 전체 공지 가져오기
-  const allNotices = useNotices(category);
+  const { notices: allNotices } = useNotices(category);
 
   // 알림 설정된 카테고리 필터링
-  const activeCategories = items.filter((c) => c.notify).map((c) => c.name);
+  const activeCategories = items
+    .filter((category) => category.notify)
+    .map((category) => category.name);
   const alertNotices = allNotices.filter((n) =>
-    activeCategories.includes(n.category.name)
+    activeCategories.includes(n.category)
   );
 
   if (alertNotices.length === 0) {

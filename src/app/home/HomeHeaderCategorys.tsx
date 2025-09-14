@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import Stack from '@mui/material/Stack';
-import { useCategories, CategoryItem } from '@/contexts/CategoryContext';
+import { CategoryItem } from '@/contexts/CategoryContext';
 
 interface HomeHeaderCategorysProps {
   category: CategoryItem;

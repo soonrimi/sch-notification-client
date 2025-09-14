@@ -1,5 +1,4 @@
 import { Stack, TextField, Button, Select, MenuItem } from '@mui/material';
-import { useAtom } from 'jotai';
 
 import { useKakaoChatRooms } from './useKakaoChatRooms';
 import { CreateInternalNoticeRequest } from '@/api';

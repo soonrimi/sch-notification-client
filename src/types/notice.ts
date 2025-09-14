@@ -1,7 +1,7 @@
 import { Category } from '@/constants/categories';
 
 export interface Notice {
-  id: string;
+  id: number;
   category: Category;
   upload_time: Date;
   title: string;

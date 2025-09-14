@@ -92,14 +92,18 @@
 
 .home_notice_detail {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  -webkit-line-clamp: 2; /* 세로 2줄 제한 */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+
   font-size: 15px;
   color: #000;
   font-weight: 320;
+
+  width: 100%; /* 부모 영역 기준 폭 제한 */
+  max-width: 100%; /* 혹시 부모보다 커지는 걸 방지 */
+  word-break: break-word; /* 긴 단어/URL 줄바꿈 */
 }
 
 .selection_circle {

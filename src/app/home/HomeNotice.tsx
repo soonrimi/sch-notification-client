@@ -7,10 +7,10 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { IconButton } from '@mui/material';
-import { useCategoryColors } from '@/contexts/CategoryColorContext';
 import styles from './Home.module.css';
-import { Notice } from '@/api';
+import { Notice } from '@/types/notice';
 import { CATEGORY_COLORS, getCategoryName } from '@/constants/categories';
+import { formatUploadTime } from '@/utils/NoticeDate';
 
 interface HomeNoticeProps extends Notice {
   isBookmarked: boolean;
@@ -20,34 +20,6 @@ interface HomeNoticeProps extends Notice {
   isSelected?: boolean;
 }
 
-function formatUploadTime(date: Date) {
-  const now = new Date();
-  const isToday =
-    date.getFullYear() === now.getFullYear() &&
-    date.getMonth() === now.getMonth() &&
-    date.getDate() === now.getDate();
-
-  if (isToday)
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-  const isThisYear = date.getFullYear() === now.getFullYear();
-  if (isThisYear)
-    return date.toLocaleString([], {
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-
-  return date.toLocaleString([], {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-}
-
 export default function HomeNotice({
   id,
   category,
@@ -55,13 +27,11 @@ export default function HomeNotice({
   isBookmarked,
   onToggleBookmark,
   isRead,
-  content,
+  detail,
   selectionMode = false,
   isSelected = false,
-  createdAt,
+  upload_time,
 }: HomeNoticeProps) {
-  const { categoryColors } = useCategoryColors();
-
   const noticeContent = (
     <div className={styles.home_notice_content}>
       <div className={styles.home_notice_info}>
@@ -82,7 +52,7 @@ export default function HomeNotice({
           {getCategoryName(category)}
         </div>
         <div className={styles.home_notice_upload_info}>
-          | {formatUploadTime(createdAt)}
+          | {formatUploadTime(upload_time)}
         </div>
       </div>
 
@@ -117,9 +87,8 @@ export default function HomeNotice({
 
         <div
           className={`${styles.home_notice_detail} ${isRead ? styles.read : ''}`}
-        >
-          {content}
-        </div>
+          dangerouslySetInnerHTML={{ __html: detail ?? '' }}
+        />
       </div>
     </div>
   );

@@ -1,78 +1,78 @@
 'use client';
-import React, { useEffect } from 'react';
+
+import React, { useEffect, useState } from 'react';
 import Layout from '@/Components/LayoutDir/Layout';
-import {
-  Box,
-  Typography,
-  Stack,
-  Button,
-  IconButton,
-  colors,
-} from '@mui/material';
+import { Box, Typography, Stack, Button, IconButton } from '@mui/material';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
-import { useBookmark } from '@/hooks/useBookmark';
-import { useNotices } from '@/hooks/useNotices';
-import { CategoryItem, useCategories } from '@/contexts/CategoryContext';
-import { CATEGORY_COLORS, getCategoryName } from '@/constants/categories';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerService';
+import type { CrawlPostsResponse } from '@/api/models/CrawlPostsResponse';
+import { useBookmark } from '@/hooks/useBookmark';
+import { Category } from '@/constants/categories';
+import { formatUploadTime } from '@/utils/NoticeDate';
 
 interface NoticeDetailProps {
   id: string;
 }
 
+// HomeNotice 스타일의 Date 변환용 타입
+interface NoticeWithDate extends Omit<CrawlPostsResponse, 'createdAt'> {
+  upload_time: Date | null;
+}
+
 export default function NoticeDetail({ id }: NoticeDetailProps) {
-  // 전체 카테고리 객체
-  const allCategory: CategoryItem = {
-    id: '0',
-    name: getCategoryName('ALL'),
-    color: CATEGORY_COLORS['ALL'],
-    notify: false,
-    visible: true,
-  };
+  const [notice, setNotice] = useState<NoticeWithDate | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // 전체 공지 가져오기
-  const notices = useNotices({
-    id: Number(allCategory.id),
-    name: allCategory.name,
-  });
+  const { bookmarked, toggleBookmark } = useBookmark(notice?.id ?? 0);
 
-  // id로 공지 찾기
-  const notice = notices.find((n) => n.id === decodeURIComponent(id));
-  const { bookmarked, toggleBookmark } = useBookmark(notice?.id || '');
+  useEffect(() => {
+    async function fetchNotice() {
+      setLoading(true);
+      try {
+        const data = await CrawlPostControllerService.getNotice(Number(id));
+
+        // createdAt(string) → Date 변환
+        setNotice({
+          ...data,
+          upload_time: data.createdAt ? new Date(data.createdAt) : null,
+        });
+      } catch (err) {
+        console.error('공지 불러오기 실패', err);
+        setNotice(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchNotice();
+  }, [id]);
 
   // 읽음 처리
   useEffect(() => {
-    if (!notice) return;
+    if (!notice?.id) return;
 
-    const readNotices: string[] = JSON.parse(
+    const readNotices: number[] = JSON.parse(
       localStorage.getItem('readNotices') || '[]'
     );
-
     if (!readNotices.includes(notice.id)) {
       readNotices.push(notice.id);
       localStorage.setItem('readNotices', JSON.stringify(readNotices));
     }
   }, [notice]);
 
+  if (loading) return <Layout hideBottomNav>로딩중...</Layout>;
   if (!notice)
     return <Layout hideBottomNav>해당 공지를 찾을 수 없습니다.</Layout>;
 
-  // 첨부파일 예시
-  const attachments = [
-    {
-      name: '개인정보수집이용동의서.hwp',
-      url: '/files/개인정보수집이용동의서.hwp',
-    },
-    { name: '이력서 양식_1.hwp', url: '/files/이력서양식.hwp' },
-    { name: '이력서 양식_2.hwp', url: '/files/이력서양식.hwp' },
-    { name: '이력서 양식_3.hwp', url: '/files/이력서양식.hwp' },
-  ];
+  const attachments = notice.attachments ?? [];
 
   const handleDownloadAll = () => {
     attachments.forEach((file) => {
+      if (!file.fileUrl || !file.fileName) return;
       const link = document.createElement('a');
-      link.href = file.url;
-      link.download = file.name;
+      link.href = file.fileUrl;
+      link.download = file.fileName;
       link.click();
     });
   };
@@ -82,8 +82,8 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
       headerProps={{
         pageType: 'contentdetail',
         noticeHeaderProps: {
-          category: notice.category,
-          noticeId: notice.id,
+          category: notice.category as Category,
+          noticeId: notice.id ?? 0,
           isBookmarked: bookmarked,
           onToggleBookmark: toggleBookmark,
         },
@@ -123,9 +123,10 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
                     flexShrink: 0,
                   }}
                   onClick={() => {
+                    if (!file.fileUrl || !file.fileName) return;
                     const link = document.createElement('a');
-                    link.href = file.url;
-                    link.download = file.name;
+                    link.href = file.fileUrl;
+                    link.download = file.fileName;
                     link.click();
                   }}
                 >
@@ -137,7 +138,7 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
                       fontSize: '13px',
                     }}
                   >
-                    {file.name}
+                    {file.fileName}
                   </Box>
                 </Button>
               ))}
@@ -158,8 +159,6 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
           <AccountBoxIcon
             sx={{ color: '#d8d8d8', fontSize: 50, mr: 0.5, marginLeft: -0.8 }}
           />
-
-          {/* 텍스트 박스 */}
           <Box
             sx={{
               display: 'flex',
@@ -181,7 +180,7 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
               color="text.secondary"
               sx={{ lineHeight: 1.3 }}
             >
-              {notice.upload_time.toISOString().slice(0, 10)}
+              {formatUploadTime(notice.upload_time)}
             </Typography>
           </Box>
         </Box>
@@ -202,7 +201,7 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
           display="flex"
           fontSize="14px"
         >
-          <span>조회수 37회</span>
+          <span>조회수 {notice.viewCount ?? 0}회</span>
         </Typography>
 
         <Typography
@@ -211,9 +210,8 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
           mb={3}
           mt={3}
           fontSize="15px"
-        >
-          {notice.detail}
-        </Typography>
+          dangerouslySetInnerHTML={{ __html: notice.content ?? '' }}
+        />
       </Box>
     </Layout>
   );

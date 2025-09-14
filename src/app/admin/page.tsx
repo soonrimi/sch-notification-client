@@ -14,7 +14,7 @@ const DELETE_WINDOW_MS = 5 * 60 * 1000;
 
 export default function AdminPage() {
   const { adminToken } = useAdminInfo();
-  const [tick, setTick] = useState(0);
+  const [, setTick] = useState(0);
   const { push } = useRouter();
   const [notices, setNotices] = useState<InternalNoticeListResponse[]>([]);
 

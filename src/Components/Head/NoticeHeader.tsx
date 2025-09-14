@@ -11,9 +11,9 @@ import { Category, getCategoryName } from '@/constants/categories';
 
 export interface NoticeHeaderProps {
   category: Category;
-  noticeId: string;
+  noticeId: number;
   isBookmarked: boolean;
-  onToggleBookmark: (id: string) => void;
+  onToggleBookmark: (id: number) => void;
   isRead?: boolean;
 }
 

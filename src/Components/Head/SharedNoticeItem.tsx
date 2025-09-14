@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import HomeNotice from '@/app/home/HomeNotice';
 import { useBookmark } from '@/hooks/useBookmark';
-import { Notice } from '@/api';
+import { Notice } from '@/types/notice';
 
 type Props = {
   notice: Notice;

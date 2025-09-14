@@ -30,17 +30,9 @@ import { useCategoryColors } from '@/contexts/CategoryColorContext';
 import {
   useCategories,
   getDefaultCategories,
+  CategoryItem,
 } from '@/contexts/CategoryContext';
 import { CATEGORY_COLORS } from '@/constants/categories';
-
-/** CategoryItem 타입 정의 */
-interface CategoryItem {
-  id: string;
-  name: string;
-  color: string;
-  visible: boolean;
-  notify: boolean;
-}
 
 /**
  * ItemView: 기본 아이템 UI
@@ -85,13 +77,13 @@ function ItemView({
           fontSize: 15,
           backgroundColor: item.visible
             ? item.color || categoryColors[item.name] || '#000'
-            : '#ccc', // 안보이면 회색
+            : '#ccc',
           color: '#fff',
           cursor: 'pointer',
         }}
       >
         {item.name}
-        {item.id !== 'all' && onToggleActive && (
+        {item.id !== 'ALL' && onToggleActive && (
           <IconButton
             size="small"
             onClick={() => onToggleActive(index!)}
@@ -129,7 +121,8 @@ function ItemView({
           />
         </IconButton>
 
-        {onToggleNotify && (
+        {/* 오른쪽: 알림 아이콘 */}
+        {onToggleNotify && item.id !== 'ALL' && (
           <IconButton
             onClick={() => onToggleNotify(index!)}
             size="small"
@@ -177,7 +170,7 @@ function SortableItem({
   onToggleActive,
   onOpenColorPicker,
 }: {
-  item: CategoryItem; // 수정
+  item: CategoryItem;
   index: number;
   onToggleNotify?: (i: number) => void;
   onToggleActive?: (i: number) => void;
@@ -311,7 +304,7 @@ export default function CategorySettingsPage() {
       const toggled = { ...newItems[index], visible: !newItems[index].visible };
       newItems.splice(index, 1);
       if (toggled.visible) {
-        const allIndex = newItems.findIndex((i) => i.id === 'all');
+        const allIndex = newItems.findIndex((i) => i.id === 'ALL');
         newItems.splice(allIndex + 1, 0, toggled);
       } else {
         newItems.push(toggled);

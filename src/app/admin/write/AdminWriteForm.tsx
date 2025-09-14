@@ -1,7 +1,6 @@
 'use client';
 
-import React, { ElementType, forwardRef, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { ElementType, forwardRef, useEffect } from 'react';
 import base from '../Admin.module.css';
 import fancy from './WriteForm.module.css';
 import { useAdminWrite } from './useAdminWrite';
@@ -13,14 +12,9 @@ import {
   Stack,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
-import {
-  CrawlPostsResponse,
-  Department,
-  InternalNoticeListResponse,
-} from '@/api';
+import { CrawlPostsResponse, InternalNoticeListResponse } from '@/api';
 
 // 아이콘
-import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
@@ -71,9 +65,7 @@ export type AdminWriteFormHandle = {
 };
 
 export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
-  function AdminWriteForm(_props, ref) {
-    const router = useRouter();
-
+  function AdminWriteForm(_props) {
     const {
       title,
       setTitle,

@@ -1,11 +1,15 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { CATEGORY_COLORS, getCategoryName } from '@/constants/categories';
-import { CrawlPostsResponse } from '@/api/models/CrawlPostsResponse';
+import {
+  CATEGORY_COLORS,
+  getCategoryName,
+  Category,
+  ALL_CATEGORY,
+} from '@/constants/categories';
 
 export interface CategoryItem {
-  id: string;
+  id: Category;
   name: string;
   color: string;
   notify: boolean;
@@ -26,38 +30,32 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     async function initCategories() {
-      const defaultAll: CategoryItem = {
-        id: 'all',
-        name: '전체',
-        color: CATEGORY_COLORS['ALL'],
-        notify: false,
-        visible: true,
-      };
+      const defaultAll: CategoryItem = ALL_CATEGORY;
 
       // localStorage 확인 (카테고리 순서, 알림설정, 색상설정)
       const saved = localStorage.getItem('categories');
       if (saved) {
         const parsed: CategoryItem[] = JSON.parse(saved);
-        const hasAll = parsed.some((c) => c.id === '0');
+        const hasAll = parsed.some((c) => c.id === 'ALL');
         setItems(hasAll ? parsed : [defaultAll, ...parsed]);
         return;
       }
 
       try {
-        Object.entries(CATEGORY_COLORS).forEach(([key, value]) => {
-          setItems((prevItems) => [
-            ...prevItems,
-            {
-              id: key,
-              name: getCategoryName(
-                key as CrawlPostsResponse['category'] | 'ALL'
-              ),
-              color: value || '#1d9ad6',
+        const categoryItems: CategoryItem[] = Object.keys(CATEGORY_COLORS).map(
+          (key) => {
+            const id = key as Category; // string → Category
+            return {
+              id,
+              name: getCategoryName(id),
+              color: CATEGORY_COLORS[id] || '#1d9ad6',
               notify: false,
               visible: true,
-            },
-          ]);
-        });
+            };
+          }
+        );
+
+        setItems(categoryItems);
       } catch {
         // fallback mock
         setItems([defaultAll]);
@@ -81,23 +79,18 @@ export function useCategories() {
   return context;
 }
 
-export function getDefaultCategories(
-  serverCategories: CrawlPostsResponse.category[] = []
-): CategoryItem[] {
+export function getDefaultCategories(): CategoryItem[] {
   return [
-    {
-      id: '0',
-      name: getCategoryName('ALL'),
-      color: CATEGORY_COLORS['ALL'],
-      notify: true,
-      visible: true,
-    },
-    ...Object.keys(CATEGORY_COLORS).map(([id, color]) => ({
-      id,
-      name: getCategoryName(id as CrawlPostsResponse['category'] | 'ALL'),
-      color: color || '#1d9ad6',
-      notify: true,
-      visible: true,
-    })),
+    ALL_CATEGORY,
+    ...Object.keys(CATEGORY_COLORS).map((key) => {
+      const id = key as Category;
+      return {
+        id,
+        name: getCategoryName(id),
+        color: CATEGORY_COLORS[id] || '#1d9ad6',
+        notify: true,
+        visible: true,
+      };
+    }),
   ];
 }

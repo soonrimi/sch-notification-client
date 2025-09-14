@@ -1,10 +1,11 @@
 import { CrawlPostsResponse } from '@/api';
+import { CategoryItem } from '@/contexts/CategoryContext';
 
 export const CATEGORY_COLORS: Record<
   CrawlPostsResponse.category | 'ALL',
   string
 > = {
-  ALL: '#7986CC', // ✅ 전체도 색상 필요
+  ALL: '#7986CC',
   UNIVERSITY: '#69B054',
   DEPARTMENT: '#EA9E5A',
   GRADE: '#F17298',
@@ -32,8 +33,16 @@ export function getCategoryName(
     case CrawlPostsResponse.category.PROMOTION:
       return '홍보';
     default:
-      return '알 수 없음';
+      return 'NULL';
   }
 }
 
 export type Category = keyof typeof CATEGORY_COLORS;
+
+export const ALL_CATEGORY: CategoryItem = {
+  id: 'ALL',
+  name: getCategoryName('ALL'),
+  color: CATEGORY_COLORS['ALL'],
+  notify: false,
+  visible: true,
+};

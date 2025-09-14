@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 function DetailInner() {
   const sp = useSearchParams();
   const id = sp.get('id') ?? '';
-  const [item, setItem] = useState<InternalNoticeListResponse | null>(null);
+  const [item] = useState<InternalNoticeListResponse | null>(null);
 
   useEffect(() => {}, [id]);
 
