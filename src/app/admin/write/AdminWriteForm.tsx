@@ -1,31 +1,20 @@
 'use client';
 
-import React, {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from 'react';
-import { useRouter } from 'next/navigation';
+import React, { ElementType, forwardRef, useEffect } from 'react';
 import base from '../Admin.module.css';
 import fancy from './WriteForm.module.css';
 import { useAdminWrite } from './useAdminWrite';
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+} from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
-import { InternalNoticeListResponse } from '@/api';
-
-// 게시판(단일 선택)
-type BoardCategory =
-  | '학교'
-  | '대학'
-  | '학과'
-  | '학년'
-  | '채용'
-  | '활동'
-  | '홍보';
+import { CrawlPostsResponse, InternalNoticeListResponse } from '@/api';
 
 // 아이콘
-import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
@@ -34,34 +23,41 @@ import EventAvailableRoundedIcon from '@mui/icons-material/EventAvailableRounded
 import CampaignRoundedIcon from '@mui/icons-material/CampaignRounded';
 
 const CATEGORY_META: {
-  key: BoardCategory;
+  categoryId: CrawlPostsResponse.category;
   label: string;
-  Icon: React.ElementType;
+  Icon: ElementType;
 }[] = [
-  { key: '학교', label: '학교', Icon: SchoolRoundedIcon },
-  { key: '대학', label: '대학', Icon: ApartmentRoundedIcon },
-  { key: '학과', label: '학과', Icon: GroupsRoundedIcon },
-  { key: '학년', label: '학년', Icon: BadgeRoundedIcon },
-  { key: '채용', label: '채용', Icon: WorkOutlineRoundedIcon },
-  { key: '활동', label: '활동', Icon: EventAvailableRoundedIcon },
-  { key: '홍보', label: '홍보', Icon: CampaignRoundedIcon },
+  {
+    categoryId: CrawlPostsResponse.category.UNIVERSITY,
+    label: '대학',
+    Icon: ApartmentRoundedIcon,
+  },
+  {
+    categoryId: CrawlPostsResponse.category.DEPARTMENT,
+    label: '학과',
+    Icon: GroupsRoundedIcon,
+  },
+  {
+    categoryId: CrawlPostsResponse.category.GRADE,
+    label: '학년',
+    Icon: BadgeRoundedIcon,
+  },
+  {
+    categoryId: CrawlPostsResponse.category.RECRUIT,
+    label: '채용',
+    Icon: WorkOutlineRoundedIcon,
+  },
+  {
+    categoryId: CrawlPostsResponse.category.ACTIVITY,
+    label: '활동',
+    Icon: EventAvailableRoundedIcon,
+  },
+  {
+    categoryId: CrawlPostsResponse.category.PROMOTION,
+    label: '홍보',
+    Icon: CampaignRoundedIcon,
+  },
 ];
-
-type LocalNotice = {
-  id: string;
-  title: string;
-  content: string;
-  category: BoardCategory;
-  year?:
-    | typeof InternalNoticeListResponse.targetYear.FIRST_YEAR
-    | typeof InternalNoticeListResponse.targetYear.SECOND_YEAR
-    | typeof InternalNoticeListResponse.targetYear.THIRD_YEAR
-    | typeof InternalNoticeListResponse.targetYear.FOURTH_YEAR;
-  files: { id: string; name: string }[];
-  createdAt: string; // ISO
-};
-
-const LS_KEY = 'SOONRIMI_LOCAL_NOTICES';
 
 export type AdminWriteFormHandle = {
   /** 상단 "등록" 버튼에서 호출 → 로컬 저장 */
@@ -69,9 +65,7 @@ export type AdminWriteFormHandle = {
 };
 
 export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
-  function AdminWriteForm(_props, ref) {
-    const router = useRouter();
-
+  function AdminWriteForm(_props) {
     const {
       title,
       setTitle,
@@ -87,10 +81,12 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
       onRemoveFile,
       targetYear,
       setTargetYear,
+      departmentList,
+      targetDepartmentList,
+      category,
+      setCategory,
+      setTargetDepartmentList,
     } = useAdminWrite();
-
-    // 게시판 카테고리(단일)
-    const [category, setCategory] = useState<BoardCategory>('학교');
 
     // 학년 값은 항상 유효한 enum으로 유지
     const Year = InternalNoticeListResponse.targetYear;
@@ -98,7 +94,7 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
 
     // 카테고리 변경 시 학년 초기화/보정
     useEffect(() => {
-      if (category === '학년') {
+      if (category === CrawlPostsResponse.category.GRADE) {
         if (
           targetYear !== Year.FIRST_YEAR &&
           targetYear !== Year.SECOND_YEAR &&
@@ -119,41 +115,16 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
       );
     };
 
-    // ------ 부모에서 호출하는 submit 핸들 바인딩 ------
-    useImperativeHandle(ref, () => ({
-      submit: () => {
-        const trimmedTitle = title.trim();
-        const trimmedContent = content.trim();
-        if (!trimmedTitle || !trimmedContent) {
-          alert('제목과 내용을 입력하세요.');
-          return;
-        }
-
-        const notice: LocalNotice = {
-          id: String(Date.now()),
-          title: trimmedTitle,
-          content: trimmedContent,
-          category,
-          year:
-            category === '학년'
-              ? (selectedYear as LocalNotice['year'])
-              : undefined,
-          files: numberedFiles.map((f) => ({ id: String(f.id), name: f.name })),
-          createdAt: new Date().toISOString(),
-        };
-
-        try {
-          const raw = localStorage.getItem(LS_KEY);
-          const list: LocalNotice[] = raw ? JSON.parse(raw) : [];
-          list.unshift(notice);
-          localStorage.setItem(LS_KEY, JSON.stringify(list));
-        } catch {
-          /* localStorage 실패해도 화면 전환은 그대로 */
-        }
-
-        router.push('/admin');
-      },
-    }));
+    function handleChangeTargetDepartments(e: SelectChangeEvent<number[]>) {
+      const {
+        target: { value },
+      } = e;
+      setTargetDepartmentList(
+        typeof value === 'string'
+          ? []
+          : departmentList.filter((d) => value.includes(d.id))
+      );
+    }
 
     // ------ UI ------
     return (
@@ -183,14 +154,16 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
           <div className={base.sectionTitle}>게시판 선택</div>
           <div className={fancy.sectionCard}>
             <div className={fancy.chips}>
-              {CATEGORY_META.map(({ key, label, Icon }) => (
+              {CATEGORY_META.map(({ categoryId, label, Icon }) => (
                 <button
-                  key={key}
+                  key={categoryId}
                   type="button"
-                  className={`${fancy.chip} ${category === key ? fancy.chipActive : ''}`}
-                  onClick={() => setCategory(key)}
-                  aria-pressed={category === key}
-                  data-active={category === key} /* 활성 스타일 강제 적용 */
+                  className={`${fancy.chip} ${category === categoryId ? fancy.chipActive : ''}`}
+                  onClick={() => setCategory(categoryId)}
+                  aria-pressed={category === categoryId}
+                  data-active={
+                    category === categoryId
+                  } /* 활성 스타일 강제 적용 */
                 >
                   <Icon className={fancy.icon} />
                   <span>{label}</span>
@@ -199,9 +172,23 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
             </div>
           </div>
         </div>
-
-        {/* 학년 선택: 카테고리가 '학년'일 때만 */}
-        {category === '학년' && (
+        {category === CrawlPostsResponse.category.DEPARTMENT && (
+          <Stack>
+            <Select
+              multiple
+              value={targetDepartmentList.map((d) => d.id)}
+              onChange={(e) => handleChangeTargetDepartments(e)}
+              displayEmpty
+            >
+              {departmentList.map((dept) => (
+                <MenuItem key={dept.id} value={dept.id}>
+                  {dept.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </Stack>
+        )}
+        {category === CrawlPostsResponse.category.GRADE && (
           <div className={base.section}>
             <div className={base.sectionTitle}>학년 선택</div>
             <div className={fancy.sectionCard}>
@@ -217,6 +204,7 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
                     keepMounted: true,
                   }}
                 >
+                  <MenuItem value={Year.ALL_YEARS}>전체</MenuItem>
                   <MenuItem value={Year.FIRST_YEAR}>1학년</MenuItem>
                   <MenuItem value={Year.SECOND_YEAR}>2학년</MenuItem>
                   <MenuItem value={Year.THIRD_YEAR}>3학년</MenuItem>

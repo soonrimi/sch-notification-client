@@ -54,7 +54,13 @@ export class CrawlPostControllerService {
    * @throws ApiError
    */
   public static getNoticesByCategoryId(
-    categoryId: number
+    categoryId:
+      | 'UNIVERSITY'
+      | 'DEPARTMENT'
+      | 'GRADE'
+      | 'RECRUIT'
+      | 'ACTIVITY'
+      | 'PROMOTION'
   ): CancelablePromise<Array<CrawlPostsResponse>> {
     return __request(OpenAPI, {
       method: 'GET',

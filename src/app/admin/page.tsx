@@ -8,21 +8,13 @@ import useAdminInfo from './useAdminInfo';
 import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
 import Header from './components/Header';
+import { CATEGORY_COLORS, getCategoryName } from '@/constants/categories';
 
 const DELETE_WINDOW_MS = 5 * 60 * 1000;
-const CATEGORY_COLOR: Record<string, string> = {
-  전체: '#1d9ad6',
-  학교: '#e74c3c',
-  대학: '#27ae60',
-  학년: '#9b59b6',
-  채용: '#f39c12',
-  활동: '#16a085',
-  홍보: '#34495e',
-};
 
 export default function AdminPage() {
   const { adminToken } = useAdminInfo();
-  const [tick, setTick] = useState(0);
+  const [, setTick] = useState(0);
   const { push } = useRouter();
   const [notices, setNotices] = useState<InternalNoticeListResponse[]>([]);
 
@@ -72,7 +64,7 @@ export default function AdminPage() {
         ) : (
           view.map((n) => {
             const files = n.attachments?.length || 0;
-            const color = CATEGORY_COLOR[n.targetDept?.name || ''] || '#1d9ad6';
+            const color = CATEGORY_COLORS[n.category];
             return (
               <article key={n.id} className={styles.card}>
                 <div className={styles.cardRowTop}>
@@ -81,7 +73,9 @@ export default function AdminPage() {
                     style={{ backgroundColor: color }}
                     aria-hidden
                   />
-                  <span className={styles.catText}>{n.targetDept?.name}</span>
+                  <span className={styles.catText}>
+                    {getCategoryName(n.category)}
+                  </span>
                   <span className={styles.metaRight}>
                     {dayjs(n.createdAt).format('YYYY-MM-DD HH:mm')}
                   </span>

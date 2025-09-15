@@ -25,7 +25,7 @@ export default function AdminDrawer({ open, onClose }: AdminDrawerProps) {
       icon: <ChatIcon />,
       path: '/admin/kakao-chat',
     },
-    { text: '게시글 목록', icon: <ArticleIcon />, path: '/admin/posts' },
+    { text: '게시글 목록', icon: <ArticleIcon />, path: '/admin' },
   ];
 
   return (

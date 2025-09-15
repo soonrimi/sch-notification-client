@@ -1,23 +1,49 @@
-import { useMemo } from 'react';
+'use client';
+
+import { useState, useEffect } from 'react';
 import type { Notice } from '@/types/notice';
-import { allNotices } from '@/mock/notices';
-import { useCategories } from '@/contexts/CategoryContext';
+import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerService';
+import type { CrawlPostsResponse } from '@/api/models/CrawlPostsResponse';
+import { Category } from '@/constants/categories';
+import { mapCrawlPostToNotice } from '@/utils/Noticemappers';
 
-/**
- * 선택된 카테고리와 Context를 기반으로 공지 필터링
- */
-export function useNotices(selectedCategory: string): Notice[] {
-  const { items } = useCategories();
+export function useNotices(selectedCategory: Category) {
+  const [notices, setNotices] = useState<Notice[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  return useMemo(() => {
-    const currentCat = items.find((i) => i.name === selectedCategory);
-    if (!currentCat || !currentCat.visible) return [];
+  useEffect(() => {
+    async function fetchNotices() {
+      setLoading(true);
+      let data: CrawlPostsResponse[] = [];
 
-    if (selectedCategory === '전체') {
-      const visibleNames = items.filter((i) => i.visible).map((i) => i.name);
-      return allNotices.filter((n) => visibleNames.includes(n.category));
-    } else {
-      return allNotices.filter((n) => n.category === selectedCategory);
+      try {
+        if (selectedCategory === 'ALL') {
+          data = await CrawlPostControllerService.getAllNotices();
+        } else {
+          data =
+            await CrawlPostControllerService.getNoticesByCategoryId(
+              selectedCategory
+            );
+        }
+      } catch {
+        console.warn('API 실패 → Mock 데이터 사용');
+      }
+
+      // 서버에서 받은 문자열 upload_time을 Date로 변환
+      const convertedNotices: Notice[] = data.map((raw) => {
+        const notice = mapCrawlPostToNotice(raw);
+        return {
+          ...notice,
+          upload_time: new Date(notice.upload_time),
+        };
+      });
+
+      setNotices(convertedNotices);
+      setLoading(false);
     }
-  }, [selectedCategory, items]);
+
+    fetchNotices();
+  }, [selectedCategory]);
+
+  return { notices, loading };
 }

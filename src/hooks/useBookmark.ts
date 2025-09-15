@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export function useBookmark(noticeId: string) {
+export function useBookmark(noticeId: number) {
   const [bookmarked, setBookmarked] = useState(false);
 
   useEffect(() => {
@@ -11,7 +11,7 @@ export function useBookmark(noticeId: string) {
   const toggleBookmark = () => {
     const saved = JSON.parse(localStorage.getItem('bookmarkedIds') || '[]');
     const newBookmarked = saved.includes(noticeId)
-      ? saved.filter((x: string) => x !== noticeId)
+      ? saved.filter((x: number) => x !== noticeId)
       : [...saved, noticeId];
     localStorage.setItem('bookmarkedIds', JSON.stringify(newBookmarked));
     setBookmarked(!bookmarked);

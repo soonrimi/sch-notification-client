@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 function DetailInner() {
   const sp = useSearchParams();
   const id = sp.get('id') ?? '';
-  const [item, setItem] = useState<InternalNoticeListResponse | null>(null);
+  const [item] = useState<InternalNoticeListResponse | null>(null);
 
   useEffect(() => {}, [id]);
 
@@ -22,7 +22,7 @@ function DetailInner() {
         <article className={styles.detailCard}>
           <div className={styles.detailHeaderRow}>
             <span className={styles.catBadge}>
-              {item.targetDept?.name}
+              {item.targetDept.map((d) => d.name).join(', ')}
               {` · ${item.targetYear}`}
             </span>
             <time className={styles.metaTime} dateTime={item.createdAt}>

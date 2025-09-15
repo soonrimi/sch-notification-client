@@ -1,34 +1,37 @@
-// src/app/home/HomeHeaderCategorys.tsx
 'use client';
+
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import Stack from '@mui/material/Stack';
-import { useCategories } from '@/contexts/CategoryContext';
-import { useCategoryColors } from '@/contexts/CategoryColorContext';
+import { CategoryItem } from '@/contexts/CategoryContext';
 
 interface HomeHeaderCategorysProps {
-  category: string;
-  setCategory: (cat: string) => void;
+  category: CategoryItem;
+  setCategory: React.Dispatch<React.SetStateAction<CategoryItem>>;
+  categories: CategoryItem[];
 }
 
 export default function HomeHeaderCategorys({
   category,
   setCategory,
+  categories,
 }: HomeHeaderCategorysProps) {
   const router = useRouter();
-  const { items } = useCategories();
-  const { categoryColors } = useCategoryColors();
 
-  function getButtonStyles(catName: string, selected: boolean) {
+  function getButtonStyles(item: CategoryItem, selected: boolean) {
     return selected
       ? {
-          border: `1px solid ${categoryColors[catName]}`,
-          backgroundColor: categoryColors[catName],
+          border: `1px solid ${item.color}`,
+          backgroundColor: item.color,
           color: '#fff',
         }
-      : { border: '1px solid #6b6b6b', backgroundColor: '#fff', color: '#000' };
+      : {
+          border: '1px solid #6b6b6b',
+          backgroundColor: '#fff',
+          color: '#000',
+        };
   }
 
   return (
@@ -49,13 +52,13 @@ export default function HomeHeaderCategorys({
         '&::-webkit-scrollbar': { display: 'none' },
       }}
     >
-      {items
+      {categories
         .filter((item) => item.visible)
-        .map((item, index) => (
+        .map((item) => (
           <Button
             key={item.id}
-            variant={category === item.name ? 'contained' : 'outlined'}
-            onClick={() => setCategory(item.name)}
+            variant={category.id === item.id ? 'contained' : 'outlined'}
+            onClick={() => setCategory(item)}
             sx={{
               minWidth: 0,
               padding: '0 12px',
@@ -66,10 +69,9 @@ export default function HomeHeaderCategorys({
               textTransform: 'none',
               justifyContent: 'center',
               alignItems: 'center',
-              ...getButtonStyles(item.name, category === item.name),
+              ...getButtonStyles(item, category.id === item.id),
             }}
-            aria-pressed={category === item.name}
-            disabled={item.id === 'all' ? false : false} // 필요시 '전체' 클릭 가능
+            aria-pressed={category.id === item.id}
           >
             {item.name}
           </Button>

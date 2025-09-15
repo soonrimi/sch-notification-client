@@ -61,7 +61,7 @@ export default function KakaoChatAdminPage() {
   function getDepartmentName(departmentId: number | '') {
     if (departmentId === '') return '전체';
     const department = departments.find((dept) => dept.id === departmentId);
-    return department ? department.name : '알 수 없음';
+    return department ? department.name : 'NULL';
   }
 
   function getYearName(year: CreateInternalNoticeRequest['targetYear']) {
