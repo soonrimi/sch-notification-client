@@ -30,17 +30,9 @@ import { useCategoryColors } from '@/contexts/CategoryColorContext';
 import {
   useCategories,
   getDefaultCategories,
+  CategoryItem,
 } from '@/contexts/CategoryContext';
-import { categoryColors as DEFAULT_COLORS } from '@/constants/categories';
-
-/** CategoryItem 타입 정의 */
-interface CategoryItem {
-  id: string;
-  name: string;
-  color: string;
-  visible: boolean;
-  notify: boolean;
-}
+import { CATEGORY_COLORS } from '@/constants/categories';
 
 /**
  * ItemView: 기본 아이템 UI
@@ -84,14 +76,14 @@ function ItemView({
           borderRadius: '9999px',
           fontSize: 15,
           backgroundColor: item.visible
-            ? categoryColors[item.name] || item.color
+            ? item.color || categoryColors[item.name] || '#000'
             : '#ccc',
           color: '#fff',
           cursor: 'pointer',
         }}
       >
         {item.name}
-        {item.id !== 'all' && onToggleActive && (
+        {item.id !== 'ALL' && onToggleActive && (
           <IconButton
             size="small"
             onClick={() => onToggleActive(index!)}
@@ -122,14 +114,15 @@ function ItemView({
           <CircleIcon
             sx={{
               color: item.visible
-                ? categoryColors[item.name] || item.color
+                ? item.color || categoryColors[item.name] || '#000'
                 : '#999',
               fontSize: 19,
             }}
           />
         </IconButton>
 
-        {onToggleNotify && (
+        {/* 오른쪽: 알림 아이콘 */}
+        {onToggleNotify && item.id !== 'ALL' && (
           <IconButton
             onClick={() => onToggleNotify(index!)}
             size="small"
@@ -177,7 +170,7 @@ function SortableItem({
   onToggleActive,
   onOpenColorPicker,
 }: {
-  item: CategoryItem; // 수정
+  item: CategoryItem;
   index: number;
   onToggleNotify?: (i: number) => void;
   onToggleActive?: (i: number) => void;
@@ -272,8 +265,8 @@ export default function CategorySettingsPage() {
     const defaults = getDefaultCategories();
     setItems(defaults);
     localStorage.setItem('categories', JSON.stringify(defaults));
-    setCategoryColorBulk(DEFAULT_COLORS);
-    localStorage.setItem('categoryColors', JSON.stringify(DEFAULT_COLORS));
+    setCategoryColorBulk(CATEGORY_COLORS);
+    localStorage.setItem('categoryColors', JSON.stringify(CATEGORY_COLORS));
   };
 
   const setCategoryColorBulk = (colors: Record<string, string>) => {
@@ -311,7 +304,7 @@ export default function CategorySettingsPage() {
       const toggled = { ...newItems[index], visible: !newItems[index].visible };
       newItems.splice(index, 1);
       if (toggled.visible) {
-        const allIndex = newItems.findIndex((i) => i.id === 'all');
+        const allIndex = newItems.findIndex((i) => i.id === 'ALL');
         newItems.splice(allIndex + 1, 0, toggled);
       } else {
         newItems.push(toggled);
@@ -342,17 +335,20 @@ export default function CategorySettingsPage() {
     <Layout
       headerProps={{
         pageType: 'settings',
-        settingsHeaderProps: { title: '카테고리 설정', onReset: handleReset },
+        settingsHeaderProps: {
+          title: '카테고리 설정',
+          onReset: handleReset,
+        },
       }}
       hideBottomNav
       backgroundColor="#f3f3f3ff"
       fullHeight
-      style={{ overflow: 'hidden' }}
+      style={{ overflow: 'hidden', fontSize: '18px' }}
     >
       <div
         style={{
           padding: '20px 20px 40px 40px',
-          fontSize: '13px',
+          fontSize: '15px',
           height: '90px',
           boxSizing: 'border-box',
         }}

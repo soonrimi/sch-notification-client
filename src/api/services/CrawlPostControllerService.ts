@@ -2,17 +2,17 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { CrawlPostsResponse } from '../models/CrawlPostsResponse';
 import type { Notice } from '../models/Notice';
-import type { Response } from '../models/Response';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class CrawlPostControllerService {
   /**
-   * @returns Response OK
+   * @returns CrawlPostsResponse OK
    * @throws ApiError
    */
-  public static getAllNotices(): CancelablePromise<Array<Response>> {
+  public static getAllNotices(): CancelablePromise<Array<CrawlPostsResponse>> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/api/notice',
@@ -20,10 +20,10 @@ export class CrawlPostControllerService {
   }
   /**
    * @param id
-   * @returns Response OK
+   * @returns CrawlPostsResponse OK
    * @throws ApiError
    */
-  public static getNotice(id: number): CancelablePromise<Response> {
+  public static getNotice(id: number): CancelablePromise<CrawlPostsResponse> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/api/notice/{id}',
@@ -50,12 +50,18 @@ export class CrawlPostControllerService {
   }
   /**
    * @param categoryId
-   * @returns Response OK
+   * @returns CrawlPostsResponse OK
    * @throws ApiError
    */
   public static getNoticesByCategoryId(
-    categoryId: number
-  ): CancelablePromise<Array<Response>> {
+    categoryId:
+      | 'UNIVERSITY'
+      | 'DEPARTMENT'
+      | 'GRADE'
+      | 'RECRUIT'
+      | 'ACTIVITY'
+      | 'PROMOTION'
+  ): CancelablePromise<Array<CrawlPostsResponse>> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/api/notice/category/{categoryId}',

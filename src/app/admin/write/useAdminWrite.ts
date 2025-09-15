@@ -2,10 +2,18 @@ import useAdminInfo from '../useAdminInfo';
 import { useRouter } from 'next/navigation';
 import {
   AdminControllerService,
-  InternalNoticeResponse,
+  CrawlPostsResponse,
   Department,
+  InternalNoticeListResponse,
 } from '@/api';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  ChangeEventHandler,
+  DragEventHandler,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { atom, useAtom } from 'jotai';
 
 export type FileItem = { id: string; file: File };
@@ -14,9 +22,12 @@ const titleAtom = atom('');
 const contentAtom = atom('');
 const filesAtom = atom<FileItem[]>([]);
 const submittingAtom = atom(false);
-const targetDepartmentAtom = atom<Department | null>(null);
-const targetYearAtom = atom<InternalNoticeResponse.targetYear>(
-  InternalNoticeResponse.targetYear.ALL_YEARS
+const categoryAtom = atom<CrawlPostsResponse.category>(
+  CrawlPostsResponse.category.UNIVERSITY
+);
+const targetDepartmentListAtom = atom<Department[]>([]);
+const targetYearAtom = atom<InternalNoticeListResponse.targetYear>(
+  InternalNoticeListResponse.targetYear.ALL_YEARS
 );
 
 export function useAdminWrite() {
@@ -29,14 +40,17 @@ export function useAdminWrite() {
   const [files, setFiles] = useAtom(filesAtom);
   const [submitting, setSubmitting] = useAtom(submittingAtom);
   const [dragOver, setDragOver] = useState(false);
-  const [targetDepartment, setTargetDepartment] = useAtom(targetDepartmentAtom);
+  const [targetDepartmentList, setTargetDepartmentList] = useAtom(
+    targetDepartmentListAtom
+  );
   const [targetYear, setTargetYear] = useAtom(targetYearAtom);
   const [departmentList, setDepartmentList] = useState<Department[]>([]);
+  const [category, setCategory] = useAtom(categoryAtom);
 
   useEffect(() => {
     AdminControllerService.getAllDepartment().then((res) => {
       setDepartmentList(res);
-      setTargetDepartment(res[0] || null);
+      setTargetDepartmentList([]);
     });
   }, []);
 
@@ -54,7 +68,7 @@ export function useAdminWrite() {
     setFiles((prev) => [...prev, ...next]);
   };
 
-  const onAddFiles: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+  const onAddFiles: ChangeEventHandler<HTMLInputElement> = (e) => {
     appendFiles(e.target.files);
     e.currentTarget.value = '';
   };
@@ -63,12 +77,12 @@ export function useAdminWrite() {
     setFiles((prev) => prev.filter((f) => f.id !== id));
   };
 
-  const onDrop: React.DragEventHandler<HTMLDivElement> = (e) => {
+  const onDrop: DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
     setDragOver(false);
     appendFiles(e.dataTransfer.files);
   };
-  const onDragOver: React.DragEventHandler<HTMLDivElement> = (e) => {
+  const onDragOver: DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
     if (!dragOver) setDragOver(true);
   };
@@ -85,12 +99,11 @@ export function useAdminWrite() {
     try {
       await AdminControllerService.createInternalNotice(adminToken, {
         internalNotice: {
+          targetYear: targetYear,
           title: title.trim(),
+          category: category,
           content: content.trim(),
-
-          //Todo: 임시 주석, 왜 안되는지 확인 필요
-          //targetDept: targetDepartment?.id || 0,
-          //targetYear: targetYear,
+          targetDepartmentIds: targetDepartmentList.map((d) => d.id),
         },
         file: files.map((f) => f.file),
       });
@@ -106,8 +119,8 @@ export function useAdminWrite() {
     setTitle,
     content,
     setContent,
-    targetDepartment,
-    setTargetDepartment,
+    targetDepartmentList,
+    setTargetDepartmentList,
     departmentList,
     files,
     setFiles,
@@ -123,6 +136,8 @@ export function useAdminWrite() {
     onDragOver,
     onDragLeave,
     isValid,
+    setCategory,
+    category,
     handleSubmit,
     targetYear,
     setTargetYear,

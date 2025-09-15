@@ -3,28 +3,20 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import styles from './Admin.module.css';
+import { AdminControllerService, InternalNoticeListResponse } from '@/api';
 import useAdminInfo from './useAdminInfo';
 import { useRouter } from 'next/navigation';
-import { AdminControllerService, InternalNoticeResponse } from '@/api';
 import dayjs from 'dayjs';
-
-const CATEGORY_COLOR: Record<string, string> = {
-  전체: '#1d9ad6',
-  학교: '#e74c3c',
-  대학: '#27ae60',
-  학년: '#9b59b6',
-  채용: '#f39c12',
-  활동: '#16a085',
-  홍보: '#34495e',
-};
+import Header from './components/Header';
+import { CATEGORY_COLORS, getCategoryName } from '@/constants/categories';
 
 const DELETE_WINDOW_MS = 5 * 60 * 1000;
 
-export default function AdminHomePage() {
-  const [, setTick] = useState(0); // 카운트다운 재렌더용
-  const [notices, setNotices] = useState<InternalNoticeResponse[]>([]);
+export default function AdminPage() {
   const { adminToken } = useAdminInfo();
+  const [, setTick] = useState(0);
   const { push } = useRouter();
+  const [notices, setNotices] = useState<InternalNoticeListResponse[]>([]);
 
   useEffect(() => {
     if (!adminToken) {
@@ -35,12 +27,11 @@ export default function AdminHomePage() {
     AdminControllerService.getMyNotices(adminToken).then((data) => {
       setNotices(data);
     });
+  }, []);
 
+  useEffect(() => {
     const t = setInterval(() => setTick((v) => v + 1), 1000);
-
-    return () => {
-      clearInterval(t);
-    };
+    return () => clearInterval(t);
   }, []);
 
   const view = useMemo(
@@ -62,6 +53,7 @@ export default function AdminHomePage() {
   const canDelete = false;
   return (
     <div className={styles.adminRoot}>
+      <Header />
       <div className={styles.headerBar}>
         <h1 className={styles.title}>등록된 공지</h1>
       </div>
@@ -72,7 +64,7 @@ export default function AdminHomePage() {
         ) : (
           view.map((n) => {
             const files = n.attachments?.length || 0;
-            const color = CATEGORY_COLOR[n.targetDept?.name || ''] || '#1d9ad6';
+            const color = CATEGORY_COLORS[n.category];
             return (
               <article key={n.id} className={styles.card}>
                 <div className={styles.cardRowTop}>
@@ -81,15 +73,21 @@ export default function AdminHomePage() {
                     style={{ backgroundColor: color }}
                     aria-hidden
                   />
-                  <span className={styles.catText}>{n.targetDept?.name}</span>
+                  <span className={styles.catText}>
+                    {getCategoryName(n.category)}
+                  </span>
                   <span className={styles.metaRight}>
                     {dayjs(n.createdAt).format('YYYY-MM-DD HH:mm')}
                   </span>
                 </div>
 
                 <div className={styles.cardMain}>
-                  <h2 className={styles.cardTitle}>{n.title}</h2>
-                  <p className={styles.cardDetail}>{n.content}</p>
+                  <h2 className={`${styles.cardTitle} ${styles.clamp2}`}>
+                    {n.title}
+                  </h2>
+                  <h2 className={`${styles.cardDetail} ${styles.clamp2}`}>
+                    {n.content}
+                  </h2>
                 </div>
 
                 <div className={styles.metaRow}>
@@ -115,7 +113,7 @@ export default function AdminHomePage() {
         )}
       </div>
 
-      <Link href="/admin/write" className={styles.fab} aria-label="글쓰기">
+      <Link href="/admin/write" className={styles.fab} aria-label="공지 작성">
         +
       </Link>
     </div>

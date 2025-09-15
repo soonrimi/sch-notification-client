@@ -4,7 +4,7 @@
 /* eslint-disable */
 export type Response = {
   id?: number;
-  title?: string;
-  content?: string;
-  createdAt?: string;
+  category?: string;
+  device?: string;
+  createdDate?: string;
 };

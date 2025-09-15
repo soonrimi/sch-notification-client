@@ -2,21 +2,32 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../page.module.css';
 import Layout from '../../Components/LayoutDir/Layout';
-import { Category } from '@/types/notice';
+import { useCategories } from '@/contexts/CategoryContext';
 import { useNotices } from '@/hooks/useNotices';
+import type { Notice } from '@/types/notice';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SharedNoticeItem from '@/Components/Head/SharedNoticeItem';
+import { Category } from '@/constants/categories';
 
 export default function Bookmark() {
-  const notices = useNotices('전체' as Category);
-  const [readIds, setReadIds] = useState<string[]>([]);
+  const { items } = useCategories();
+  const [category, setCategory] = useState<Category>('ALL');
+
+  useEffect(() => {
+    setCategory('ALL');
+  }, [items]);
+
+  // 선택된 category 기반으로 공지 가져오기 (loading 포함)
+  const { notices, loading } = useNotices(category);
+
+  const [readIds, setReadIds] = useState<number[]>([]);
   const [selectionMode, setSelectionMode] = useState(false);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
   // 읽은 목록 불러오기
   useEffect(() => {
     const savedReads = localStorage.getItem('readNotices');
-    if (savedReads) setReadIds(JSON.parse(savedReads));
+    if (savedReads) setReadIds(JSON.parse(savedReads).map(Number));
   }, []);
 
   // 북마크된 공지 필터링
@@ -28,7 +39,7 @@ export default function Bookmark() {
   });
 
   // 선택 토글
-  const toggleSelect = (id: string) => {
+  const toggleSelect = (id: number) => {
     if (selectedIds.includes(id)) {
       setSelectedIds(selectedIds.filter((sid) => sid !== id));
     } else {
@@ -49,9 +60,9 @@ export default function Bookmark() {
   const deleteSelected = () => {
     const savedBookmarks = JSON.parse(
       localStorage.getItem('bookmarkedIds') || '[]'
-    );
+    ) as number[];
     const updated = savedBookmarks.filter(
-      (id: string) => !selectedIds.includes(id)
+      (id: number) => !selectedIds.includes(id)
     );
     localStorage.setItem('bookmarkedIds', JSON.stringify(updated));
     setSelectedIds([]);
@@ -111,10 +122,12 @@ export default function Bookmark() {
     >
       <div className={styles.page_wrapper}>
         <div className={styles.page_content}>
-          {bookmarkedNotices.length === 0 ? (
-            <div></div>
+          {loading ? (
+            <div>로딩중...</div>
+          ) : bookmarkedNotices.length === 0 ? (
+            <div>북마크된 공지가 없습니다</div>
           ) : (
-            bookmarkedNotices.map((notice) => (
+            bookmarkedNotices.map((notice: Notice) => (
               <SharedNoticeItem
                 key={notice.id}
                 notice={notice}
