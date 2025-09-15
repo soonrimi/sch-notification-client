@@ -15,7 +15,10 @@ export function formatUploadTime(date: Date | null | undefined) {
   if (diffMinutes < 60) return `${diffMinutes}분 전`;
 
   if (isToday)
-    return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString('ko-KR', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
 
   if (isThisYear)
     return date.toLocaleString('ko-KR', {

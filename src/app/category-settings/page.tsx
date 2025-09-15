@@ -343,12 +343,12 @@ export default function CategorySettingsPage() {
       hideBottomNav
       backgroundColor="#f3f3f3ff"
       fullHeight
-      style={{ overflow: 'hidden' }}
+      style={{ overflow: 'hidden', fontSize: '18px' }}
     >
       <div
         style={{
           padding: '20px 20px 40px 40px',
-          fontSize: '13px',
+          fontSize: '15px',
           height: '90px',
           boxSizing: 'border-box',
         }}
