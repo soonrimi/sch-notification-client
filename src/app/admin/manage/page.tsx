@@ -33,9 +33,14 @@ export default function ManagePage() {
 
   const handleDelete = () => {
     if (selectedUser) {
-      setUsers((prev) => prev.filter((u) => u.id !== selectedUser.id));
-      setSelectedUser(null);
-      setMode('view');
+      const ok = window.confirm(
+        `정말로 ${selectedUser.name} 사용자를 삭제하시겠습니까?`
+      );
+      if (ok) {
+        setUsers((prev) => prev.filter((u) => u.id !== selectedUser.id));
+        setSelectedUser(null);
+        setMode('view');
+      }
     }
   };
 
