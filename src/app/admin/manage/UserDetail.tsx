@@ -171,5 +171,5 @@ export default function UserDetail({ user, mode, onSave, onCancel }: Props) {
     );
   }
 
-  return <div className={styles.placeholder}>사용자를 선택하세요</div>;
+  return <div></div>;
 }
