@@ -150,7 +150,7 @@ export default function UserDetail({ user, mode, onSave, onCancel }: Props) {
           </label>
 
           <div className={styles.formButtons}>
-            {mode === 'edit' && (
+            {(mode === 'edit' || mode === 'add') && (
               <button
                 type="button"
                 className={styles.cancelBtn}
