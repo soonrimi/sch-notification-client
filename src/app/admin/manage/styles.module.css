@@ -37,6 +37,11 @@
     background: #f9f9f9;
 }
 
+.selected {
+    background-color: #e6f0ff;
+    font-weight: 600;
+}
+
 .userIndex {
     text-align: left;
     color: #555;
