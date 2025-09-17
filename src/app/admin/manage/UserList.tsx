@@ -25,7 +25,7 @@ export default function UserList({ users, onSelect, selectedUser }: Props) {
           >
             <span className={styles.userIndex}>{idx + 1}</span>
             <span className={styles.userName}>{u.name}</span>
-            <span className={styles.userGroup}>{u.role}</span>
+            <span className={styles.userGroup}>{u.affiliation}</span>
             <span className={styles.boardPermissions}>
               {/*u.boardPermissions.map((bp) => (
                 <span key={bp} className={styles.badge}>

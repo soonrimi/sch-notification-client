@@ -6,6 +6,7 @@ import UserDetail from './UserDetail';
 import SearchIcon from '@mui/icons-material/Search';
 import useAdminManage from './useAdminManage';
 import { AdminUserResponse } from '@/api';
+import type { Department } from '@/api';
 
 type Mode = 'view' | 'add' | 'edit';
 
@@ -17,8 +18,13 @@ export default function ManagePage() {
   const [mode, setMode] = useState<Mode>('view');
 
   const [filterRole, setFilterRole] = useState('전체');
-  const { adminUserList, fetchAdminUsers, updateAdminUser, createAdminUser } =
-    useAdminManage();
+  const {
+    adminUserList,
+    fetchAdminUsers,
+    updateAdminUser,
+    createAdminUser,
+    departmentList,
+  } = useAdminManage();
 
   const filtered = adminUserList.filter((u) => {
     const matchSearch = u.name.toLowerCase().includes(search.toLowerCase());
@@ -48,11 +54,20 @@ export default function ManagePage() {
     }
   };
 
-  const handleSave = (newUser: AdminUserResponse, mode: Mode) => {
+  const handleSave = (
+    newUser: AdminUserResponse & {
+      password: string;
+      registerPassword: string;
+      categories: AdminUserResponse['categories'];
+      departments: Department[];
+      grades: AdminUserResponse['grades'];
+    },
+    mode: Mode
+  ) => {
     if (mode === 'add') {
       createAdminUser(newUser);
     } else if (mode === 'edit') {
-      updateAdminUser(newUser);
+      updateAdminUser(newUser, newUser.registerPassword);
     }
     fetchAdminUsers();
     setSelectedUser(newUser);
@@ -117,6 +132,7 @@ export default function ManagePage() {
           mode={mode}
           onSave={handleSave}
           onCancel={() => setMode('view')}
+          departmentList={departmentList}
         />
       </div>
     </div>
