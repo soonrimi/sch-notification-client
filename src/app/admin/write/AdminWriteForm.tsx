@@ -172,7 +172,8 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
             </div>
           </div>
         </div>
-        {category === CrawlPostsResponse.category.DEPARTMENT && (
+        {(category === CrawlPostsResponse.category.DEPARTMENT ||
+          category === CrawlPostsResponse.category.GRADE) && (
           <Stack>
             <Select
               multiple
