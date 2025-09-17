@@ -3,22 +3,26 @@ import { useState } from 'react';
 import styles from './page.module.css';
 import UserList from './UserList';
 import UserDetail from './UserDetail';
-import { User, dummyUsers } from './dummyUsers';
 import SearchIcon from '@mui/icons-material/Search';
+import useAdminManage from './useAdminManage';
+import { AdminUserResponse } from '@/api';
 
 type Mode = 'view' | 'add' | 'edit';
 
 export default function ManagePage() {
-  const [users, setUsers] = useState<User[]>(dummyUsers);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<AdminUserResponse | null>(
+    null
+  );
   const [search, setSearch] = useState('');
   const [mode, setMode] = useState<Mode>('view');
 
   const [filterRole, setFilterRole] = useState('전체');
+  const { adminUserList, fetchAdminUsers, updateAdminUser, createAdminUser } =
+    useAdminManage();
 
-  const filtered = users.filter((u) => {
+  const filtered = adminUserList.filter((u) => {
     const matchSearch = u.name.toLowerCase().includes(search.toLowerCase());
-    const matchRole = filterRole === '전체' ? true : u.group === filterRole;
+    const matchRole = filterRole === '전체';
     return matchSearch && matchRole;
   });
 
@@ -37,19 +41,20 @@ export default function ManagePage() {
         `정말로 ${selectedUser.name} 사용자를 삭제하시겠습니까?`
       );
       if (ok) {
-        setUsers((prev) => prev.filter((u) => u.id !== selectedUser.id));
+        fetchAdminUsers();
         setSelectedUser(null);
         setMode('view');
       }
     }
   };
 
-  const handleSave = (newUser: User, mode: Mode) => {
+  const handleSave = (newUser: AdminUserResponse, mode: Mode) => {
     if (mode === 'add') {
-      setUsers((prev) => [...prev, { ...newUser, id: `u${Date.now()}` }]);
+      createAdminUser(newUser);
     } else if (mode === 'edit') {
-      setUsers((prev) => prev.map((u) => (u.id === newUser.id ? newUser : u)));
+      updateAdminUser(newUser);
     }
+    fetchAdminUsers();
     setSelectedUser(newUser);
     setMode('view');
   };

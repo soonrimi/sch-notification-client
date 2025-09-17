@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 
 const adminUserListAtom = atom<AdminUserResponse[]>([]);
 
-export default function useManage() {
+export default function useAdminManage() {
   const [adminUserList, setAdminUserList] = useAtom(adminUserListAtom);
 
   useEffect(() => {
@@ -22,11 +22,25 @@ export default function useManage() {
     setAdminUserList(data);
   }
 
-  async function updateAdminUser(updatedUser: AdminUpdateRequest) {
-    const data = await AdminControllerService.updateAdmin(updatedUser);
+  async function updateAdminUser(updatedUser: AdminUserResponse) {
+    const data = await AdminControllerService.updateAdmin(
+      updatedUser.id,
+      updatedUser
+    );
     setAdminUserList((prevList) =>
       prevList.map((user) => (user.id === data.id ? data : user))
     );
     return data;
   }
+
+  async function createAdminUser(newUser: AdminUserResponse) {
+    await AdminControllerService.register(newUser);
+  }
+
+  return {
+    adminUserList,
+    fetchAdminUsers,
+    createAdminUser,
+    updateAdminUser,
+  };
 }
