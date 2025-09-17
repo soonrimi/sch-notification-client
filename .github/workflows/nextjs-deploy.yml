@@ -22,6 +22,9 @@ jobs:
       - name: npm install client
         run: npm install
 
+      - name: api document refresh
+        run: npm run generate-api
+
       - name: client build
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}

@@ -19,7 +19,7 @@ interface AdminDrawerProps {
 export default function AdminDrawer({ open, onClose }: AdminDrawerProps) {
   const router = useRouter();
   const menuItems = [
-    { text: '관리자 계정 관리', icon: <PeopleIcon />, path: '/admin/account' },
+    { text: '관리자 계정 관리', icon: <PeopleIcon />, path: '/admin/manage' },
     {
       text: '카카오 채팅방 관리',
       icon: <ChatIcon />,
