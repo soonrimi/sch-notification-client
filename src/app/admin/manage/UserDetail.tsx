@@ -1,10 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
 import styles from './styles.module.css';
-import { User } from './dummyUsers';
+import { AdminUserResponse } from '@/api';
+
+type User = {
+  password: string;
+} & AdminUserResponse;
 
 interface Props {
-  user: User | null;
+  user: AdminUserResponse | null;
   mode: 'view' | 'add' | 'edit';
   onSave: (user: User, mode: 'add' | 'edit') => void;
   onCancel: () => void;
@@ -16,42 +20,36 @@ export default function UserDetail({ user, mode, onSave, onCancel }: Props) {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [group, setGroup] = useState('');
-  const [boardPermissions, setBoardPermissions] = useState<string[]>([]);
-  const [note, setNote] = useState('');
+  const [role, setRole] = useState<AdminUserResponse.role>(
+    AdminUserResponse.role.ADMIN
+  );
 
   useEffect(() => {
     if (user && mode !== 'add') {
       setUserId(user.userId);
-      setPassword(user.password);
       setName(user.name);
-      setGroup(user.group);
-      setBoardPermissions(user.boardPermissions || []);
-      setNote(user.note || '');
+      setRole(user.role);
     } else {
       setUserId('');
       setPassword('');
       setName('');
-      setGroup('');
-      setBoardPermissions([]);
-      setNote('');
+      setRole(AdminUserResponse.role.ADMIN);
     }
   }, [user, mode]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!userId || !password || !name || !group) {
+    if (!userId || !password || !name || !role) {
       alert('필수 항목을 작성해주세요.');
       return;
     }
     const newUser: User = {
-      id: user?.id || `u${Date.now()}`,
+      id: user?.id || 0,
       userId,
       password,
       name,
-      group,
-      boardPermissions,
-      note,
+      affiliation: '',
+      role,
     };
     if (mode === 'add' || mode === 'edit') {
       onSave(newUser, mode);
@@ -103,8 +101,10 @@ export default function UserDetail({ user, mode, onSave, onCancel }: Props) {
           <label>
             소속 *
             <select
-              value={group}
-              onChange={(e) => setGroup(e.target.value)}
+              value={role}
+              onChange={(e) =>
+                setRole(e.target.value as AdminUserResponse.role)
+              }
               required
               disabled={mode === 'view'}
             >
@@ -118,7 +118,7 @@ export default function UserDetail({ user, mode, onSave, onCancel }: Props) {
 
           <label>게시판 권한 *</label>
           <div className={styles.boardCheckboxes}>
-            {boardList.map((board) => (
+            {/*boardList.map((board) => (
               <div key={board}>
                 <input
                   type="checkbox"
@@ -136,17 +136,12 @@ export default function UserDetail({ user, mode, onSave, onCancel }: Props) {
                 />
                 {board}
               </div>
-            ))}
+            ))*/}
           </div>
 
           <label>
             비고
-            <textarea
-              rows={5}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              disabled={mode === 'view'}
-            />
+            <textarea rows={5} disabled={mode === 'view'} />
           </label>
 
           <div className={styles.formButtons}>
