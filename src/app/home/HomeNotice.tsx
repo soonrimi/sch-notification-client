@@ -9,7 +9,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { IconButton } from '@mui/material';
 import styles from './Home.module.css';
 import { Notice } from '@/types/notice';
-import { CATEGORY_COLORS, getCategoryName } from '@/constants/categories';
+import { CATEGORY_COLORS } from '@/constants/categories';
 import { formatUploadTime } from '@/utils/NoticeDate';
 
 interface HomeNoticeProps extends Notice {
@@ -49,7 +49,7 @@ export default function HomeNotice({
             backgroundColor: CATEGORY_COLORS[category] || '#000',
           }}
         >
-          {getCategoryName(category)}
+          {category}
         </div>
         <div className={styles.home_notice_upload_info}>
           | {formatUploadTime(upload_time)}

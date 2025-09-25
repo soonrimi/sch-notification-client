@@ -8,7 +8,7 @@ import useAdminInfo from './useAdminInfo';
 import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
 import Header from './components/Header';
-import { CATEGORY_COLORS, getCategoryName } from '@/constants/categories';
+import { CATEGORY_COLORS } from '@/constants/categories';
 
 const DELETE_WINDOW_MS = 5 * 60 * 1000;
 
@@ -74,7 +74,7 @@ export default function AdminPage() {
                     aria-hidden
                   />
                   <span className={styles.catText}>
-                    {getCategoryName(n.category)}
+                    {n.category}
                   </span>
                   <span className={styles.metaRight}>
                     {dayjs(n.createdAt).format('YYYY-MM-DD HH:mm')}

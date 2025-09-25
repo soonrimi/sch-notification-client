@@ -7,18 +7,18 @@ import { useNotices } from '@/hooks/useNotices';
 import type { Notice } from '@/types/notice';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SharedNoticeItem from '@/Components/Head/SharedNoticeItem';
-import { Category } from '@/constants/categories';
+import { Category, ApiCategory } from '@/constants/categories';
 
 export default function Bookmark() {
   const { items } = useCategories();
-  const [category, setCategory] = useState<Category>('ALL');
+  const [category, setCategory] = useState<Category>('전체');
 
   useEffect(() => {
-    setCategory('ALL');
+    setCategory('전체');
   }, [items]);
 
   // 선택된 category 기반으로 공지 가져오기 (loading 포함)
-  const { notices, loading } = useNotices(category);
+  const { notices, loading } = useNotices(category as ApiCategory);
 
   const [readIds, setReadIds] = useState<number[]>([]);
   const [selectionMode, setSelectionMode] = useState(false);
