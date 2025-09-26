@@ -8,7 +8,9 @@ import type { Notice } from '@/types/notice';
 import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerService';
 import { mapCrawlPostToNotice } from '@/utils/Noticemappers';
 import type { Pageable } from '@/api/models/Pageable';
-import InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { CircularProgress } from '@mui/material';
+import styles from '../../home/Home.module.css';
 
 function NoticeWithBookmark({ notice }: { notice: Notice }) {
   const { bookmarked, toggleBookmark } = useBookmark(notice.id);
@@ -31,9 +33,8 @@ export default function SearchResults() {
   const [results, setResults] = useState<Notice[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
-  
   const fetchData = async (pageNumber: number) => {
     try {
       setLoading(true);
@@ -60,10 +61,11 @@ export default function SearchResults() {
         setResults((prevResults) => [...prevResults, ...notices]);
       }
 
-      setHasMore(pageNumber + 1 < (res.totalPages || 0));
+      setHasMore(pageNumber + 1 < (res.totalPages ?? 1));
       setPage(pageNumber);
     } catch (error) {
       console.error('Failed to fetch notices:', error);
+      setHasMore(false);
     } finally {
       setLoading(false); // 로딩 종료
     }
@@ -83,6 +85,12 @@ export default function SearchResults() {
       console.log(`Loading more - next page: ${page + 1}`);
       fetchData(page + 1);
     }
+  };
+
+  const SearchReaultsRefresh = async () => {
+    console.log('SearchReaultsRefresh!');
+    if (loading) return;
+    await fetchData(0);
   };
 
   const handleBackToSearchInput = () => {
@@ -106,28 +114,67 @@ export default function SearchResults() {
       }}
       hideBottomNav
     >
-      <div style={{ paddingTop: 20 }}>
-        {results.length === 0 && loading ? (
-          <div>로딩중...</div>
-        ) : results.length === 0 ? (
-          <div>검색 결과가 없습니다.</div>
-        ) : (
-          <InfiniteScroll
-            pageStart={0}
-            loadMore={loadMore}
-            hasMore={hasMore}
-            initialLoad={false}
-            loader={<div key={0}>Loading ...</div>}
-            useWindow={true}
-          >
-            {results.map((notice: Notice, index) => (
-              <NoticeWithBookmark
-                key={`${notice.id}-${index}`}
-                notice={notice}
-              />
-            ))}
-          </InfiniteScroll>
-        )}
+      <div
+        style={{
+          height: '95vh',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <div
+          id="search_result_content"
+          style={{
+            flex: '1 1 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            boxSizing: 'border-box',
+            overscrollBehavior: 'contain',
+            overflow: 'auto',
+            height: '100vh',
+            paddingTop: 20,
+          }}
+        >
+          {results.length === 0 && loading ? (
+            <div className={styles.loading}>로딩중...</div>
+          ) : results.length === 0 ? (
+            <div className={styles.no_notice}>공지 없음</div>
+          ) : (
+            <InfiniteScroll
+              dataLength={results.length}
+              next={loadMore}
+              hasMore={hasMore}
+              loader={<div className={styles.loading}>로딩중...</div>}
+              pullDownToRefresh={true}
+              scrollableTarget="search_result_content"
+              pullDownToRefreshThreshold={60}
+              refreshFunction={SearchReaultsRefresh}
+              pullDownToRefreshContent={
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: 60,
+                  }}
+                >
+                  <CircularProgress
+                    variant="indeterminate"
+                    size={24}
+                    style={{ color: '#999' }}
+                  />
+                </div>
+              }
+            >
+              {results.map((notice: Notice, index) => (
+                <NoticeWithBookmark
+                  key={`${notice.id}-${index}`}
+                  notice={notice}
+                />
+              ))}
+            </InfiniteScroll>
+          )}
+        </div>
       </div>
     </Layout>
   );

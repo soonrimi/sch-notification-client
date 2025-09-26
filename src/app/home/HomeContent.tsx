@@ -13,7 +13,8 @@ import {
   ApiCategory,
   CATEGORY_LABELS,
 } from '@/constants/categories';
-import InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { CircularProgress } from '@mui/material';
 
 export default function HomeContent() {
   const { items } = useCategories();
@@ -40,7 +41,8 @@ export default function HomeContent() {
   }
 
   const backendCategory = getBackendCategory(category.id);
-  const { notices, loading, hasMore, loadMore } = useNotices(backendCategory);
+  const { notices, loading, hasMore, loadMore, refresh } =
+    useNotices(backendCategory);
 
   // 로컬스토리지에서 읽은 공지 ID
   const [readIds, setReadIds] = useState<number[]>([]);
@@ -66,23 +68,55 @@ export default function HomeContent() {
           categories={categoriesForUI}
         />
 
-        <div className={styles.home_content}>
+        <div id="home_content" className={styles.home_content}>
           {notices.length === 0 && loading ? (
             <div className={styles.loading}>로딩중...</div>
           ) : notices.length === 0 ? (
             <div className={styles.no_notice}>공지 없음</div>
           ) : (
             <InfiniteScroll
-              pageStart={0}
-              loadMore={loadMore}
+              key={backendCategory}
+              dataLength={notices.length}
+              next={loadMore}
               hasMore={hasMore}
-              initialLoad={false}
-              loader={
-                <div key={0} className={styles.loading}>
-                  loaderer...
+              loader={<div className={styles.loading}>로딩중...</div>}
+              scrollableTarget="home_content"
+              pullDownToRefresh={true}
+              pullDownToRefreshThreshold={60}
+              refreshFunction={refresh}
+              pullDownToRefreshContent={
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: 60,
+                  }}
+                >
+                  <CircularProgress
+                    variant="indeterminate"
+                    size={24}
+                    style={{ color: '#999' }}
+                  />
                 </div>
               }
-              useWindow={false}
+              releaseToRefreshContent={
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: 60,
+                  }}
+                >
+                  <CircularProgress
+                    variant="indeterminate"
+                    color="primary"
+                    size={24}
+                    style={{ color: '#999' }}
+                  />
+                </div>
+              }
             >
               {notices.map((notice: Notice, index) => (
                 <SharedNoticeItem
