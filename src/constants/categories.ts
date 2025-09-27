@@ -1,19 +1,48 @@
-export const categories = [
-  '학교',
-  '대학',
-  '학년',
-  '채용',
-  '활동',
-  '홍보',
-] as const;
-export type Category = (typeof categories)[number];
+import { CrawlPostsResponse } from '@/api';
+import { CategoryItem } from '@/contexts/CategoryContext';
 
-export const categoryColors: Record<Category | '전체', string> = {
-  전체: '#7986CC', // ✅ 전체도 색상 필요
-  학교: '#69B054',
-  대학: '#EA9E5A',
-  학년: '#F17298',
-  채용: '#81AAE8',
-  활동: '#B192E7',
-  홍보: '#A9A9A9',
+export const CATEGORY_COLORS: Record<
+  CrawlPostsResponse.category | 'ALL',
+  string
+> = {
+  ALL: '#7986CC',
+  UNIVERSITY: '#69B054',
+  DEPARTMENT: '#EA9E5A',
+  GRADE: '#F17298',
+  RECRUIT: '#81AAE8',
+  ACTIVITY: '#B192E7',
+  PROMOTION: '#A9A9A9',
+};
+
+export function getCategoryName(
+  category: CrawlPostsResponse['category'] | 'ALL'
+) {
+  switch (category) {
+    case 'ALL':
+      return '전체';
+    case CrawlPostsResponse.category.UNIVERSITY:
+      return '대학';
+    case CrawlPostsResponse.category.DEPARTMENT:
+      return '학과';
+    case CrawlPostsResponse.category.GRADE:
+      return '학년';
+    case CrawlPostsResponse.category.RECRUIT:
+      return '채용';
+    case CrawlPostsResponse.category.ACTIVITY:
+      return '활동';
+    case CrawlPostsResponse.category.PROMOTION:
+      return '홍보';
+    default:
+      return 'NULL';
+  }
+}
+
+export type Category = keyof typeof CATEGORY_COLORS;
+
+export const ALL_CATEGORY: CategoryItem = {
+  id: 'ALL',
+  name: getCategoryName('ALL'),
+  color: CATEGORY_COLORS['ALL'],
+  notify: false,
+  visible: true,
 };

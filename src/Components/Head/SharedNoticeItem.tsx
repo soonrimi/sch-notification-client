@@ -2,15 +2,15 @@
 import { useRouter } from 'next/navigation';
 import HomeNotice from '@/app/home/HomeNotice';
 import { useBookmark } from '@/hooks/useBookmark';
-import type { Notice } from '@/types/notice';
+import { Notice } from '@/types/notice';
 
 type Props = {
   notice: Notice;
   isRead: boolean;
   selectionMode?: boolean;
   isSelected?: boolean;
-  onSelectToggle?: (id: string) => void;
-  hrefBuilder?: (id: string) => string;
+  onSelectToggle?: (id: number) => void;
+  hrefBuilder?: (id: number) => string;
 };
 
 export default function SharedNoticeItem({
@@ -38,7 +38,6 @@ export default function SharedNoticeItem({
         id={notice.id}
         category={notice.category}
         upload_time={notice.upload_time}
-        application_period={notice.application_period}
         title={notice.title}
         detail={notice.detail}
         isBookmarked={bookmarked}

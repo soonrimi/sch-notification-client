@@ -1,10 +1,9 @@
 import styles from './styles.module.css';
-import { User } from './dummyUsers';
-
+import { AdminUserResponse } from '@/api';
 interface Props {
-  users: User[];
-  onSelect: (user: User) => void;
-  selectedUser: User | null;
+  users: AdminUserResponse[];
+  onSelect: (user: AdminUserResponse) => void;
+  selectedUser: AdminUserResponse | null;
 }
 
 export default function UserList({ users, onSelect, selectedUser }: Props) {
@@ -26,15 +25,15 @@ export default function UserList({ users, onSelect, selectedUser }: Props) {
           >
             <span className={styles.userIndex}>{idx + 1}</span>
             <span className={styles.userName}>{u.name}</span>
-            <span className={styles.userGroup}>{u.group}</span>
+            <span className={styles.userGroup}>{u.affiliation}</span>
             <span className={styles.boardPermissions}>
-              {u.boardPermissions.map((bp) => (
+              {/*u.boardPermissions.map((bp) => (
                 <span key={bp} className={styles.badge}>
                   {bp}
                 </span>
-              ))}
+              ))*/}
             </span>
-            {u.note && <span className={styles.note}>{u.note}</span>}
+            {/*u.note && <span className={styles.note}>{u.note}</span>*/}
           </li>
         ))}
       </ul>
