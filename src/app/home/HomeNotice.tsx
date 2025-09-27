@@ -16,8 +16,8 @@ interface HomeNoticeProps extends Notice {
   isBookmarked: boolean;
   onToggleBookmark: () => void;
   isRead: boolean;
-  selectionMode?: boolean;
-  isSelected?: boolean;
+  BookmarkDeleteMode?: boolean;
+  isSelectedForBookmarkDelete?: boolean;
 }
 
 export default function HomeNotice({
@@ -28,8 +28,8 @@ export default function HomeNotice({
   onToggleBookmark,
   isRead,
   detail,
-  selectionMode = false,
-  isSelected = false,
+  BookmarkDeleteMode = false,
+  isSelectedForBookmarkDelete = false,
   upload_time,
 }: HomeNoticeProps) {
   const noticeContent = (
@@ -64,7 +64,7 @@ export default function HomeNotice({
             {title}
           </div>
 
-          {!selectionMode && (
+          {!BookmarkDeleteMode && (
             <div className={styles.home_notic_bookmark}>
               <IconButton
                 className={styles.home_notic_bookmark_btn}
@@ -98,11 +98,11 @@ export default function HomeNotice({
       className={styles.home_notice}
       style={{
         backgroundColor:
-          selectionMode && isSelected ? '#bda10030' : 'transparent',
+          BookmarkDeleteMode && isSelectedForBookmarkDelete ? '#bda10030' : 'transparent',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-        {selectionMode && (
+        {BookmarkDeleteMode && (
           <div
             style={{
               width: 0,
@@ -111,7 +111,7 @@ export default function HomeNotice({
               justifyContent: 'center',
             }}
           >
-            {isSelected ? (
+            {isSelectedForBookmarkDelete ? (
               <CheckCircleIcon
                 className={styles.selection_circle}
                 sx={{ color: '#bda100ff', fontSize: 22 }}
@@ -125,7 +125,7 @@ export default function HomeNotice({
           </div>
         )}
 
-        {selectionMode ? (
+        {BookmarkDeleteMode ? (
           noticeContent
         ) : (
           <Link
