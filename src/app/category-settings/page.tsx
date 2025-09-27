@@ -83,7 +83,7 @@ function ItemView({
         }}
       >
         {item.name}
-        {item.id !== 'ALL' && onToggleActive && (
+        {item.id !== '전체' && onToggleActive && (
           <IconButton
             size="small"
             onClick={() => onToggleActive(index!)}
@@ -122,7 +122,7 @@ function ItemView({
         </IconButton>
 
         {/* 오른쪽: 알림 아이콘 */}
-        {onToggleNotify && item.id !== 'ALL' && (
+        {onToggleNotify && item.id !== '전체' && (
           <IconButton
             onClick={() => onToggleNotify(index!)}
             size="small"
@@ -304,7 +304,7 @@ export default function CategorySettingsPage() {
       const toggled = { ...newItems[index], visible: !newItems[index].visible };
       newItems.splice(index, 1);
       if (toggled.visible) {
-        const allIndex = newItems.findIndex((i) => i.id === 'ALL');
+        const allIndex = newItems.findIndex((i) => i.id === '전체');
         newItems.splice(allIndex + 1, 0, toggled);
       } else {
         newItems.push(toggled);

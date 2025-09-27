@@ -7,8 +7,8 @@ import { Notice } from '@/types/notice';
 type Props = {
   notice: Notice;
   isRead: boolean;
-  selectionMode?: boolean;
-  isSelected?: boolean;
+  BookmarkDeleteMode?: boolean;
+  isSelectedForBookmarkDelete?: boolean;
   onSelectToggle?: (id: number) => void;
   hrefBuilder?: (id: number) => string;
 };
@@ -16,8 +16,8 @@ type Props = {
 export default function SharedNoticeItem({
   notice,
   isRead,
-  selectionMode = false,
-  isSelected = false,
+  BookmarkDeleteMode = false,
+  isSelectedForBookmarkDelete = false,
   onSelectToggle,
   hrefBuilder = (id) => `/home?id=${encodeURIComponent(id)}`,
 }: Props) {
@@ -25,7 +25,7 @@ export default function SharedNoticeItem({
   const router = useRouter();
 
   const handleClick = () => {
-    if (selectionMode) {
+    if (BookmarkDeleteMode) {
       onSelectToggle?.(notice.id);
     } else {
       router.push(hrefBuilder(notice.id));
@@ -43,8 +43,8 @@ export default function SharedNoticeItem({
         isBookmarked={bookmarked}
         onToggleBookmark={toggleBookmark}
         isRead={isRead}
-        selectionMode={selectionMode}
-        isSelected={isSelected}
+        BookmarkDeleteMode={BookmarkDeleteMode}
+        isSelectedForBookmarkDelete={isSelectedForBookmarkDelete}
       />
     </div>
   );

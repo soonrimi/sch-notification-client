@@ -2,49 +2,58 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../page.module.css';
 import Layout from '../../Components/LayoutDir/Layout';
-import { useCategories } from '@/contexts/CategoryContext';
-import { useNotices } from '@/hooks/useNotices';
 import type { Notice } from '@/types/notice';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SharedNoticeItem from '@/Components/Head/SharedNoticeItem';
-import { Category } from '@/constants/categories';
+import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerService';
+import { mapCrawlPostToNotice } from '@/utils/Noticemappers';
 
 export default function Bookmark() {
-  const { items } = useCategories();
-  const [category, setCategory] = useState<Category>('ALL');
-
-  useEffect(() => {
-    setCategory('ALL');
-  }, [items]);
-
-  // 선택된 category 기반으로 공지 가져오기 (loading 포함)
-  const { notices, loading } = useNotices(category);
-
   const [readIds, setReadIds] = useState<number[]>([]);
-  const [selectionMode, setSelectionMode] = useState(false);
+  const [BookmarkDeleteMode, setBookmarkDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [bookmarkedNotices, setBookmarkedNotices] = useState<Notice[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // 읽은 목록 불러오기
+  // 읽은 공지들 불러오기
   useEffect(() => {
     const savedReads = localStorage.getItem('readNotices');
     if (savedReads) setReadIds(JSON.parse(savedReads).map(Number));
   }, []);
 
-  // 북마크된 공지 필터링
-  const bookmarkedNotices = notices.filter((n) => {
-    const savedBookmarks = JSON.parse(
-      localStorage.getItem('bookmarkedIds') || '[]'
-    );
-    return savedBookmarks.includes(n.id);
-  });
+  useEffect(() => {
+    const fetchBookmarkedNotices = async () => {
+      setLoading(true);
+      const savedBookmarks = JSON.parse(
+        localStorage.getItem('bookmarkedIds') || '[]'
+      ) as number[];
 
-  // 선택 토글
+      if (savedBookmarks.length === 0) {
+        setBookmarkedNotices([]);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await CrawlPostControllerService.getNoticesByIds(
+          savedBookmarks,
+          { page: 0 } // 필요 시 size, sort 추가 가능
+        );
+        setBookmarkedNotices(res.content?.map(mapCrawlPostToNotice) || []);
+      } catch (err) {
+        console.error('Failed to fetch bookmarked notices:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBookmarkedNotices();
+  }, []);
+
+  // 북마크 토글로 선택했을 때, 해당 북마크id가 북마크id에 이미 없으면 북마크id에 새로 추가
   const toggleSelect = (id: number) => {
-    if (selectedIds.includes(id)) {
-      setSelectedIds(selectedIds.filter((sid) => sid !== id));
-    } else {
-      setSelectedIds([...selectedIds, id]);
-    }
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
+    );
   };
 
   // 전체 선택/해제
@@ -65,8 +74,11 @@ export default function Bookmark() {
       (id: number) => !selectedIds.includes(id)
     );
     localStorage.setItem('bookmarkedIds', JSON.stringify(updated));
+    setBookmarkedNotices((prev) =>
+      prev.filter((n) => !selectedIds.includes(n.id))
+    );
     setSelectedIds([]);
-    setSelectionMode(false);
+    setBookmarkDeleteMode(false);
   };
 
   const deleteColor = selectedIds.length > 0 ? '#333333' : '#A1A1A1';
@@ -76,20 +88,21 @@ export default function Bookmark() {
       headerProps={{
         pageType: 'bookmark',
         bookmarkProps: {
-          selectionMode,
+          BookmarkDeleteMode,
           selectedCount: selectedIds.length,
           totalCount: bookmarkedNotices.length,
           onSelectAll: toggleSelectAll,
-          onCancelSelection: () => setSelectionMode(false),
-          onToggleSelectionMode: () => {
-            if (!selectionMode && selectedIds.length === 0) setSelectedIds([]);
-            setSelectionMode(!selectionMode);
+          onCancelSelection: () => setBookmarkDeleteMode(false),
+          onToggleBookmarkDeleteMode: () => {
+            if (!BookmarkDeleteMode && selectedIds.length === 0)
+              setSelectedIds([]);
+            setBookmarkDeleteMode(!BookmarkDeleteMode);
           },
         },
       }}
-      hideBottomNav={selectionMode}
+      hideBottomNav={BookmarkDeleteMode}
       footerSlot={
-        selectionMode && (
+        BookmarkDeleteMode && (
           <div
             style={{
               height: '48px',
@@ -132,8 +145,8 @@ export default function Bookmark() {
                 key={notice.id}
                 notice={notice}
                 isRead={readIds.includes(notice.id)}
-                selectionMode={selectionMode}
-                isSelected={selectedIds.includes(notice.id)}
+                BookmarkDeleteMode={BookmarkDeleteMode}
+                isSelectedForBookmarkDelete={selectedIds.includes(notice.id)}
                 onSelectToggle={toggleSelect}
               />
             ))

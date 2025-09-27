@@ -6,7 +6,7 @@ import { Box, Typography, Stack, Button, IconButton } from '@mui/material';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerService';
-import type { CrawlPostsResponse } from '@/api/models/CrawlPostsResponse';
+import type { DetailResponse } from '@/api/models/DetailResponse';
 import { useBookmark } from '@/hooks/useBookmark';
 import { Category } from '@/constants/categories';
 import { formatUploadTime } from '@/utils/NoticeDate';
@@ -16,7 +16,7 @@ interface NoticeDetailProps {
 }
 
 // HomeNotice 스타일의 Date 변환용 타입
-interface NoticeWithDate extends Omit<CrawlPostsResponse, 'createdAt'> {
+interface NoticeWithDate extends Omit<DetailResponse, 'createdAt'> {
   upload_time: Date | null;
 }
 
@@ -68,13 +68,23 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
   const attachments = notice.attachments ?? [];
 
   const handleDownloadAll = () => {
-    attachments.forEach((file) => {
-      if (!file.fileUrl || !file.fileName) return;
-      const link = document.createElement('a');
-      link.href = file.fileUrl;
-      link.download = file.fileName;
-      link.click();
-    });
+    if (!attachments.length) return;
+
+    attachments
+      .filter(
+        (f): f is { fileUrl: string; fileName: string } =>
+          !!f.fileUrl && !!f.fileName
+      )
+      .forEach((file, idx) => {
+        setTimeout(() => {
+          const link = document.createElement('a');
+          link.href = file.fileUrl;
+          link.download = file.fileName;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+        }, idx * 200);
+      });
   };
 
   return (
@@ -82,7 +92,7 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
       headerProps={{
         pageType: 'contentdetail',
         noticeHeaderProps: {
-          category: notice.category as Category,
+          category: notice.categoryName as Category,
           noticeId: notice.id ?? 0,
           isBookmarked: bookmarked,
           onToggleBookmark: toggleBookmark,
@@ -145,9 +155,19 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
             </Stack>
           </Box>
           <Box sx={{ flex: 1.1, textAlign: 'center' }}>
-            <IconButton onClick={handleDownloadAll} sx={{ bgcolor: 'white' }}>
+            <IconButton
+              onClick={attachments.length ? handleDownloadAll : undefined}
+              disabled={!attachments.length}
+              sx={{
+                bgcolor: 'white',
+              }}
+            >
               <SystemUpdateAltIcon
-                sx={{ fontSize: 29, color: '#2e2e2e', marginRight: -1 }}
+                sx={{
+                  fontSize: 29,
+                  color: attachments.length ? '#2e2e2e' : '#c3c3c3ff',
+                  marginRight: -1,
+                }}
               />
             </IconButton>
           </Box>
