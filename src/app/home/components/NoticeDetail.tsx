@@ -2,20 +2,35 @@
 
 import React, { useEffect, useState } from 'react';
 import Layout from '@/Components/LayoutDir/Layout';
-import { Box, Typography, Stack, Button, IconButton } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Stack,
+  Drawer,
+} from '@mui/material';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerService';
 import type { DetailResponse } from '@/api/models/DetailResponse';
 import { useBookmark } from '@/hooks/useBookmark';
 import { Category } from '@/constants/categories';
 import { formatUploadTime } from '@/utils/NoticeDate';
+import { useSwipeable } from 'react-swipeable';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import DescriptionIcon from '@mui/icons-material/Description';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 interface NoticeDetailProps {
   id: string;
 }
 
-// HomeNotice 스타일의 Date 변환용 타입
+// NoticeItem 스타일의 Date 변환용 타입
 interface NoticeWithDate extends Omit<DetailResponse, 'createdAt'> {
   upload_time: Date | null;
 }
@@ -23,8 +38,11 @@ interface NoticeWithDate extends Omit<DetailResponse, 'createdAt'> {
 export default function NoticeDetail({ id }: NoticeDetailProps) {
   const [notice, setNotice] = useState<NoticeWithDate | null>(null);
   const [loading, setLoading] = useState(true);
-
+  const [openModal, setOpenModal] = useState(false);
   const { bookmarked, toggleBookmark } = useBookmark(notice?.id ?? 0);
+  const handlers = useSwipeable({
+    onSwipedDown: () => setOpenModal(false),
+  });
 
   useEffect(() => {
     async function fetchNotice() {
@@ -87,6 +105,10 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
       });
   };
 
+
+
+
+
   return (
     <Layout
       headerProps={{
@@ -99,112 +121,8 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
         },
       }}
       hideBottomNav
-      footerSlot={
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            p: 1,
-            bgcolor: 'white',
-            height: 48,
-          }}
-        >
-          <Box
-            sx={{
-              flex: 9,
-              overflowX: 'auto',
-              scrollbarWidth: 'none',
-              '&::-webkit-scrollbar': { display: 'none' },
-            }}
-          >
-            <Stack direction="row" spacing={1.1} alignItems="center">
-              {attachments.map((file, idx) => (
-                <Button
-                  key={idx}
-                  variant="outlined"
-                  sx={{
-                    height: 30,
-                    maxWidth: 160,
-                    px: 1,
-                    borderRadius: '20px',
-                    borderColor: '#aaa',
-                    color: 'black',
-                    bgcolor: 'white',
-                    flexShrink: 0,
-                  }}
-                  onClick={() => {
-                    if (!file.fileUrl || !file.fileName) return;
-                    const link = document.createElement('a');
-                    link.href = file.fileUrl;
-                    link.download = file.fileName;
-                    link.click();
-                  }}
-                >
-                  <Box
-                    sx={{
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      fontSize: '13px',
-                    }}
-                  >
-                    {file.fileName}
-                  </Box>
-                </Button>
-              ))}
-            </Stack>
-          </Box>
-          <Box sx={{ flex: 1.1, textAlign: 'center' }}>
-            <IconButton
-              onClick={attachments.length ? handleDownloadAll : undefined}
-              disabled={!attachments.length}
-              sx={{
-                bgcolor: 'white',
-              }}
-            >
-              <SystemUpdateAltIcon
-                sx={{
-                  fontSize: 29,
-                  color: attachments.length ? '#2e2e2e' : '#c3c3c3ff',
-                  marginRight: -1,
-                }}
-              />
-            </IconButton>
-          </Box>
-        </Box>
-      }
     >
       <Box sx={{ p: 3 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <AccountBoxIcon
-            sx={{ color: '#d8d8d8', fontSize: 50, mr: 0.5, marginLeft: -0.8 }}
-          />
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              height: 37.5,
-            }}
-          >
-            <Typography
-              variant="caption"
-              fontSize="15px"
-              sx={{ lineHeight: 1.3, fontWeight: 400, color: '#000000' }}
-            >
-              국제교육교류처
-            </Typography>
-            <Typography
-              variant="caption"
-              fontSize="13px"
-              color="text.secondary"
-              sx={{ lineHeight: 1.3 }}
-            >
-              {formatUploadTime(notice.upload_time)}
-            </Typography>
-          </Box>
-        </Box>
-
         <Typography
           variant="subtitle1"
           fontWeight="600"
@@ -219,20 +137,60 @@ export default function NoticeDetail({ id }: NoticeDetailProps) {
           color="text.secondary"
           mb={1}
           display="flex"
-          fontSize="14px"
+          fontSize="0.8rem"
+          gap="1rem"
         >
+          <span>{notice.writer ?? ''}</span>
+          <span>{formatUploadTime(notice.upload_time) ?? ''}</span>
           <span>조회수 {notice.viewCount ?? 0}회</span>
         </Typography>
-
+        <hr
+          style={{
+            position: 'absolute',
+            left: 0,
+            width: '100%',
+            border: 'none',
+            borderTop: '1px solid #242424',
+            transform: 'scaleY(0.3)',
+            marginTop: '0.1875rem',
+          }}
+        />
         <Typography
           variant="body2"
           whiteSpace="pre-line"
           mb={3}
-          mt={3}
+          mt={3.8}
           fontSize="15px"
           dangerouslySetInnerHTML={{ __html: notice.content ?? '' }}
         />
       </Box>
+
+      {/* 오른쪽 하단 고정 버튼 */}
+      {attachments.length > 0 && (
+        <IconButton
+          onClick={() => setOpenModal(true)}
+          sx={{
+            position: 'fixed',
+            bottom: '1.1675rem',
+            right: '1rem',
+            bgcolor: '#3182F7',
+            width: '3.1rem',
+            height: '3.1rem',
+            borderRadius: '30%',
+            '&:hover': { bgcolor: '#f5f5f5' },
+          }}
+        >
+          <ArrowDownwardIcon
+            sx={{
+              fontSize: '1.8125rem',
+              color: attachments.length ? '#ffffffff' : '#c3c3c3ff',
+            }}
+          />
+        </IconButton>
+      )}
+
+      {/* 첨부파일 모달 */}
+      
     </Layout>
   );
 }

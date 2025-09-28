@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Layout from '@/Components/LayoutDir/Layout';
-import HomeNotice from '@/app/home/HomeNotice';
-import { useBookmark } from '@/hooks/useBookmark';
+import NoticeItem from '@/app/home/NoticeItem';
 import type { Notice } from '@/types/notice';
 import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerService';
 import { mapCrawlPostToNotice } from '@/utils/Noticemappers';
@@ -11,19 +10,6 @@ import type { Pageable } from '@/api/models/Pageable';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { CircularProgress } from '@mui/material';
 import styles from '../../home/Home.module.css';
-
-function NoticeWithBookmark({ notice }: { notice: Notice }) {
-  const { bookmarked, toggleBookmark } = useBookmark(notice.id);
-  return (
-    <HomeNotice
-      key={notice.id}
-      {...notice}
-      isBookmarked={bookmarked}
-      onToggleBookmark={toggleBookmark}
-      isRead={false}
-    />
-  );
-}
 
 export default function SearchResults() {
   const searchParams = useSearchParams();
@@ -167,9 +153,10 @@ export default function SearchResults() {
               }
             >
               {results.map((notice: Notice, index) => (
-                <NoticeWithBookmark
+                <NoticeItem
                   key={`${notice.id}-${index}`}
-                  notice={notice}
+                  {...notice}
+                  isRead={false}
                 />
               ))}
             </InfiniteScroll>
