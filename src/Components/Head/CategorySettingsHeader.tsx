@@ -14,7 +14,7 @@ interface SettingsHeaderProps {
 export default function CategorySettingsHeader({
   title,
   onReset,
-  backgroundColor = '#f3f3f3ff',
+  backgroundColor = '#f9fafb',
 }: SettingsHeaderProps) {
   const router = useRouter();
 

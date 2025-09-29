@@ -41,8 +41,9 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
       }
 
       try {
-        const categoryItems: CategoryItem[] = Object.keys(CATEGORY_COLORS).map(
-          (key) => {
+        const categoryItems: CategoryItem[] = Object.keys(CATEGORY_COLORS)
+          .filter((key) => key !== '전체')
+          .map((key) => {
             const id = key as Category;
             return {
               id,
@@ -51,10 +52,9 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
               notify: false,
               visible: true,
             };
-          }
-        );
+          });
 
-        setItems(categoryItems);
+        setItems([defaultAll, ...categoryItems]);
       } catch {
         // fallback mock
         setItems([defaultAll]);
@@ -81,15 +81,17 @@ export function useCategories() {
 export function getDefaultCategories(): CategoryItem[] {
   return [
     ALL_CATEGORY,
-    ...Object.keys(CATEGORY_COLORS).map((key) => {
-      const id = key as Category;
-      return {
-        id,
-        name: id,
-        color: CATEGORY_COLORS[id] || '#1d9ad6',
-        notify: true,
-        visible: true,
-      };
-    }),
+    ...Object.keys(CATEGORY_COLORS)
+      .filter((key) => key !== '전체')
+      .map((key) => {
+        const id = key as Category;
+        return {
+          id,
+          name: id,
+          color: CATEGORY_COLORS[id] || '#1d9ad6',
+          notify: true,
+          visible: true,
+        };
+      }),
   ];
 }

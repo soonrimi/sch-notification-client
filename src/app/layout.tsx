@@ -4,6 +4,7 @@ import './globals.css';
 import { CategoryColorProvider } from '@/contexts/CategoryColorContext';
 import { CategoryProvider } from '@/contexts/CategoryContext';
 import { NoticesProvider } from '@/contexts/NoticesContext';
+import { BookmarkNoticesProvider } from '@/contexts/BookmarkNoticesContext';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -32,9 +33,11 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <NoticesProvider>
-        <CategoryColorProvider>
-          <CategoryProvider>{children}</CategoryProvider>
-        </CategoryColorProvider>
+          <BookmarkNoticesProvider>
+          <CategoryColorProvider>
+            <CategoryProvider>{children}</CategoryProvider>
+          </CategoryColorProvider>
+          </BookmarkNoticesProvider>
         </NoticesProvider>
       </body>
     </html>
