@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Layout from '@/Components/LayoutDir/Layout';
-import NoticeItem from '@/app/home/NoticeItem';
+import NoticeItem from '@/Components/Notice/NoticeItem';
 import type { Notice } from '@/types/notice';
 import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerService';
 import { mapCrawlPostToNotice } from '@/utils/Noticemappers';
@@ -155,7 +155,7 @@ export default function SearchResults() {
               {results.map((notice: Notice, index) => (
                 <NoticeItem
                   key={`${notice.id}-${index}`}
-                  {...notice}
+                  notice={notice}
                   isRead={false}
                 />
               ))}

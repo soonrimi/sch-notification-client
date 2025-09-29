@@ -12,11 +12,9 @@ export function useNotices(selectedCategory: ApiCategory) {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-
   const { cache, setCache } = useContext(NoticesContext)!;
 
   const fetchNotices = async (pageNumber: number, ignoreCache = false) => {
-    // 첫 페이지이고 캐시가 존재하면 API 호출 생략
     if (pageNumber === 0 && !ignoreCache && cache[selectedCategory]?.length) {
       setNotices(cache[selectedCategory]!);
       setHasMore(true);
@@ -44,7 +42,7 @@ export function useNotices(selectedCategory: ApiCategory) {
           const notice = mapCrawlPostToNotice(raw);
           return {
             ...notice,
-            upload_time: raw.createdAt ? new Date(raw.createdAt) : new Date(0), // 1970-01-01T00:00:00.000Z
+            upload_time: raw.createdAt ? new Date(raw.createdAt) : new Date(0),
           };
         }) || [];
 
@@ -55,12 +53,10 @@ export function useNotices(selectedCategory: ApiCategory) {
         setNotices((prev) => [...prev, ...convertedNotices]);
         setCache(selectedCategory, [
           ...(cache[selectedCategory] || []),
-          // 새로 받은 페이지의 공지들도 ...(cache[selectedCategory] || []),이거에 합쳐서 펼침.
           ...convertedNotices,
         ]);
       }
 
-      // 전체 페이지 수 기반 hasMore 계산
       setHasMore(pageNumber + 1 < (data.totalPages ?? 1));
       setPage(pageNumber);
     } catch (err) {
@@ -71,18 +67,31 @@ export function useNotices(selectedCategory: ApiCategory) {
     }
   };
 
+  // 카테고리 전환 시
   useEffect(() => {
-    fetchNotices(0);
+    if (cache[selectedCategory]?.length) {
+      // 캐시가 있으면 캐시만 보여줌
+      setNotices(cache[selectedCategory]!);
+      setPage(0);
+      setHasMore(true);
+    } else {
+      // 없을 때만 API 호출
+      fetchNotices(0);
+    }
+
+    // 스크롤 최상단 이동
+    const scrollContainer = document.getElementById('home_content');
+    if (scrollContainer) scrollContainer.scrollTop = 0;
   }, [selectedCategory]);
 
   const loadMore = () => {
     if (hasMore && !loading) fetchNotices(page + 1);
   };
 
+  // 당겨서 새로고침 시에만 강제 API 호출
   const refresh = async () => {
-    console.log('refresh!');
     if (loading) return;
-    await fetchNotices(0, true); // 캐시 무시하고 새로 API 호출
+    await fetchNotices(0, true); // 캐시 무시
   };
 
   return { notices, loading, hasMore, loadMore, refresh };

@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import styles from './Home.module.css';
+import styles from '../../Home.module.css';
 import HomeHeaderCategorys from './HomeHeaderCategorys';
-import { useNotices } from '@/hooks/useNotices';
+import { useNotices } from './useNotices';
 import type { Notice } from '@/types/notice';
 import Layout from '@/Components/LayoutDir/Layout';
 import { useCategories, CategoryItem } from '@/contexts/CategoryContext';
-import SharedNoticeItem from '@/Components/Head/SharedNoticeItem';
+import NoticeItem from '@/Components/Notice/NoticeItem';
 import {
   ALL_CATEGORY,
   ApiCategory,
@@ -16,7 +16,7 @@ import {
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { CircularProgress } from '@mui/material';
 
-export default function HomeContent() {
+export function HomeContent() {
   const { items } = useCategories();
   const allCategory: CategoryItem = ALL_CATEGORY;
   const [category, setCategory] = useState<CategoryItem>(allCategory);
@@ -119,7 +119,7 @@ export default function HomeContent() {
               }
             >
               {notices.map((notice: Notice, index) => (
-                <SharedNoticeItem
+                <NoticeItem
                   key={`${notice.id}-${index}`}
                   notice={notice}
                   isRead={readIds.includes(notice.id)}

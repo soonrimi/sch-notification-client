@@ -1,7 +1,7 @@
 'use client';
 import { useCategories } from '@/contexts/CategoryContext';
-import { useNotices } from '@/hooks/useNotices';
-import SharedNoticeItem from '@/Components/Head/SharedNoticeItem';
+import { useNotices } from '../../home/components/HomeContent/useNotices';
+import NoticeItem from '@/Components/Notice/NoticeItem';
 import { useEffect, useState } from 'react';
 import { Category, ApiCategory } from '@/constants/categories';
 
@@ -36,7 +36,7 @@ export default function AlertTab() {
   return (
     <div>
       {alertNotices.map((notice) => (
-        <SharedNoticeItem key={notice.id} notice={notice} isRead={false} />
+        <NoticeItem key={notice.id} notice={notice} isRead={false} />
       ))}
     </div>
   );
