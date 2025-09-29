@@ -28,6 +28,7 @@ import styles from './page.module.css';
 import SortableItem from './components/SortableItem';
 import ColorPicker from './components/ColorPicker';
 import ItemView from './components/ItemView';
+import { SubscribeControllerService } from '@/api/services/SubscribeControllerService';
 
 export default function CategorySettingsPage() {
   const { items, setItems } = useCategories();
@@ -78,15 +79,26 @@ export default function CategorySettingsPage() {
     setActiveId(null);
   };
 
-  const handleToggleNotify = (index: number) => {
+  const handleToggleNotify = async (index: number) => {
     setItems((prev) => {
       const newItems = prev.map((it, i) =>
         i === index ? { ...it, notify: !it.notify } : it
       );
 
-      return newItems.filter(
-        (cat, idx, self) => idx === self.findIndex((c) => c.id === cat.id)
-      );
+      const changed = newItems[index];
+
+      if (changed.notify) {
+        SubscribeControllerService.create({
+          category: changed.name,
+        }).catch((err) => console.error('구독 등록 실패:', err));
+      } else {
+        if (changed.subscribeId) {
+          SubscribeControllerService.delete(changed.subscribeId).catch((err) =>
+            console.error('구독 해제 실패:', err)
+          );
+        }
+      }
+      return newItems;
     });
   };
 

@@ -36,7 +36,7 @@ export default function SearchHeader({
       </IconButton>
       <TextField
         inputRef={inputRef}
-        placeholder="제목, 내용"
+        placeholder="검색어를 입력하세요."
         value={searchKeyword}
         onChange={(e) => setSearchKeyword(e.target.value)}
         onKeyDown={(e) => {
@@ -53,13 +53,22 @@ export default function SearchHeader({
         size="small"
         fullWidth
         sx={{
-          backgroundColor: '#e0e0e0ff',
-          borderRadius: '10px',
+          backgroundColor: '#F9FAFB',
+          borderRadius: '0.625rem',
           '& .MuiOutlinedInput-notchedOutline': {
             border: 'none',
           },
           '& .MuiOutlinedInput-root': {
-            height: 36,
+            height: '2.2rem',
+            fontSize: '0.875rem',
+            padding: '0 0.5rem',
+          },
+          '& .MuiInputBase-input': {
+            fontSize: '0.875rem',
+          },
+          '& .MuiInputBase-input::placeholder': {
+            fontSize: '0.8125rem',
+            color: '#9CA3AF',
           },
         }}
         InputProps={{
@@ -67,7 +76,7 @@ export default function SearchHeader({
             <IconButton
               size="small"
               onClick={() => setSearchKeyword('')}
-              sx={{ p: 0.5 }}
+              sx={{ p: '0.25rem' }}
             >
               <ClearIcon
                 onClick={() => {
@@ -75,7 +84,7 @@ export default function SearchHeader({
                     onBack();
                   }
                 }}
-                sx={{ fontSize: 18, color: '#606060ff' }}
+                sx={{ fontSize: '1rem', color: '#606060' }}
               />
             </IconButton>
           ),

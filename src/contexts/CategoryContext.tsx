@@ -13,6 +13,7 @@ export interface CategoryItem {
   color: string;
   notify: boolean;
   visible: boolean;
+  subscribeId?: number;
 }
 
 interface CategoryContextType {

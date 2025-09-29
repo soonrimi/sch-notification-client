@@ -47,11 +47,11 @@ export default function KeywordSettings() {
         pageType: 'settings',
         settingsHeaderProps: {
           title: '키워드 알림 설정',
-          backgroundColor: '#fff',
+          backgroundColor: '#F9FAFB',
         },
       }}
       hideBottomNav
-      backgroundColor="#fff"
+      backgroundColor="#F9FAFB"
       fullHeight
     >
       <div className={styles.container}>
