@@ -34,9 +34,9 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <NoticesProvider>
           <BookmarkNoticesProvider>
-          <CategoryColorProvider>
-            <CategoryProvider>{children}</CategoryProvider>
-          </CategoryColorProvider>
+            <CategoryColorProvider>
+              <CategoryProvider>{children}</CategoryProvider>
+            </CategoryColorProvider>
           </BookmarkNoticesProvider>
         </NoticesProvider>
       </body>

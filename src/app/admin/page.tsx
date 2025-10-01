@@ -73,9 +73,7 @@ export default function AdminPage() {
                     style={{ backgroundColor: color }}
                     aria-hidden
                   />
-                  <span className={styles.catText}>
-                    {n.category}
-                  </span>
+                  <span className={styles.catText}>{n.category}</span>
                   <span className={styles.metaRight}>
                     {dayjs(n.createdAt).format('YYYY-MM-DD HH:mm')}
                   </span>

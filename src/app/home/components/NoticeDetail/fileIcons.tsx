@@ -26,7 +26,7 @@ export function getFileIcon(fileName: string) {
     case 'gif':
       return <InsertPhotoIcon sx={{ color: '#afafafff' }} />;
     case 'txt':
-      return <DescriptionIcon sx={{ color: '#afafafff'}} />;
+      return <DescriptionIcon sx={{ color: '#afafafff' }} />;
     default:
       return <InsertDriveFileIcon />;
   }

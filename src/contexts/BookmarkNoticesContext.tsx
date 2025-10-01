@@ -11,7 +11,11 @@ interface BookmarkNoticesContextValue {
 export const BookmarkNoticesContext =
   React.createContext<BookmarkNoticesContextValue | null>(null);
 
-export const BookmarkNoticesProvider = ({ children }: { children: ReactNode }) => {
+export const BookmarkNoticesProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
   const [cache, setCacheState] = useState<Notice[]>([]);
 
   const setCache = (notices: Notice[]) => {
