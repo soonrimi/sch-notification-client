@@ -3,6 +3,8 @@ import localFont from 'next/font/local';
 import './globals.css';
 import { CategoryColorProvider } from '@/contexts/CategoryColorContext';
 import { CategoryProvider } from '@/contexts/CategoryContext';
+import { NoticesProvider } from '@/contexts/NoticesContext';
+import { BookmarkNoticesProvider } from '@/contexts/BookmarkNoticesContext';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -30,9 +32,13 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <CategoryColorProvider>
-          <CategoryProvider>{children}</CategoryProvider>
-        </CategoryColorProvider>
+        <NoticesProvider>
+          <BookmarkNoticesProvider>
+            <CategoryColorProvider>
+              <CategoryProvider>{children}</CategoryProvider>
+            </CategoryColorProvider>
+          </BookmarkNoticesProvider>
+        </NoticesProvider>
       </body>
     </html>
   );

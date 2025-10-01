@@ -6,4 +6,5 @@ export interface Notice {
   upload_time: Date;
   title: string;
   detail: string;
+  writer: string;
 }

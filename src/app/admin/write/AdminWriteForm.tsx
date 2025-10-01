@@ -1,18 +1,25 @@
 'use client';
 
-import React, { ElementType, forwardRef, useEffect } from 'react';
+import React, {
+  ElementType,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+} from 'react';
 import base from '../Admin.module.css';
 import fancy from './WriteForm.module.css';
 import { useAdminWrite } from './useAdminWrite';
 import {
+  Autocomplete,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   Stack,
+  TextField,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
-import { CrawlPostsResponse, InternalNoticeListResponse } from '@/api';
+import { CreateInternalNoticeRequest, InternalNoticeListResponse } from '@/api';
 
 // 아이콘
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
@@ -22,38 +29,41 @@ import WorkOutlineRoundedIcon from '@mui/icons-material/WorkOutlineRounded';
 import EventAvailableRoundedIcon from '@mui/icons-material/EventAvailableRounded';
 import CampaignRoundedIcon from '@mui/icons-material/CampaignRounded';
 
+// Year 변수를 컴포넌트 밖으로 이동시켜, 렌더링 시 새로 생성되지 않도록 합니다.
+const Year = InternalNoticeListResponse.targetYear;
+
 const CATEGORY_META: {
-  categoryId: CrawlPostsResponse.category;
+  categoryId: CreateInternalNoticeRequest.category;
   label: string;
   Icon: ElementType;
 }[] = [
   {
-    categoryId: CrawlPostsResponse.category.UNIVERSITY,
+    categoryId: CreateInternalNoticeRequest.category.UNIVERSITY,
     label: '대학',
     Icon: ApartmentRoundedIcon,
   },
   {
-    categoryId: CrawlPostsResponse.category.DEPARTMENT,
+    categoryId: CreateInternalNoticeRequest.category.DEPARTMENT,
     label: '학과',
     Icon: GroupsRoundedIcon,
   },
   {
-    categoryId: CrawlPostsResponse.category.GRADE,
+    categoryId: CreateInternalNoticeRequest.category.GRADE,
     label: '학년',
     Icon: BadgeRoundedIcon,
   },
   {
-    categoryId: CrawlPostsResponse.category.RECRUIT,
+    categoryId: CreateInternalNoticeRequest.category.RECRUIT,
     label: '채용',
     Icon: WorkOutlineRoundedIcon,
   },
   {
-    categoryId: CrawlPostsResponse.category.ACTIVITY,
+    categoryId: CreateInternalNoticeRequest.category.ACTIVITY,
     label: '활동',
     Icon: EventAvailableRoundedIcon,
   },
   {
-    categoryId: CrawlPostsResponse.category.PROMOTION,
+    categoryId: CreateInternalNoticeRequest.category.PROMOTION,
     label: '홍보',
     Icon: CampaignRoundedIcon,
   },
@@ -65,7 +75,7 @@ export type AdminWriteFormHandle = {
 };
 
 export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
-  function AdminWriteForm(_props) {
+  function AdminWriteForm(_props, ref) {
     const {
       title,
       setTitle,
@@ -85,46 +95,27 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
       targetDepartmentList,
       category,
       setCategory,
-      setTargetDepartmentList,
+      handleSubmit,
+      setTargetDepartmentList, // 여기에 빠뜨렸던 부분을 추가했습니다!
     } = useAdminWrite();
 
-    // 학년 값은 항상 유효한 enum으로 유지
-    const Year = InternalNoticeListResponse.targetYear;
-    const selectedYear = targetYear ?? Year.FIRST_YEAR;
+    useImperativeHandle(
+      ref,
+      () => ({
+        submit: handleSubmit,
+      }),
+      [handleSubmit]
+    );
 
-    // 카테고리 변경 시 학년 초기화/보정
     useEffect(() => {
-      if (category === CrawlPostsResponse.category.GRADE) {
-        if (
-          targetYear !== Year.FIRST_YEAR &&
-          targetYear !== Year.SECOND_YEAR &&
-          targetYear !== Year.THIRD_YEAR &&
-          targetYear !== Year.FOURTH_YEAR
-        ) {
-          setTargetYear(Year.FIRST_YEAR);
-        }
-      } else {
+      if (category !== 'GRADE') {
         setTargetYear(Year.ALL_YEARS);
       }
-    }, [category, targetYear, setTargetYear, Year]);
+    }, [category, setTargetYear]);
 
     const handleYearChange = (e: SelectChangeEvent) => {
-      setTargetYear(
-        e.target
-          .value as unknown as typeof InternalNoticeListResponse.targetYear.FIRST_YEAR
-      );
+      setTargetYear(e.target.value as InternalNoticeListResponse.targetYear);
     };
-
-    function handleChangeTargetDepartments(e: SelectChangeEvent<number[]>) {
-      const {
-        target: { value },
-      } = e;
-      setTargetDepartmentList(
-        typeof value === 'string'
-          ? []
-          : departmentList.filter((d) => value.includes(d.id))
-      );
-    }
 
     // ------ UI ------
     return (
@@ -158,12 +149,12 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
                 <button
                   key={categoryId}
                   type="button"
-                  className={`${fancy.chip} ${category === categoryId ? fancy.chipActive : ''}`}
+                  className={`${fancy.chip} ${
+                    category === categoryId ? fancy.chipActive : ''
+                  }`}
                   onClick={() => setCategory(categoryId)}
                   aria-pressed={category === categoryId}
-                  data-active={
-                    category === categoryId
-                  } /* 활성 스타일 강제 적용 */
+                  data-active={category === categoryId}
                 >
                   <Icon className={fancy.icon} />
                   <span>{label}</span>
@@ -172,24 +163,34 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
             </div>
           </div>
         </div>
-        {(category === CrawlPostsResponse.category.DEPARTMENT ||
-          category === CrawlPostsResponse.category.GRADE) && (
-          <Stack>
-            <Select
+
+        {/* 학과 선택 (Autocomplete UI) */}
+        {(category === 'DEPARTMENT' || category === 'GRADE') && (
+          <Stack sx={{ my: 2 }}>
+            <Autocomplete
               multiple
-              value={targetDepartmentList.map((d) => d.id)}
-              onChange={(e) => handleChangeTargetDepartments(e)}
-              displayEmpty
-            >
-              {departmentList.map((dept) => (
-                <MenuItem key={dept.id} value={dept.id}>
-                  {dept.name}
-                </MenuItem>
-              ))}
-            </Select>
+              autoHighlight
+              options={departmentList}
+              getOptionLabel={(option) => option.name}
+              value={targetDepartmentList}
+              onChange={(event, newValue) => {
+                setTargetDepartmentList(newValue);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  label="학과 선택"
+                  placeholder="검색하여 학과 추가"
+                />
+              )}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+            />
           </Stack>
         )}
-        {category === CrawlPostsResponse.category.GRADE && (
+
+        {/* 학년 선택 */}
+        {category === 'GRADE' && (
           <div className={base.section}>
             <div className={base.sectionTitle}>학년 선택</div>
             <div className={fancy.sectionCard}>
@@ -198,10 +199,10 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
                 <Select
                   labelId="year-label"
                   label="학년 선택"
-                  value={selectedYear as unknown as string}
+                  value={targetYear}
                   onChange={handleYearChange}
                   MenuProps={{
-                    disablePortal: true, // removeChild 에러 방지
+                    disablePortal: true,
                     keepMounted: true,
                   }}
                 >
@@ -220,7 +221,9 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
         <div className={base.section}>
           <div className={base.sectionTitle}>첨부파일 추가</div>
           <div
-            className={`${base.dropZone} ${dragOver ? base.dropZoneActive : ''} ${fancy.sectionCard}`}
+            className={`${base.dropZone} ${
+              dragOver ? base.dropZoneActive : ''
+            } ${fancy.sectionCard}`}
             onDrop={onDrop}
             onDragOver={onDragOver}
             onDragLeave={onDragLeave}

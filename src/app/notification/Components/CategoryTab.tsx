@@ -1,21 +1,21 @@
 'use client';
 import { useCategories } from '@/contexts/CategoryContext';
-import { useNotices } from '@/hooks/useNotices';
-import SharedNoticeItem from '@/Components/Head/SharedNoticeItem';
+import { useNotices } from '../../home/components/HomeContent/useNotices';
+import NoticeItem from '@/Components/Notice/NoticeItem';
 import { useEffect, useState } from 'react';
-import { Category } from '@/constants/categories';
+import { Category, ApiCategory } from '@/constants/categories';
 
 export default function AlertTab() {
   const { items } = useCategories();
 
-  const [category, setCategory] = useState<Category>('ALL');
+  const [category, setCategory] = useState<Category>('전체');
 
   useEffect(() => {
-    setCategory('ALL');
+    setCategory('전체');
   }, [items]);
 
   // 전체 공지 가져오기
-  const { notices: allNotices } = useNotices(category);
+  const { notices: allNotices } = useNotices(category as ApiCategory);
 
   // 알림 설정된 카테고리 필터링
   const activeCategories = items
@@ -36,7 +36,7 @@ export default function AlertTab() {
   return (
     <div>
       {alertNotices.map((notice) => (
-        <SharedNoticeItem key={notice.id} notice={notice} isRead={false} />
+        <NoticeItem key={notice.id} notice={notice} isRead={false} />
       ))}
     </div>
   );

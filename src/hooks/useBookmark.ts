@@ -14,7 +14,7 @@ export function useBookmark(noticeId: number) {
       ? saved.filter((x: number) => x !== noticeId)
       : [...saved, noticeId];
     localStorage.setItem('bookmarkedIds', JSON.stringify(newBookmarked));
-    setBookmarked(!bookmarked);
+    setBookmarked((prev) => !prev);
   };
 
   return { bookmarked, toggleBookmark };

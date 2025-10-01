@@ -1,13 +1,13 @@
-import type { CrawlPostsResponse } from '@/api/models/CrawlPostsResponse';
+import type { ListResponse } from '@/api/models/ListResponse';
 import type { Notice } from '@/types/notice';
-import { Category } from '@/constants/categories';
 
-export function mapCrawlPostToNotice(crawl: CrawlPostsResponse): Notice {
+export function mapCrawlPostToNotice(response: ListResponse): Notice {
   return {
-    id: Number(crawl.id),
-    category: crawl.category as Category,
-    upload_time: crawl.createdAt ? new Date(crawl.createdAt) : new Date(),
-    title: crawl.title ?? '',
-    detail: crawl.content ?? '',
+    id: Number(response.id),
+    category: String(response.categoryName),
+    upload_time: response.createdAt ? new Date(response.createdAt) : new Date(),
+    writer: response.writer ?? '',
+    title: response.title ?? '',
+    detail: response.content ?? '',
   };
 }
