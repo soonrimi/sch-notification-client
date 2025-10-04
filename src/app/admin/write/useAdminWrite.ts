@@ -2,7 +2,7 @@ import useAdminInfo from '../useAdminInfo';
 import { useRouter } from 'next/navigation';
 import {
   AdminControllerService,
-  CrawlPostsResponse,
+  CreateInternalNoticeRequest,
   Department,
   InternalNoticeListResponse,
 } from '@/api';
@@ -22,8 +22,8 @@ const titleAtom = atom('');
 const contentAtom = atom('');
 const filesAtom = atom<FileItem[]>([]);
 const submittingAtom = atom(false);
-const categoryAtom = atom<CrawlPostsResponse.category>(
-  CrawlPostsResponse.category.UNIVERSITY
+const categoryAtom = atom<CreateInternalNoticeRequest.category>(
+  CreateInternalNoticeRequest.category.UNIVERSITY
 );
 const targetDepartmentListAtom = atom<Department[]>([]);
 const targetYearAtom = atom<InternalNoticeListResponse.targetYear>(

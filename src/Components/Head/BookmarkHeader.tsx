@@ -12,10 +12,10 @@ import { BookmarkHeaderProps } from './Header';
 import { useRouter } from 'next/navigation';
 
 export default function BookmarkHeader({
-  selectionMode,
+  BookmarkDeleteMode,
   selectedCount,
   totalCount,
-  onToggleSelectionMode,
+  onToggleBookmarkDeleteMode,
   onSelectAll,
   onCancelSelection,
 }: BookmarkHeaderProps) {
@@ -36,13 +36,13 @@ export default function BookmarkHeader({
     >
       {/* 왼쪽: 뒤로가기 + 제목 */}
       <Stack direction="row" alignItems="center" spacing={1}>
-        {selectionMode && (
+        {BookmarkDeleteMode && (
           <IconButton onClick={onCancelSelection} size="small">
             <ArrowBackIosIcon fontSize="small" sx={{ color: '#333333' }} />
           </IconButton>
         )}
         <Typography variant="subtitle1" fontWeight="bold" fontSize={18}>
-          {selectionMode
+          {BookmarkDeleteMode
             ? isAnySelected
               ? `${selectedCount}개 선택됨`
               : '항목 선택'
@@ -52,7 +52,7 @@ export default function BookmarkHeader({
 
       {/* 오른쪽 버튼 */}
       <Stack direction="row" alignItems="center" spacing={-0.6}>
-        {selectionMode ? (
+        {BookmarkDeleteMode ? (
           <IconButton
             onClick={onSelectAll}
             sx={{
@@ -89,7 +89,7 @@ export default function BookmarkHeader({
                 className={styles.icon_small}
               />
             </IconButton>
-            <IconButton onClick={onToggleSelectionMode}>
+            <IconButton onClick={onToggleBookmarkDeleteMode}>
               <DeleteOutlineIcon
                 sx={{ fontSize: 23.5, color: '#333333', marginRight: -1.1 }}
               />
