@@ -1,7 +1,6 @@
 'use client';
 import { useState, useMemo, useRef, useEffect } from 'react';
 import styles from './page.module.css';
-import { useSwipe } from './hooks/useMonthNavigation';
 import useCalendarCells, { CalendarCell } from './hooks/useCalendarCells';
 import EventItem from './Components/EventItem';
 import DayKor from './Components/DayKor';
@@ -12,16 +11,15 @@ import SearchIcon from '@mui/icons-material/Search';
 import BottomNav from '@/Components/Bottom/BottomNav';
 import { CalenderApiService } from '@/api';
 import { CalenderDto_Response } from '@/api/models/CalenderDto_Response';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { useRouter } from 'next/navigation';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(customParseFormat);
 
 export default function Calendar() {
   const [current, setCurrent] = useState<Dayjs>(dayjs());
-  const nav = useSwipe(setCurrent, {
-    swipeThreshold: 60,
-    wheelThreshold: 100,
-  });
 
   const headRef = useRef<HTMLDivElement>(null);
   const [headH, setHeadH] = useState<number>(0);
@@ -62,6 +60,8 @@ export default function Calendar() {
     return map;
   }, []);
 
+  const router = useRouter();
+
   useEffect(() => {
     CalenderApiService.getAllCalenders({
       page: 0,
@@ -78,11 +78,28 @@ export default function Calendar() {
         <div className={styles.head_top}>
           <div className={styles.header_year}>{current.year()}년</div>
           <div className={styles.header_right}>
-            <SearchIcon />
-            <div className={styles.today_box}>{dayjs().format('DD')}</div>
+            <SearchIcon onClick={() => router.push('/search')} />
+            <div
+              className={styles.today_box}
+              onClick={() => setCurrent(dayjs())}
+              style={{ cursor: 'pointer' }}
+            >
+              {dayjs().format('DD')}
+            </div>
           </div>
         </div>
-        <div className={styles.calendar_month}>{current.format('M월')}</div>
+        <div className={styles.calendar_month}>
+          <NavigateBeforeIcon
+            onClick={() => setCurrent((prev) => prev.subtract(1, 'month'))}
+            style={{ cursor: 'pointer' }}
+          />
+          <div>{current.format('M월')}</div>
+          <NavigateNextIcon
+            onClick={() => setCurrent((prev) => prev.add(1, 'month'))}
+            style={{ cursor: 'pointer' }}
+          />
+        </div>
+
         <div className={styles.calendar_day_kr}>
           <DayKor />
         </div>
@@ -92,10 +109,6 @@ export default function Calendar() {
         className={styles.calendar_body}
         tabIndex={0}
         style={{ outline: 'none', paddingTop: headH }}
-        onWheel={nav.onWheel}
-        onPointerDown={nav.onPointerDown}
-        onPointerMove={nav.onPointerMove}
-        onPointerUp={nav.onPointerUp}
       >
         <div className={styles.calendar_body_box}>
           {weeks.map(

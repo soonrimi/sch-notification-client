@@ -4,7 +4,7 @@ import Header, { HeaderProps } from '@/Components/Head/Header';
 import BottomNav from '@/Components/Bottom/BottomNav';
 import styles from './Layout.module.css';
 
-const HEADER_HEIGHT = 45;
+export const HEADER_HEIGHT = 45;
 const BOTTOM_NAV_HEIGHT = 48;
 
 interface LayoutProps {

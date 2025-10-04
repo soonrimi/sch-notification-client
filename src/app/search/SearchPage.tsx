@@ -43,11 +43,7 @@ export default function SearchPage() {
     localStorage.removeItem('recentSearch');
   };
   const handleBack = () => {
-    if (initialScope === 'bookmark') {
-      router.push('/bookmark');
-    } else {
-      router.push('/home');
-    }
+    router.back();
   };
 
   return (
