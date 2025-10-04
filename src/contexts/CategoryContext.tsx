@@ -3,7 +3,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
   CATEGORY_COLORS,
-  getCategoryName,
   Category,
   ALL_CATEGORY,
 } from '@/constants/categories';
@@ -36,7 +35,7 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
       const saved = localStorage.getItem('categories');
       if (saved) {
         const parsed: CategoryItem[] = JSON.parse(saved);
-        const hasAll = parsed.some((c) => c.id === 'ALL');
+        const hasAll = parsed.some((c) => c.id === '전체');
         setItems(hasAll ? parsed : [defaultAll, ...parsed]);
         return;
       }
@@ -44,10 +43,10 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
       try {
         const categoryItems: CategoryItem[] = Object.keys(CATEGORY_COLORS).map(
           (key) => {
-            const id = key as Category; // string → Category
+            const id = key as Category;
             return {
               id,
-              name: getCategoryName(id),
+              name: id,
               color: CATEGORY_COLORS[id] || '#1d9ad6',
               notify: false,
               visible: true,
@@ -86,7 +85,7 @@ export function getDefaultCategories(): CategoryItem[] {
       const id = key as Category;
       return {
         id,
-        name: getCategoryName(id),
+        name: id,
         color: CATEGORY_COLORS[id] || '#1d9ad6',
         notify: true,
         visible: true,

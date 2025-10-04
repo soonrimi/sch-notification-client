@@ -44,14 +44,14 @@ export default function KakaoChatAdminPage() {
 
   // 필터 상태
   const [filterDepartment, setFilterDepartment] = React.useState<number>(0);
-  const [filterYear, setFilterYear] = React.useState<string>('ALL');
+  const [filterYear, setFilterYear] = React.useState<string>('전체');
 
   // 필터링된 rooms
   const filteredRooms = rooms.filter((room: KakaoRoomInfoResponse) => {
     const matchDepartment =
       filterDepartment === 0 || room.department?.id === filterDepartment;
     const matchYear =
-      filterYear === 'ALL' || String(room.targetYear) === filterYear;
+      filterYear === '전체' || String(room.targetYear) === filterYear;
     return matchDepartment && matchYear;
   });
 
