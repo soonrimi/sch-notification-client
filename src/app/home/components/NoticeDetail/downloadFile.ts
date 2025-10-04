@@ -12,8 +12,9 @@ export function downloadFile(file?: Attachment) {
 
 export function downloadAll(attachments: Attachment[], delay = 200) {
   attachments
-    .filter((f): f is Required<Pick<Attachment, 'fileUrl' | 'fileName'>> =>
-      !!f?.fileUrl && !!f?.fileName
+    .filter(
+      (f): f is Required<Pick<Attachment, 'fileUrl' | 'fileName'>> =>
+        !!f?.fileUrl && !!f?.fileName
     )
     .forEach((file, idx) => {
       setTimeout(() => downloadFile(file), idx * delay);
