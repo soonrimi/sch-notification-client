@@ -10,10 +10,10 @@ import styles from './Header.module.css';
 import NotificationHeader from './NotificationHeader';
 
 export interface BookmarkHeaderProps {
-  selectionMode: boolean;
+  BookmarkDeleteMode: boolean;
   selectedCount: number;
   totalCount: number;
-  onToggleSelectionMode: () => void;
+  onToggleBookmarkDeleteMode: () => void;
   onSelectAll: () => void;
   onCancelSelection?: () => void;
 }

@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import SharedNoticeItem from '@/Components/Head/SharedNoticeItem';
+import NoticeItem from '@/Components/Notice/NoticeItem';
 import type { Notice } from '@/types/notice';
 import { mockKeywordNotices } from '@/mock/noticesKeywords';
 import Link from 'next/link';
@@ -28,7 +28,7 @@ export default function KeywordTab() {
         </Link>
       </div>
       {notices.map((n) => (
-        <SharedNoticeItem key={n.id} notice={n} isRead={false} />
+        <NoticeItem key={n.id} notice={n} isRead={false} />
       ))}
     </div>
   );

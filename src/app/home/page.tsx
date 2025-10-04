@@ -1,8 +1,8 @@
 'use client';
 
 import { Suspense } from 'react';
-import HomeContent from './HomeContent';
-import NoticeDetail from './NoticeDetail';
+import { HomeContent } from './components/HomeContent';
+import { NoticeDetail } from './components/NoticeDetail';
 import { useSearchParams } from 'next/navigation';
 
 function HomePageInner() {

@@ -3,7 +3,10 @@ export function formatUploadTime(date: Date | null | undefined) {
 
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
+  const diffSeconds = Math.floor(diffMs / 1000);
   const diffMinutes = Math.floor(diffMs / 1000 / 60);
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
 
   const isToday =
     date.getFullYear() === now.getFullYear() &&
@@ -12,27 +15,33 @@ export function formatUploadTime(date: Date | null | undefined) {
 
   const isThisYear = date.getFullYear() === now.getFullYear();
 
-  if (diffMinutes < 60) return `${diffMinutes}분 전`;
+  if (diffSeconds < 60) {
+    // 1분 미만
+    return `${diffSeconds}초 전`;
+  }
 
-  if (isToday)
-    return date.toLocaleTimeString('ko-KR', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  if (diffMinutes < 60) {
+    // 1시간 미만
+    return `${diffMinutes}분 전`;
+  }
 
-  if (isThisYear)
-    return date.toLocaleString('ko-KR', {
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  if (isToday) {
+    // 오늘 1시간 이상
+    return `${diffHours}시간 전`;
+  }
 
-  return date.toLocaleString('ko-KR', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  if (diffDays < 30) {
+    // 1일 ~ 30일 전
+    return `${diffDays}일 전`;
+  }
+
+  if (isThisYear) {
+    // 올해: n개월 전
+    const monthDiff = now.getMonth() - date.getMonth();
+    return `${monthDiff}개월 전`;
+  }
+
+  // 올해 아님: X년 전
+  const yearDiff = now.getFullYear() - date.getFullYear();
+  return `${yearDiff}년 전`;
 }

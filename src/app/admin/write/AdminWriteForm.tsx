@@ -12,7 +12,7 @@ import {
   Stack,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
-import { CrawlPostsResponse, InternalNoticeListResponse } from '@/api';
+import { CreateInternalNoticeRequest, InternalNoticeListResponse } from '@/api';
 
 // 아이콘
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
@@ -23,37 +23,37 @@ import EventAvailableRoundedIcon from '@mui/icons-material/EventAvailableRounded
 import CampaignRoundedIcon from '@mui/icons-material/CampaignRounded';
 
 const CATEGORY_META: {
-  categoryId: CrawlPostsResponse.category;
+  categoryId: CreateInternalNoticeRequest.category;
   label: string;
   Icon: ElementType;
 }[] = [
   {
-    categoryId: CrawlPostsResponse.category.UNIVERSITY,
+    categoryId: CreateInternalNoticeRequest.category.UNIVERSITY,
     label: '대학',
     Icon: ApartmentRoundedIcon,
   },
   {
-    categoryId: CrawlPostsResponse.category.DEPARTMENT,
+    categoryId: CreateInternalNoticeRequest.category.DEPARTMENT,
     label: '학과',
     Icon: GroupsRoundedIcon,
   },
   {
-    categoryId: CrawlPostsResponse.category.GRADE,
+    categoryId: CreateInternalNoticeRequest.category.GRADE,
     label: '학년',
     Icon: BadgeRoundedIcon,
   },
   {
-    categoryId: CrawlPostsResponse.category.RECRUIT,
+    categoryId: CreateInternalNoticeRequest.category.RECRUIT,
     label: '채용',
     Icon: WorkOutlineRoundedIcon,
   },
   {
-    categoryId: CrawlPostsResponse.category.ACTIVITY,
+    categoryId: CreateInternalNoticeRequest.category.ACTIVITY,
     label: '활동',
     Icon: EventAvailableRoundedIcon,
   },
   {
-    categoryId: CrawlPostsResponse.category.PROMOTION,
+    categoryId: CreateInternalNoticeRequest.category.PROMOTION,
     label: '홍보',
     Icon: CampaignRoundedIcon,
   },
@@ -94,7 +94,7 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
 
     // 카테고리 변경 시 학년 초기화/보정
     useEffect(() => {
-      if (category === CrawlPostsResponse.category.GRADE) {
+      if (category === CreateInternalNoticeRequest.category.GRADE) {
         if (
           targetYear !== Year.FIRST_YEAR &&
           targetYear !== Year.SECOND_YEAR &&
@@ -172,8 +172,8 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
             </div>
           </div>
         </div>
-        {(category === CrawlPostsResponse.category.DEPARTMENT ||
-          category === CrawlPostsResponse.category.GRADE) && (
+        {(category === CreateInternalNoticeRequest.category.DEPARTMENT ||
+          category === CreateInternalNoticeRequest.category.GRADE) && (
           <Stack>
             <Select
               multiple
@@ -189,7 +189,7 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
             </Select>
           </Stack>
         )}
-        {category === CrawlPostsResponse.category.GRADE && (
+        {category === CreateInternalNoticeRequest.category.GRADE && (
           <div className={base.section}>
             <div className={base.sectionTitle}>학년 선택</div>
             <div className={fancy.sectionCard}>
