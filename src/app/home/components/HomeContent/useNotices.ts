@@ -6,6 +6,7 @@ import { ApiCategory, BackendCategory } from '@/constants/categories';
 import { mapCrawlPostToNotice } from '@/utils/Noticemappers';
 import type { Pageable } from '@/api/models/Pageable';
 import { NoticesContext } from '@/contexts/NoticesContext';
+import { CreateInternalNoticeRequest } from '@/api';
 
 export function useNotices(selectedCategory: ApiCategory) {
   const [notices, setNotices] = useState<Notice[]>([]);
@@ -29,11 +30,17 @@ export function useNotices(selectedCategory: ApiCategory) {
       const pageable: Pageable = { page: pageNumber };
 
       if (selectedCategory === 'ALL') {
-        data = await CrawlPostControllerService.getAllNotices(pageable);
+        data = await CrawlPostControllerService.getAllNotices(
+          pageable.page,
+          20,
+          ['createdAt,DESC']
+        );
       } else {
         data = await CrawlPostControllerService.getNotices(
-          pageable,
-          selectedCategory as BackendCategory
+          selectedCategory as CreateInternalNoticeRequest.category,
+          pageable.page,
+          20,
+          ['createdAt,DESC']
         );
       }
 

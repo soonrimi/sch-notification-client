@@ -108,7 +108,16 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
     );
 
     useEffect(() => {
-      if (category !== 'GRADE') {
+      if (category === CreateInternalNoticeRequest.category.GRADE) {
+        if (
+          targetYear !== Year.FIRST_YEAR &&
+          targetYear !== Year.SECOND_YEAR &&
+          targetYear !== Year.THIRD_YEAR &&
+          targetYear !== Year.FOURTH_YEAR
+        ) {
+          setTargetYear(Year.FIRST_YEAR);
+        }
+      } else {
         setTargetYear(Year.ALL_YEARS);
       }
     }, [category, setTargetYear]);
@@ -163,11 +172,10 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
             </div>
           </div>
         </div>
-
-        {/* 학과 선택 (Autocomplete UI) */}
-        {(category === 'DEPARTMENT' || category === 'GRADE') && (
-          <Stack sx={{ my: 2 }}>
-            <Autocomplete
+        {(category === CreateInternalNoticeRequest.category.DEPARTMENT ||
+          category === CreateInternalNoticeRequest.category.GRADE) && (
+          <Stack>
+            <Select
               multiple
               autoHighlight
               options={departmentList}
@@ -189,8 +197,7 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
           </Stack>
         )}
 
-        {/* 학년 선택 */}
-        {category === 'GRADE' && (
+        {category === CreateInternalNoticeRequest.category.GRADE && (
           <div className={base.section}>
             <div className={base.sectionTitle}>학년 선택</div>
             <div className={fancy.sectionCard}>

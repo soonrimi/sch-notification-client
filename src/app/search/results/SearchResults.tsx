@@ -29,7 +29,9 @@ export default function SearchResults() {
       const pageable: Pageable = { page: pageNumber };
       const res = await CrawlPostControllerService.searchNotices(
         keyword,
-        pageable
+        pageable.page,
+        20,
+        ['createdAt,DESC']
       );
       let notices = res.content?.map(mapCrawlPostToNotice) || [];
 

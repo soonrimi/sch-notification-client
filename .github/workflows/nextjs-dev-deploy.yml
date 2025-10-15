@@ -32,7 +32,7 @@ jobs:
         uses: milanmk/actions-file-deployer@master
         with:
           remote-protocol: sftp
-          remote-host: ${{ secrets.SERVER_HOST }}
+          remote-host: ${{ secrets.DEV_SERVER_HOST }}
           remote-user: ${{ secrets.SERVER_USER }}
           remote-password: ${{ secrets.SERVER_PASSWORD }}
           remote-path: /var/www/notification

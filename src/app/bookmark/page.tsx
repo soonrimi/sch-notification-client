@@ -223,7 +223,12 @@ export default function Bookmark() {
 
       const pageable: Pageable = { page: pageNumber };
       const res: PageListResponse =
-        await CrawlPostControllerService.getNoticesByIds(bookmarkIds, pageable);
+        await CrawlPostControllerService.getNoticesByIds(
+          bookmarkIds,
+          pageable.page,
+          20,
+          ['createdAt,DESC']
+        );
 
       const newNotices =
         res.content?.map((raw) => mapCrawlPostToNotice(raw)) || [];
