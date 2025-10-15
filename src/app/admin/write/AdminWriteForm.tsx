@@ -19,7 +19,11 @@ import {
   TextField,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
-import { CreateInternalNoticeRequest, InternalNoticeListResponse } from '@/api';
+import {
+  CreateInternalNoticeRequest,
+  Department,
+  InternalNoticeListResponse,
+} from '@/api';
 
 // 아이콘
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
@@ -177,23 +181,26 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
           <Stack>
             <Select
               multiple
-              autoHighlight
-              options={departmentList}
-              getOptionLabel={(option) => option.name}
               value={targetDepartmentList}
-              onChange={(event, newValue) => {
+              onChange={(event) => {
+                const newValue = event.target.value as Department[];
                 setTargetDepartmentList(newValue);
               }}
-              renderInput={(params) => (
+              renderValue={(selected) => (
                 <TextField
-                  {...params}
                   variant="outlined"
                   label="학과 선택"
                   placeholder="검색하여 학과 추가"
+                  value={selected.map((dept) => dept.name).join(', ')}
                 />
               )}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-            />
+            >
+              {departmentList.map((dept) => (
+                <MenuItem key={dept.id} value={dept.name}>
+                  {dept.name}
+                </MenuItem>
+              ))}
+            </Select>
           </Stack>
         )}
 
