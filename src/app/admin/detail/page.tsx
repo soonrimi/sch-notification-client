@@ -36,12 +36,12 @@ function DetailInner() {
 
           <div className={styles.detailContent}>{item.content}</div>
 
-          {item.attachments?.length ? (
+          {item.attachments.length ? (
             <>
               <div className={styles.sectionDivider} />
               <div className={styles.sectionTitleSm}>첨부파일</div>
               <ol className={styles.attachList}>
-                {item.attachments?.map((f, i) => (
+                {item.attachments.map((f, i) => (
                   <li key={f.fileUrl}>
                     {i + 1}. {f.fileName}
                   </li>

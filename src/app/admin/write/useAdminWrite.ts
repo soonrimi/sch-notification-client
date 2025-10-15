@@ -1,3 +1,5 @@
+// sch-notification-client/src/app/admin/write/useAdminWrite.ts
+
 import useAdminInfo from '../useAdminInfo';
 import { useRouter } from 'next/navigation';
 import {
@@ -9,6 +11,7 @@ import {
 import {
   ChangeEventHandler,
   DragEventHandler,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -52,7 +55,7 @@ export function useAdminWrite() {
       setDepartmentList(res);
       setTargetDepartmentList([]);
     });
-  }, []);
+  }, [setTargetDepartmentList]);
 
   const numberedFiles = useMemo(
     () => files.map((f, i) => ({ no: i + 1, name: f.file.name, id: f.id })),
@@ -90,7 +93,7 @@ export function useAdminWrite() {
 
   const isValid = title.trim().length > 0 && content.trim().length > 0;
 
-  async function handleSubmit() {
+  const handleSubmit = useCallback(async () => {
     if (!isValid) {
       alert('제목과 내용을 입력해주세요.');
       return;
@@ -111,7 +114,18 @@ export function useAdminWrite() {
     } finally {
       setSubmitting(false);
     }
-  }
+  }, [
+    isValid,
+    setSubmitting,
+    adminToken,
+    targetYear,
+    title,
+    category,
+    content,
+    targetDepartmentList,
+    files,
+    push,
+  ]);
 
   return {
     inputRef,
