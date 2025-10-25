@@ -221,14 +221,16 @@ export default function Bookmark() {
     try {
       setLoading(true);
 
-      const pageable: Pageable = { page: pageNumber };
+      const pageable: Pageable = {
+        page: pageNumber,
+        size: 20,
+        sort: ['createdAt,DESC'],
+      };
       const res: PageListResponse =
-        await CrawlPostControllerService.getNoticesByIds(
-          bookmarkIds,
-          pageable.page,
-          20,
-          ['createdAt,DESC']
-        );
+        await CrawlPostControllerService.searchNoticesByIds(pageable, {
+          ids: bookmarkIds,
+          keyword: '',
+        });
 
       const newNotices =
         res.content?.map((raw) => mapCrawlPostToNotice(raw)) || [];
