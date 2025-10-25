@@ -1,12 +1,13 @@
 'use client';
 import { useState } from 'react';
 import styles from './page.module.css';
-import UserList from './UserList';
-import UserDetail from './UserDetail';
-import SearchIcon from '@mui/icons-material/Search';
+import AdminUserTable from './AdminUserTable';
+import AdminUserFormPanel from './AdminUserFormPanel';
 import useAdminManage from './useAdminManage';
 import { AdminUserResponse } from '@/api';
 import type { Department } from '@/api';
+import Header from '@/app/admin/components/Header';
+import { Stack } from '@mui/material';
 
 type Mode = 'view' | 'add' | 'edit';
 
@@ -75,66 +76,30 @@ export default function ManagePage() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.leftPanel}>
-        <div className={styles.leftTop}>
-          <div className={styles.searchBox}>
-            <input
-              type="text"
-              placeholder="사용자 검색"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <button type="button" onClick={() => console.log('검색 실행')}>
-              <SearchIcon />
-            </button>
-          </div>
-
-          <div className={styles.filterBox}>
-            <select
-              value={filterRole}
-              onChange={(e) => setFilterRole(e.target.value)}
-            >
-              <option value="전체">전체</option>
-              <option value="학과">학과</option>
-              <option value="학년">학년</option>
-              <option value="학생회">학생회</option>
-              <option value="교직원">교직원</option>
-            </select>
-          </div>
-        </div>
-        <div className={styles.userTableWrapper}>
-          <UserList
-            users={filtered}
-            onSelect={(u) => {
-              setSelectedUser(u);
-              setMode('view');
-            }}
-            selectedUser={selectedUser}
-          />
-        </div>
-      </div>
-
-      <div className={styles.rightPanel}>
-        <div className={styles.btnGroup}>
-          <button type="button" onClick={handleAdd}>
-            추가
-          </button>
-          <button type="button" onClick={handleEdit} disabled={!selectedUser}>
-            수정
-          </button>
-          <button type="button" onClick={handleDelete} disabled={!selectedUser}>
-            삭제
-          </button>
-        </div>
-        <UserDetail
-          user={selectedUser}
-          mode={mode}
-          onSave={handleSave}
-          onCancel={() => setMode('view')}
-          departmentList={departmentList}
+    <Stack height="100vh" gap="12px">
+      <Header />
+      <Stack direction="row" gap="12px" height="100%" padding="12px">
+        <AdminUserTable
+          users={filtered}
+          search={search}
+          setSearch={setSearch}
+          filterRole={filterRole}
+          setFilterRole={setFilterRole}
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+          setMode={setMode}
         />
-      </div>
-    </div>
+        <AdminUserFormPanel
+          selectedUser={selectedUser}
+          mode={mode}
+          handleAdd={handleAdd}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+          handleSave={handleSave}
+          departmentList={departmentList}
+          setMode={setMode}
+        />
+      </Stack>
+    </Stack>
   );
 }

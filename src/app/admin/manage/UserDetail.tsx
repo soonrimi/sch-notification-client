@@ -1,14 +1,16 @@
 'use client';
 import { useState, useEffect } from 'react';
-import {
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  Checkbox,
-  ListItemText,
-} from '@mui/material';
-import styles from './styles.module.css';
+
+import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemText from '@mui/material/ListItemText';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Grid from '@mui/material/Grid';
 
 import { AdminUserResponse, Department } from '@/api';
 import { useEffect as useReactEffect } from 'react';
@@ -118,169 +120,163 @@ export default function UserDetail({
 
   if (mode === 'view' || mode === 'edit' || mode === 'add') {
     return (
-      <div className={styles.userDetail}>
-        <h3>
-          {mode === 'view'
-            ? '사용자 정보'
-            : mode === 'edit'
-              ? '사용자 수정'
-              : '새 사용자 추가'}
-        </h3>
-
-        <form className={styles.detailForm} onSubmit={handleSubmit}>
-          <label>
-            아이디 *
-            <input
-              type="text"
+      <form onSubmit={handleSubmit}>
+        <Stack spacing={3}>
+          <h3 style={{ margin: 0, fontWeight: 600, fontSize: '1.5rem' }}>
+            {mode === 'view'
+              ? '사용자 정보'
+              : mode === 'edit'
+                ? '사용자 수정'
+                : '새 사용자 추가'}
+          </h3>
+          <Stack spacing={2}>
+            <TextField
+              label="아이디"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
               required
               disabled={mode === 'view'}
+              fullWidth
+              size="small"
             />
-          </label>
-          <label>
-            비밀번호 *
-            <input
+            <TextField
+              label="비밀번호"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               disabled={mode === 'view'}
+              fullWidth
+              size="small"
             />
-          </label>
-          <label>
-            등록용 비밀번호 *
-            <input
+            <TextField
+              label="등록용 비밀번호"
               type="password"
               value={registerPassword}
               onChange={(e) => setRegisterPassword(e.target.value)}
               required
               disabled={mode === 'view'}
+              fullWidth
+              size="small"
             />
-          </label>
-          <label>
-            이름 *
-            <input
-              type="text"
+            <TextField
+              label="이름"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
               disabled={mode === 'view'}
+              fullWidth
+              size="small"
             />
-          </label>
-          <label>
-            소속 *
-            <select
-              value={affiliation}
-              onChange={(e) =>
-                setAffiliation(e.target.value as AdminUserResponse.affiliation)
-              }
-              required
-              disabled={mode === 'view'}
-            >
-              <option value="">선택</option>
-              {affiliationOptions.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label>게시판 권한 *</label>
-          <div className={styles.boardCheckboxes}>
-            {categoryOptions.map((cat) => (
-              <div key={cat}>
-                <input
-                  type="checkbox"
-                  checked={categories.includes(cat)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setCategories([...categories, cat]);
-                    } else {
-                      setCategories(categories.filter((c) => c !== cat));
-                    }
-                  }}
-                  disabled={mode === 'view'}
-                />
-                {cat}
-              </div>
-            ))}
-          </div>
-          <FormControl fullWidth margin="dense" disabled={mode === 'view'}>
-            <InputLabel id="department-multiselect-label">학과 *</InputLabel>
-            <Select
-              labelId="department-multiselect-label"
-              multiple
-              value={departments.map((d) => d.id)}
-              onChange={(e) => {
-                const selectedIds = e.target.value as number[];
-                setDepartments(
-                  departmentList.filter((d) => selectedIds.includes(d.id))
-                );
-              }}
-              renderValue={(selected) =>
-                departmentList
-                  .filter((d) => selected.includes(d.id))
-                  .map((d) => d.name)
-                  .join(', ')
-              }
-            >
-              {departmentList.map((dept) => (
-                <MenuItem key={dept.id} value={dept.id}>
-                  <Checkbox
-                    checked={departments.some((d) => d.id === dept.id)}
-                  />
-                  <ListItemText primary={dept.name} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <label>학년 *</label>
-          <div className={styles.boardCheckboxes}>
-            {gradeOptions.map((grade) => (
-              <div key={grade}>
-                <input
-                  type="checkbox"
-                  checked={grades.includes(grade)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setGrades([...grades, grade]);
-                    } else {
-                      setGrades(grades.filter((g) => g !== grade));
-                    }
-                  }}
-                  disabled={mode === 'view'}
-                />
-                {grade}
-              </div>
-            ))}
-          </div>
-
-          <label>
-            비고
-            <textarea rows={5} disabled={mode === 'view'} />
-          </label>
-
-          <div className={styles.formButtons}>
+            <FormControl fullWidth size="small" disabled={mode === 'view'}>
+              <InputLabel>소속</InputLabel>
+              <Select
+                value={affiliation}
+                label="소속"
+                onChange={(e) =>
+                  setAffiliation(
+                    e.target.value as AdminUserResponse.affiliation
+                  )
+                }
+                required
+              >
+                <MenuItem value="">선택</MenuItem>
+                {affiliationOptions.map((opt) => (
+                  <MenuItem key={opt} value={opt}>
+                    {opt}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth size="small" disabled={mode === 'view'}>
+              <InputLabel>학과</InputLabel>
+              <Select
+                multiple
+                value={departments.map((d) => d.id)}
+                onChange={(e) => {
+                  const selectedIds = e.target.value as number[];
+                  setDepartments(
+                    departmentList.filter((d) => selectedIds.includes(d.id))
+                  );
+                }}
+                renderValue={(selected) =>
+                  departmentList
+                    .filter((d) => (selected as number[]).includes(d.id))
+                    .map((d) => d.name)
+                    .join(', ')
+                }
+                label="학과"
+              >
+                {departmentList.map((dept) => (
+                  <MenuItem key={dept.id} value={dept.id}>
+                    <Checkbox
+                      checked={departments.some((d) => d.id === dept.id)}
+                    />
+                    <ListItemText primary={dept.name} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth size="small" disabled={mode === 'view'}>
+              <InputLabel>게시판 권한</InputLabel>
+              <Select
+                multiple
+                value={categories}
+                onChange={(e) => {
+                  const value = e.target.value as typeof categories;
+                  setCategories(value);
+                }}
+                renderValue={(selected) => (selected as string[]).join(', ')}
+                label="게시판 권한"
+              >
+                {categoryOptions.map((cat) => (
+                  <MenuItem key={cat} value={cat}>
+                    <Checkbox checked={categories.includes(cat)} />
+                    <ListItemText primary={cat} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth size="small" disabled={mode === 'view'}>
+              <InputLabel>학년</InputLabel>
+              <Select
+                multiple
+                value={grades}
+                onChange={(e) => {
+                  const value = e.target.value as typeof grades;
+                  setGrades(value);
+                }}
+                renderValue={(selected) => (selected as string[]).join(', ')}
+                label="학년"
+              >
+                {gradeOptions.map((grade) => (
+                  <MenuItem key={grade} value={grade}>
+                    <Checkbox checked={grades.includes(grade)} />
+                    <ListItemText primary={grade} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Stack>
+          <Stack direction="row" spacing={2} justifyContent="flex-end">
             {(mode === 'edit' || mode === 'add') && (
-              <button
-                type="button"
-                className={styles.cancelBtn}
+              <Button
+                variant="outlined"
+                color="inherit"
                 onClick={onCancel}
+                type="button"
               >
                 취소
-              </button>
+              </Button>
             )}
-
             {mode !== 'view' && (
-              <button type="submit" className={styles.saveBtn}>
+              <Button variant="contained" color="primary" type="submit">
                 저장
-              </button>
+              </Button>
             )}
-          </div>
-        </form>
-      </div>
+          </Stack>
+        </Stack>
+      </form>
     );
   }
 
