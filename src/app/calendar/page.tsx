@@ -69,6 +69,7 @@ export default function Calendar() {
       sort: [],
     }).then((data) => {
       setCalendar(data.content ?? []);
+      console.log('캘린더 응답:', data);
     });
   }, []);
 

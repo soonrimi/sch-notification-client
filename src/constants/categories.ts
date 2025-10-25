@@ -2,7 +2,7 @@ import { CategoryItem } from '@/contexts/CategoryContext';
 import { CrawlPostControllerService } from '@/api';
 
 export type BackendCategory = NonNullable<
-  Parameters<typeof CrawlPostControllerService.getNotices>[1]
+  Parameters<typeof CrawlPostControllerService.getNotices>[0]
 >;
 
 export const CATEGORY_LABELS: Record<BackendCategory | 'ALL', string> = {

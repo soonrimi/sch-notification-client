@@ -26,14 +26,15 @@ export function useNotices(selectedCategory: ApiCategory) {
       setLoading(true);
 
       let data: PageListResponse | null = null;
-      const pageable: Pageable = { page: pageNumber };
 
       if (selectedCategory === 'ALL') {
-        data = await CrawlPostControllerService.getAllNotices(pageable);
+        data = await CrawlPostControllerService.getAllNotices(pageNumber);
       } else {
         data = await CrawlPostControllerService.getNotices(
-          pageable,
-          selectedCategory as BackendCategory
+          selectedCategory as BackendCategory,
+          pageNumber,
+          20,
+          undefined
         );
       }
 
