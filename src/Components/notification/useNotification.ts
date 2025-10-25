@@ -1,4 +1,4 @@
-import { AlertColor, AlertPropsColorOverrides } from '@mui/material';
+import { AlertColor } from '@mui/material';
 import { atom, useAtom } from 'jotai';
 
 type Severity = AlertColor;
