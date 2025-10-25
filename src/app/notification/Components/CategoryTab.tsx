@@ -2,9 +2,9 @@
 import { useCategories } from '@/contexts/CategoryContext';
 import type { Notice } from '@/types/notice';
 import NoticeItem from '@/Components/Notice/NoticeItem';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
 import styles from './styles.module.css';
 
@@ -18,11 +18,21 @@ export default function AlertTab() {
   const [notices, setNotices] = useState<Notice[]>([]);
   const [includeCount, setIncludeCount] = useState(0);
 
-  const activeCategories = items
-    .filter((category) => category.notify)
-    .map((category) => category.name);
+  const activeCategories = useMemo(() => {
+    return items
+      .filter((category) => category.notify)
+      .map((category) => category.name);
+  }, [items]);
 
   useEffect(() => {
+    //구독하는 카테고리 개수 세기 위함
+    const saved = JSON.parse(localStorage.getItem('notify_categories') || '{}');
+    const activeCategories = Object.entries(saved)
+      .filter(([_, value]) => value)
+      .map(([key]) => key);
+    setIncludeCount(activeCategories.length);
+
+    //TODO: 새로 올라오는 공지들에 대한 api로 수정 필요
     async function fetchAlertNotices() {
       try {
         let results: Notice[] = [];
@@ -68,10 +78,10 @@ export default function AlertTab() {
   return (
     <div>
       <div className={styles.keywordNum}>
-        <NotificationsActiveIcon sx={{ mr: 1, color: '#212121' }} />
+        <NotificationsIcon sx={{ mr: 1, color: '#50545F' }} />
         알림 받는 카테고리 {includeCount}개
-        <Link href="../category-settings" style={{ marginLeft: 'auto' }}>
-          <SettingsIcon sx={{ color: '#B7B7B7' }} />
+        <Link href="./category-settings" style={{ marginLeft: 'auto' }}>
+          <SettingsIcon sx={{ color: '#50545F' }} />
         </Link>
       </div>
       {notices.map((notice) => (

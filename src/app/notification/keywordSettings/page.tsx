@@ -47,11 +47,11 @@ export default function KeywordSettings() {
         pageType: 'settings',
         settingsHeaderProps: {
           title: '키워드 알림 설정',
-          backgroundColor: '#F9FAFB',
+          backgroundColor: '#F7F7F7',
         },
       }}
       hideBottomNav
-      backgroundColor="#F9FAFB"
+      backgroundColor="#F7F7F7"
       fullHeight
     >
       <div className={styles.container}>
@@ -78,8 +78,7 @@ export default function KeywordSettings() {
             </button>
           </div>
           <div className={styles.Instruction}>
-            등록한 키워드가 포함된 공지는 카테고리 알림이 꺼져 있어도 알림을
-            보내요.
+            키워드가 포함된 공지는 카테고리 알림이 꺼져 있어도 알림을 전송해요.
           </div>
           <div className={styles.keywordRow}>
             {include.length > 0 &&

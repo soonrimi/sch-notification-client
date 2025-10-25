@@ -6,7 +6,7 @@
   display: flex;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
-  border: 0.0625rem solid #ccc;
+  border: 0.0625rem solid #EEEEEE;
   border-radius: 0.8125rem;
   overflow: hidden;
   background-color: #fff;
@@ -19,14 +19,15 @@
   height: 3rem;
   border: none;
   outline: none;
+  background-color: #fff;
 }
 
 .resetBtn {
   border: none;
   background: none;
-  color: #aaaaaa;
+  color: #50545F;
   font-size: 0.6875rem;
-  font-weight: bold;
+  font-weight: 400;
   cursor: pointer;
   line-height: 1.2;
   display: flex;
@@ -39,18 +40,18 @@
 .btn {
   border: none;
   background-color: #fff;
-  color: #aaaaaa;
+  color: #50545F;
   font-size: 0.875rem;
-  font-weight: bold;
+  font-weight: 500;
   padding: 0.25rem 0.75rem;
   border-radius: 0.25rem;
 }
 
 .Instruction {
-  font-size: 0.6875rem;
-  padding-left: 0.1875rem;
+  font-size: 0.7rem;
+  padding-left: 0.2rem;
   margin-bottom: 1rem;
-  color: #4e4e4e;
+  color: #50545F;
 }
 
 .includeBox {
@@ -66,7 +67,7 @@
 
 .secondTitle {
   font-size: 1rem;
-  font-weight: bold;
+  font-weight: 600;
   padding-left: 0.5rem;
   margin-top: 1rem;
   line-height: 1.2;
@@ -82,18 +83,18 @@
 
 .chip {
   background-color: #ffffff;
-  color: #878787;
+  color: #50545F;
   font-size: 0.8125rem;
-  border: 0.0625rem solid #aaaaaa;
-  border-radius: 1rem;
+  border-radius: 16px;
   padding: 0.25rem 0.5rem;
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .chipDeleteIcon {
-  color: #aaa;
-  font-weight: bold;
+  color: #50545F;
+  font-weight: 400;
   cursor: pointer;
 }

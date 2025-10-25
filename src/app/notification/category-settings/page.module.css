@@ -1,0 +1,68 @@
+.container {
+    padding: 1.125rem;
+    background-color: #F7F7F7;
+    min-height: 100vh;
+}
+
+.subtitle {
+    color: #50545F;
+    font-size: 0.85rem;
+    margin-bottom: 1.125rem;
+}
+
+.categoryBox {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0.15rem 0.5rem rgba(0, 0, 0, 0.08);
+    padding: 0.2rem 1rem;
+    margin-bottom: 0.9rem;
+}
+
+.majorHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.4rem;
+    cursor: pointer;
+    margin-bottom: 0.4rem;
+}
+
+.majorTitle {
+    padding: 0.4rem 0;
+    font-size: 0.95rem;
+}
+
+.arrowBtn {
+    border: none;
+    background: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #666;
+}
+
+.toggleRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 0;
+    font-size: 0.95rem;
+}
+
+.subToggles {
+    margin-top: 0.5rem;
+    border-top: 1px solid #eee;
+    padding: 0.2rem 0;
+}
+
+.arrowBtn {
+    font-size: 1.5rem;
+    color: #50545f;
+    transition: transform 0.2s ease;
+}
+
+.dropdown {
+    margin-top: 0.5rem;
+    border-top: 1px solid #eee;
+    padding-top: 0.5rem;
+    animation: dropdownFade 0.2s ease;
+}
