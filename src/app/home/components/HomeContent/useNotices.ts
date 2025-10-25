@@ -86,12 +86,9 @@ export function useNotices(selectedCategory: ApiCategory) {
       fetchNotices(0);
     }
 
-    // 스크롤 최상단 이동 (뒤로가기로 복원 중이 아닐 때만)
-    const isRestoringScroll = sessionStorage.getItem('homeScrollPosition');
-    if (!isRestoringScroll) {
-      const scrollContainer = document.getElementById('home_content');
-      if (scrollContainer) scrollContainer.scrollTop = 0;
-    }
+    // 스크롤 최상단 이동
+    const scrollContainer = document.getElementById('home_content');
+    if (scrollContainer) scrollContainer.scrollTop = 0;
   }, [selectedCategory]);
 
   const loadMore = () => {
