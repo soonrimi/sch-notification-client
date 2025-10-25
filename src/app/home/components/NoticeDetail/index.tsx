@@ -44,19 +44,6 @@ export function NoticeDetail({ id }: NoticeDetailProps) {
     fetchNotice();
   }, [id]);
 
-  // 읽음 처리
-  useEffect(() => {
-    if (!notice?.id) return;
-
-    const readNotices: number[] = JSON.parse(
-      localStorage.getItem('readNotices') || '[]'
-    );
-    if (!readNotices.includes(notice.id)) {
-      readNotices.push(notice.id);
-      localStorage.setItem('readNotices', JSON.stringify(readNotices));
-    }
-  }, [notice]);
-
   if (loading) return <Layout hideBottomNav>로딩중...</Layout>;
   if (!notice)
     return <Layout hideBottomNav>해당 공지를 찾을 수 없습니다.</Layout>;
