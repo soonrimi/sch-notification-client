@@ -14,7 +14,7 @@ axiosInstance.interceptors.request.use(
 );
 
 let notify: ReturnType<typeof useNotification>['setNotificationMessage'] = (
-  ..._args: any[]
+  ..._args
 ) => {};
 
 export function setAxiosNotificationHandler(
