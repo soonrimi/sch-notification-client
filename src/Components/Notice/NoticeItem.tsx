@@ -29,9 +29,7 @@ export default function NoticeItem({
   const noticeContent = (
     <div className={styles.home_notice_content}>
       <div className={styles.home_notice_body}>
-        <div className={styles.home_notice_title}>
-          {notice.title}
-        </div>
+        <div className={styles.home_notice_title}>{notice.title}</div>
 
         <div
           className={styles.home_notice_detail}
@@ -69,7 +67,10 @@ export default function NoticeItem({
       // 현재 스크롤 위치와 카테고리 저장
       const scrollContainer = document.getElementById('home_content');
       if (scrollContainer) {
-        sessionStorage.setItem('homeScrollPosition', scrollContainer.scrollTop.toString());
+        sessionStorage.setItem(
+          'homeScrollPosition',
+          scrollContainer.scrollTop.toString()
+        );
         sessionStorage.setItem('homeCategory', notice.category);
       }
       router.push(hrefBuilder(notice.id));

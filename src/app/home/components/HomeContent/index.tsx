@@ -24,7 +24,7 @@ export function HomeContent() {
   const [categoriesForUI, setCategoriesForUI] = useState<CategoryItem[]>([
     allCategory,
   ]);
-  
+
   // 스크롤 최상단 이동 버튼 관련 상태
   const [showScrollTop, setShowScrollTop] = useState(false);
   const prevScrollPos = useRef(0);
@@ -40,7 +40,9 @@ export function HomeContent() {
   useEffect(() => {
     const savedCategory = sessionStorage.getItem('homeCategory');
     if (savedCategory && categoriesForUI.length > 1) {
-      const foundCategory = categoriesForUI.find((c) => c.name === savedCategory);
+      const foundCategory = categoriesForUI.find(
+        (c) => c.name === savedCategory
+      );
       if (foundCategory && foundCategory.id !== category.id) {
         setCategory(foundCategory);
       }
@@ -60,14 +62,18 @@ export function HomeContent() {
   const { notices, loading, hasMore, loadMore, refresh } =
     useNotices(backendCategory);
 
-
   // 스크롤 위치 복원
   useEffect(() => {
     const savedScrollPosition = sessionStorage.getItem('homeScrollPosition');
     const savedCategory = sessionStorage.getItem('homeCategory');
-    
+
     // 저장된 카테고리와 현재 카테고리가 일치하고, 공지가 로드되었을 때만 스크롤 복원
-    if (savedScrollPosition && savedCategory === category.name && notices.length > 0 && !loading) {
+    if (
+      savedScrollPosition &&
+      savedCategory === category.name &&
+      notices.length > 0 &&
+      !loading
+    ) {
       const scrollContainer = document.getElementById('home_content');
       if (scrollContainer) {
         // 약간의 지연을 두고 스크롤 복원 (DOM 렌더링 완료 대기)
@@ -88,15 +94,18 @@ export function HomeContent() {
 
     const handleScroll = () => {
       const currentScrollPos = scrollContainer.scrollTop;
-      
+
       // 위로 스크롤 중이고, 100px 이상 스크롤된 경우에만 버튼 표시
       if (prevScrollPos.current > currentScrollPos && currentScrollPos > 100) {
         setShowScrollTop(true);
-      } else if (currentScrollPos <= 100 || prevScrollPos.current < currentScrollPos) {
+      } else if (
+        currentScrollPos <= 100 ||
+        prevScrollPos.current < currentScrollPos
+      ) {
         // 최상단 근처에 있거나 아래로 스크롤 중이면 버튼 숨김
         setShowScrollTop(false);
       }
-      
+
       prevScrollPos.current = currentScrollPos;
     };
 
