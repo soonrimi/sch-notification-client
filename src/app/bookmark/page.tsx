@@ -173,6 +173,7 @@ import type { PageListResponse } from '@/api/models/PageListResponse';
 import type { Pageable } from '@/api/models/Pageable';
 
 export default function Bookmark() {
+  const [readIds, setReadIds] = useState<number[]>([]);
   const [BookmarkDeleteMode, setBookmarkDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [bookmarkedNotices, setBookmarkedNotices] = useState<Notice[]>([]);
@@ -187,6 +188,9 @@ export default function Bookmark() {
   const [bookmarkIds, setBookmarkIds] = useState<number[]>([]);
 
   useEffect(() => {
+    const savedReads = localStorage.getItem('readNotices');
+    if (savedReads) setReadIds(JSON.parse(savedReads).map(Number));
+
     const savedBookmarks = JSON.parse(
       localStorage.getItem('bookmarkedIds') || '[]'
     ) as number[];
@@ -400,7 +404,7 @@ export default function Bookmark() {
                 <NoticeItem
                   key={notice.id}
                   notice={notice}
-                  isRead={false}
+                  isRead={readIds.includes(notice.id)}
                   BookmarkDeleteMode={BookmarkDeleteMode}
                   isSelectedForBookmarkDelete={selectedIds.includes(notice.id)}
                   onSelectToggle={toggleSelect}
