@@ -3,6 +3,7 @@ import { Stack, IconButton } from '@mui/material';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import styles from './Header.module.css';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 export default function NotificationHeader() {
   const router = useRouter();
@@ -32,6 +33,7 @@ export default function NotificationHeader() {
             className={styles.icon_small}
           />
         </IconButton>
+        <DeleteOutlineIcon />
       </Stack>
     </Stack>
   );
