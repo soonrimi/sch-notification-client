@@ -27,13 +27,7 @@ export function HomeContent() {
   useEffect(() => {
     if (items.length > 0) {
       const filteredItems = items.filter((c) => c.id !== '전체');
-      const newCategories = [allCategory, ...filteredItems];
-
-      const uniqueCategories = newCategories.filter(
-        (cat, idx, self) => idx === self.findIndex((c) => c.id === cat.id)
-      );
-
-      setCategoriesForUI(uniqueCategories);
+      setCategoriesForUI([allCategory, ...filteredItems]);
     }
   }, [items]);
 

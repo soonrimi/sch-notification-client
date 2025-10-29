@@ -27,6 +27,7 @@ export function useNotices(selectedCategory: ApiCategory) {
       setLoading(true);
 
       let data: PageListResponse | null = null;
+      const pageable: Pageable = { page: pageNumber };
 
       if (selectedCategory === 'ALL') {
         data = await CrawlPostControllerService.getAllNotices(
