@@ -1,43 +1,69 @@
 import React from 'react';
-import { AdminUserResponse } from '@/api';
+import UserDetail from './UserDetail';
 import type { Department } from '@/api';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import UserDetail from './UserDetail';
+import Button from '@mui/material/Button';
+import { AdminUserResponse } from '@/api';
+import useAdminManage from './useAdminManage';
 
-type Mode = 'view' | 'add' | 'edit';
-
-type Props = {
-  selectedUser: AdminUserResponse | null;
-  mode: Mode;
-  handleAdd: () => void;
-  handleEdit: () => void;
-  handleDelete: () => void;
-  handleSave: (
+export default function AdminUserFormPanel() {
+  const {
+    mode,
+    setMode,
+    selectedUser,
+    departmentList,
+    fetchAdminUsers,
+    setSelectedUser,
+    createAdminUser,
+    updateAdminUser,
+  } = useAdminManage();
+  function handleSave(
     newUser: AdminUserResponse & {
       password: string;
       registerPassword: string;
       categories: AdminUserResponse['categories'];
       departments: Department[];
       grades: AdminUserResponse['grades'];
-    },
-    mode: Mode
-  ) => void;
-  departmentList: Department[];
-  setMode: (m: Mode) => void;
-};
+    }
+  ) {
+    try {
+      if (mode === 'add') {
+        createAdminUser(newUser);
+      } else if (mode === 'edit') {
+        updateAdminUser(newUser, newUser.registerPassword);
+      }
+    } catch (error) {
+      // 오류 메시지는 axios에서 처리하므로 여기서는 생략
+      return;
+    }
+    fetchAdminUsers();
+    setSelectedUser(newUser);
+    setMode('view');
+  }
 
-export default function AdminUserFormPanel({
-  selectedUser,
-  mode,
-  handleAdd,
-  handleEdit,
-  handleDelete,
-  handleSave,
-  departmentList,
-  setMode,
-}: Props) {
+  const handleAdd = () => {
+    setSelectedUser(null);
+    setMode('add');
+  };
+
+  const handleEdit = () => {
+    if (selectedUser) setMode('edit');
+  };
+
+  const handleDelete = () => {
+    if (selectedUser) {
+      const ok = window.confirm(
+        `정말로 ${selectedUser.name} 사용자를 삭제하시겠습니까?`
+      );
+      if (ok) {
+        fetchAdminUsers();
+        setSelectedUser(null);
+        setMode('view');
+      }
+    }
+  };
+
   return (
     <Paper
       elevation={3}

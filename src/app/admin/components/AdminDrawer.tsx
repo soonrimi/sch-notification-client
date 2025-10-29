@@ -30,7 +30,7 @@ export default function AdminDrawer({ open, onClose }: AdminDrawerProps) {
 
   return (
     <Drawer anchor="left" open={open} onClose={onClose} variant="temporary">
-      <div style={{ width: 240, padding: 16 }}>
+      <div style={{ width: 280, padding: 16 }}>
         <List>
           {menuItems.map((item) => (
             <ListItem key={item.text} disablePadding>

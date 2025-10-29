@@ -1,13 +1,16 @@
-import { AdminControllerService } from '@/api';
 import { atom, useAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { AdminControllerService } from '@/api';
+import { useNotification } from '@/Components/notification/useNotification';
 
 const adminJwt = atom<string>('');
 
 export default function useAdminInfo() {
   const { push } = useRouter();
+  const [didSendOtp, setDidSendOtp] = useState(false);
   const [adminToken, setAdminToken] = useAtom(adminJwt);
+  const { setNotificationMessage } = useNotification();
 
   useEffect(() => {
     fetchAdminInfo();
@@ -20,9 +23,18 @@ export default function useAdminInfo() {
   }
 
   async function login({ id, password }: { id: string; password: string }) {
-    const data = await AdminControllerService.login({
+    const data = await AdminControllerService.loginEmail({
       userId: id,
       password: password,
+    });
+    setNotificationMessage(data);
+    setDidSendOtp(true);
+  }
+
+  async function verifyOTP({ id, otp }: { id: string; otp: number }) {
+    const data = await AdminControllerService.verifyOtp({
+      userId: id,
+      otp,
     });
     setAdminToken(data.token || '');
     localStorage.setItem('accessToken', data.token || '');
@@ -32,5 +44,7 @@ export default function useAdminInfo() {
   return {
     adminToken,
     login,
+    verifyOTP,
+    didSendOtp,
   };
 }

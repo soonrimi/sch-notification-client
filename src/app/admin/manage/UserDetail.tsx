@@ -1,15 +1,14 @@
 'use client';
 import { useState } from 'react';
-
-import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
 
 import { AdminUserResponse, Department } from '@/api';
 import { useEffect as useReactEffect } from 'react';
@@ -34,7 +33,10 @@ interface Props {
   departmentList: Department[];
 }
 
-const boardList = ['학교', '대학', '학과', '학년', '채용', '활동', '홍보'];
+// 이메일 유효성 검사 함수
+function isValidEmail(email: string) {
+  return /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/.test(email);
+}
 
 export default function UserDetail({
   user,
@@ -44,6 +46,7 @@ export default function UserDetail({
   departmentList,
 }: Props) {
   const [userId, setUserId] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
   const [name, setName] = useState('');
@@ -130,13 +133,22 @@ export default function UserDetail({
           </h3>
           <Stack spacing={2}>
             <TextField
-              label="아이디"
+              label="이메일"
               value={userId}
-              onChange={(e) => setUserId(e.target.value)}
+              onChange={(e) => {
+                setUserId(e.target.value);
+                if (e.target.value && !isValidEmail(e.target.value)) {
+                  setEmailError('올바른 이메일 형식이 아닙니다.');
+                } else {
+                  setEmailError('');
+                }
+              }}
               required
               disabled={mode === 'view'}
               fullWidth
               size="small"
+              error={!!emailError}
+              helperText={emailError}
             />
             <TextField
               label="비밀번호"
@@ -149,7 +161,7 @@ export default function UserDetail({
               size="small"
             />
             <TextField
-              label="등록용 비밀번호"
+              label="관리자 비밀번호"
               type="password"
               value={registerPassword}
               onChange={(e) => setRegisterPassword(e.target.value)}
