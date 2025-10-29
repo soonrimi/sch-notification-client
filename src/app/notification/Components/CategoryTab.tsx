@@ -80,7 +80,7 @@ export default function AlertTab() {
       <div className={styles.keywordNum}>
         <NotificationsIcon sx={{ mr: 1, color: '#50545F' }} />
         알림 받는 카테고리 {includeCount}개
-        <Link href="./category-settings" style={{ marginLeft: 'auto' }}>
+        <Link href="./category-notify" style={{ marginLeft: 'auto' }}>
           <SettingsIcon sx={{ color: '#50545F' }} />
         </Link>
       </div>
