@@ -38,10 +38,10 @@ export default function AlertTab() {
         let results: Notice[] = [];
 
         for (const cat of activeCategories) {
-          const pageable: Pageable = { page: 0, size: 10 };
           const data = await CrawlPostControllerService.getNotices(
-            pageable,
-            mapToApiCategory(cat)
+            mapToApiCategory(cat),
+            0,
+            10
           );
 
           const converted =

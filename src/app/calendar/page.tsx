@@ -14,6 +14,7 @@ import { CalenderDto_Response } from '@/api/models/CalenderDto_Response';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useRouter } from 'next/navigation';
+import EventBar from './Components/EventBar';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(customParseFormat);
@@ -54,24 +55,44 @@ export default function Calendar() {
       while (cursor.isSameOrBefore(last)) {
         const key = cursor.format('YYYYMMDD');
         if (!map.has(key)) map.set(key, []);
+        map.get(key)!.push(ev);
         cursor = cursor.add(1, 'day');
       }
     }
     return map;
-  }, []);
+  }, [calendar]);
 
   const router = useRouter();
 
   useEffect(() => {
     CalenderApiService.getAllCalenders({
       page: 0,
-      size: 1000,
+      size: 100,
       sort: [],
     }).then((data) => {
       setCalendar(data.content ?? []);
       console.log('캘린더 응답:', data);
     });
   }, []);
+
+  // 주간 최대 겹침 수 계산 함수
+  function getMaxOverlap(
+    events: CalenderDto_Response[],
+    weekStart: Dayjs,
+    weekEnd: Dayjs
+  ) {
+    const days = Array(7).fill(0);
+
+    for (const ev of events) {
+      const start = dayjs(ev.startDate);
+      const end = dayjs(ev.endDate ?? ev.startDate);
+      const startIdx = Math.max(0, start.diff(weekStart, 'day'));
+      const endIdx = Math.min(6, end.diff(weekStart, 'day'));
+      for (let i = startIdx; i <= endIdx; i++) days[i] += 1;
+    }
+
+    return Math.max(...days);
+  }
 
   return (
     <div className={styles.App}>
@@ -112,43 +133,68 @@ export default function Calendar() {
         style={{ outline: 'none', paddingTop: headH }}
       >
         <div className={styles.calendar_body_box}>
-          {weeks.map(
-            (
-              row: CalendarCell[],
-              wIdx: number // 주 단위 렌더링
-            ) => (
-              <div className={styles.calendar_body_line} key={wIdx}>
-                {row.map((cell: CalendarCell, idx: number) => {
-                  const ymd = cell.ymd;
-                  const dayEvents = eventsByYmd.get(ymd) ?? [];
+          {weeks.map((row, wIdx) => {
+            const weekDates = row.map((cell) => dayjs(cell.ymd));
+            const weekStart = weekDates[0];
+            const weekEnd = weekDates[weekDates.length - 1];
 
-                  return (
-                    <div
-                      className={styles.calendar_body_days}
-                      key={cell.ymd}
-                      onClick={() => console.log(cell.ymd)}
+            const weekEvents = calendar.filter((ev) => {
+              const start = dayjs(ev.startDate);
+              const end = dayjs(ev.endDate ?? ev.startDate);
+              return (
+                end.isSameOrAfter(weekStart) && start.isSameOrBefore(weekEnd)
+              );
+            });
+
+            const overlapCount = getMaxOverlap(weekEvents, weekStart, weekEnd);
+
+            return (
+              <div
+                key={wIdx}
+                className={styles.calendar_body_line}
+                style={{
+                  paddingBottom: `${overlapCount * 24}px`, // 겹치는 만큼만 높이 늘리기
+                }}
+              >
+                {row.map((cell: CalendarCell, idx: number) => (
+                  <div className={styles.calendar_body_days} key={cell.ymd}>
+                    <span
+                      className={styles.date_num}
+                      style={cellColor(cell.date, idx, cell.isOtherMonth)}
                     >
-                      <span
-                        className={styles.date_num}
-                        style={cellColor(cell.date, idx, cell.isOtherMonth)}
-                      >
-                        {cell.dayLabel}
-                      </span>
+                      {cell.dayLabel}
+                    </span>
+                  </div>
+                ))}
 
-                      <div>
-                        {dayEvents.map((calendar) => (
-                          <EventItem
-                            key={`${ymd}-${calendar.id}`}
-                            event={calendar}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
+                {/* 주간 일정 */}
+                <div className={styles.week_events}>
+                  {Array.from({ length: 7 }).map((_, dayIdx) => {
+                    const day = weekStart.add(dayIdx, 'day');
+
+                    const dayEvents = weekEvents.filter((ev) => {
+                      const start = dayjs(ev.startDate);
+                      const end = dayjs(ev.endDate ?? ev.startDate);
+                      return (
+                        day.isSameOrAfter(start, 'day') &&
+                        day.isSameOrBefore(end, 'day')
+                      );
+                    });
+
+                    return dayEvents.map((ev, localIdx) => (
+                      <EventBar
+                        key={`${ev.id}-${dayIdx}-${localIdx}`}
+                        ev={ev}
+                        weekStart={weekStart}
+                        weekEnd={weekEnd}
+                        index={localIdx}
+                      />
+                    ));
+                  })}
+                </div>
               </div>
-            )
-          )}
+            );
+          })}
         </div>
       </div>
 

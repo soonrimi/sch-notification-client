@@ -12,3 +12,22 @@
   padding: 3px;
   border-radius: 3px;
 }
+
+
+/* EventBar.tsx */
+.event_bar {
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.8rem;
+  padding: 3px 0;
+  color: #333;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: keep-all;
+  line-height: 1.2;
+  overflow: visible;
+  position: static;
+  grid-auto-rows: auto;
+}
