@@ -4,7 +4,7 @@ import NoticeItem from '@/Components/Notice/NoticeItem';
 import type { Notice } from '@/types/notice';
 import { mockKeywordNotices } from '@/mock/noticesKeywords';
 import Link from 'next/link';
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
 import styles from './styles.module.css';
 
@@ -21,10 +21,10 @@ export default function KeywordTab() {
   return (
     <div>
       <div className={styles.keywordNum}>
-        <NotificationsActiveIcon sx={{ mr: 1, color: '#212121' }} />
+        <NotificationsIcon sx={{ mr: 1, color: '#50545F' }} />
         알림 받는 키워드 {includeCount}개
         <Link href="./keywordSettings" style={{ marginLeft: 'auto' }}>
-          <SettingsIcon sx={{ color: '#B7B7B7' }} />
+          <SettingsIcon sx={{ color: '#50545F' }} />
         </Link>
       </div>
       {notices.map((n) => (

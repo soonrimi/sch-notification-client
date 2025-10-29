@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import Layout from '@/Components/LayoutDir/Layout';
+import Layout, { HEADER_HEIGHT } from '@/Components/LayoutDir/Layout';
 import NotificationTabs from './Components/NotificationTabs';
 import CategoryTab from './Components/CategoryTab';
 import KeywordTab from './Components/KeywordTab';
@@ -14,8 +14,21 @@ export default function Notification() {
         pageType: 'notification',
       }}
     >
-      <NotificationTabs value={tab} onChange={setTab} />
-      {tab === 'category' ? <CategoryTab /> : <KeywordTab />}
+      <div
+        style={{
+          position: 'fixed',
+          top: HEADER_HEIGHT,
+          left: 0,
+          right: 0,
+          zIndex: 10,
+          backgroundColor: '#fff',
+        }}
+      >
+        <NotificationTabs value={tab} onChange={setTab} />
+      </div>
+      <div style={{ marginTop: HEADER_HEIGHT }}>
+        {tab === 'category' ? <CategoryTab /> : <KeywordTab />}
+      </div>
     </Layout>
   );
 }

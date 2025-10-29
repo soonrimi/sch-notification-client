@@ -32,39 +32,46 @@ export default function useAdminManage() {
     requestPassword: string
   ) {
     // AdminUpdateRequest로 변환
-    const data = await AdminControllerService.updateAdmin(updatedUser.id, {
-      name: updatedUser.name,
-      affiliation: updatedUser.affiliation,
-      registerPassword: requestPassword,
-      password: undefined, // 비밀번호 변경이 필요할 때만 전달
-      categories: updatedUser.categories ?? [],
-      departmentIds: updatedUser.departments
-        ? updatedUser.departments.map((d) => d.id ?? 0)
-        : [],
-      grades: updatedUser.grades ?? [],
-    });
-    setAdminUserList((prevList) =>
-      prevList.map((user) => (user.id === data.id ? data : user))
-    );
-    return data;
+    try {
+      const data = await AdminControllerService.updateAdmin(updatedUser.id, {
+        name: updatedUser.name,
+        affiliation: updatedUser.affiliation,
+        registerPassword: requestPassword,
+        password: undefined, // 비밀번호 변경이 필요할 때만 전달
+        categories: updatedUser.categories ?? [],
+        departmentIds: updatedUser.departments
+          ? updatedUser.departments.map((d) => d.id ?? 0)
+          : [],
+        grades: updatedUser.grades ?? [],
+      });
+      setAdminUserList((prevList) =>
+        prevList.map((user) => (user.id === data.id ? data : user))
+      );
+      return data;
+    } catch (error) {
+      console.error('Failed to update admin user:', error);
+    }
   }
 
   async function createAdminUser(
     newUser: AdminUserResponse & { password: string; registerPassword: string }
   ) {
-    // SignupRequest로 변환
-    await AdminControllerService.register({
-      userId: newUser.userId,
-      password: newUser.password,
-      name: newUser.name,
-      affiliation: newUser.affiliation,
-      registerPassword: newUser.registerPassword,
-      categories: newUser.categories ?? [],
-      departmentIds: newUser.departments
-        ? newUser.departments.map((d) => d.id ?? 0)
-        : [],
-      grades: newUser.grades ?? [],
-    });
+    try {
+      await AdminControllerService.register({
+        userId: newUser.userId,
+        password: newUser.password,
+        name: newUser.name,
+        affiliation: newUser.affiliation,
+        registerPassword: newUser.registerPassword,
+        categories: newUser.categories ?? [],
+        departmentIds: newUser.departments
+          ? newUser.departments.map((d) => d.id ?? 0)
+          : [],
+        grades: newUser.grades ?? [],
+      });
+    } catch (error) {
+      console.error('Failed to create admin user:', error);
+    }
   }
 
   return {
