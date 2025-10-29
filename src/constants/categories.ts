@@ -1,9 +1,7 @@
 import { CategoryItem } from '@/contexts/CategoryContext';
-import { CrawlPostControllerService } from '@/api';
+import { CrawlPostControllerService, CreateInternalNoticeRequest } from '@/api';
 
-export type BackendCategory = NonNullable<
-  Parameters<typeof CrawlPostControllerService.getNotices>[0]
->;
+export type BackendCategory = CreateInternalNoticeRequest.category;
 
 export const CATEGORY_LABELS: Record<BackendCategory | 'ALL', string> = {
   ALL: '전체',
