@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../../Home.module.css';
 import HomeHeaderCategorys from './HomeHeaderCategorys';
 import { useNotices } from './useNotices';
@@ -14,8 +14,8 @@ import {
   CATEGORY_LABELS,
 } from '@/constants/categories';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { CircularProgress, Fab } from '@mui/material';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { CircularProgress } from '@mui/material';
+import ScrollToTop from '@/Components/ScrollToTop/ScrollToTop';
 
 export function HomeContent() {
   const { items } = useCategories();
@@ -24,10 +24,6 @@ export function HomeContent() {
   const [categoriesForUI, setCategoriesForUI] = useState<CategoryItem[]>([
     allCategory,
   ]);
-
-  // 스크롤 최상단 이동 버튼 관련 상태
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const prevScrollPos = useRef(0);
 
   useEffect(() => {
     if (items.length > 0) {
@@ -86,41 +82,6 @@ export function HomeContent() {
       }
     }
   }, [notices, loading, category.name]);
-
-  // 스크롤 이벤트 감지 (위로 스크롤 시 버튼 표시)
-  useEffect(() => {
-    const scrollContainer = document.getElementById('home_content');
-    if (!scrollContainer) return;
-
-    const handleScroll = () => {
-      const currentScrollPos = scrollContainer.scrollTop;
-
-      // 위로 스크롤 중이고, 100px 이상 스크롤된 경우에만 버튼 표시
-      if (prevScrollPos.current > currentScrollPos && currentScrollPos > 100) {
-        setShowScrollTop(true);
-      } else if (
-        currentScrollPos <= 100 ||
-        prevScrollPos.current < currentScrollPos
-      ) {
-        // 최상단 근처에 있거나 아래로 스크롤 중이면 버튼 숨김
-        setShowScrollTop(false);
-      }
-
-      prevScrollPos.current = currentScrollPos;
-    };
-
-    scrollContainer.addEventListener('scroll', handleScroll);
-    return () => scrollContainer.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // 최상단으로 스크롤
-  const scrollToTop = () => {
-    const scrollContainer = document.getElementById('home_content');
-    if (scrollContainer) {
-      scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
-      setShowScrollTop(false);
-    }
-  };
 
   return (
     <>
@@ -197,27 +158,7 @@ export function HomeContent() {
       </Layout>
 
       {/* 스크롤 최상단 이동 버튼 */}
-      {showScrollTop && (
-        <Fab
-          onClick={scrollToTop}
-          sx={{
-            position: 'fixed',
-            bottom: 80,
-            right: 20,
-            backgroundColor: '#fff',
-            color: '#333',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-            '&:hover': {
-              backgroundColor: '#f5f5f5',
-            },
-            zIndex: 1000,
-          }}
-          size="medium"
-          aria-label="맨 위로"
-        >
-          <KeyboardArrowUpIcon />
-        </Fab>
-      )}
+      <ScrollToTop scrollableTargetId="home_content" />
     </>
   );
 }
