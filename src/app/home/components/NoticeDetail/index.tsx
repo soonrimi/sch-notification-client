@@ -69,9 +69,12 @@ export function NoticeDetail({ id }: NoticeDetailProps) {
             `[NoticeDetail] 상태 업데이트 취소됨 - isCancelled: ${isCancelled}, currentId: ${currentId}, id: ${id}, requestRef: ${requestRef.current === promise}`
           );
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         // CancelError는 무시
-        if (err?.name === 'CancelError' || err?.isCancelled) {
+        if (
+          err instanceof Error &&
+          (err.name === 'CancelError' || (err as { isCancelled?: boolean }).isCancelled)
+        ) {
           console.log('[NoticeDetail] 요청 취소됨');
           return;
         }
