@@ -53,7 +53,11 @@ export function NoticeDetail({ id }: NoticeDetailProps) {
         console.log(`[NoticeDetail] 공지 ${id} 요청 성공`, data);
 
         // 컴포넌트가 unmount되었거나 id가 변경된 경우 상태 업데이트 방지
-        if (!isCancelled && currentId === id && requestRef.current === promise) {
+        if (
+          !isCancelled &&
+          currentId === id &&
+          requestRef.current === promise
+        ) {
           console.log(`[NoticeDetail] 상태 업데이트 시작`);
           setNotice({
             ...data,
@@ -61,7 +65,9 @@ export function NoticeDetail({ id }: NoticeDetailProps) {
           });
           console.log(`[NoticeDetail] 상태 업데이트 완료`);
         } else {
-          console.log(`[NoticeDetail] 상태 업데이트 취소됨 - isCancelled: ${isCancelled}, currentId: ${currentId}, id: ${id}, requestRef: ${requestRef.current === promise}`);
+          console.log(
+            `[NoticeDetail] 상태 업데이트 취소됨 - isCancelled: ${isCancelled}, currentId: ${currentId}, id: ${id}, requestRef: ${requestRef.current === promise}`
+          );
         }
       } catch (err: any) {
         // CancelError는 무시

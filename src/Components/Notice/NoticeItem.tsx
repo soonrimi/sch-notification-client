@@ -70,7 +70,7 @@ export default function NoticeItem({
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (BookmarkDeleteMode) {
       onSelectToggle?.(notice.id);
     } else {

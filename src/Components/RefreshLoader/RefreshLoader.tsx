@@ -30,4 +30,3 @@ export default function RefreshLoader({ primary = false }: RefreshLoaderProps) {
     </div>
   );
 }
-
