@@ -73,7 +73,8 @@ export function NoticeDetail({ id }: NoticeDetailProps) {
         // CancelError는 무시
         if (
           err instanceof Error &&
-          (err.name === 'CancelError' || (err as { isCancelled?: boolean }).isCancelled)
+          (err.name === 'CancelError' ||
+            (err as { isCancelled?: boolean }).isCancelled)
         ) {
           console.log('[NoticeDetail] 요청 취소됨');
           return;
