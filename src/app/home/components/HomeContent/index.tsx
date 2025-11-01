@@ -14,8 +14,8 @@ import {
   CATEGORY_LABELS,
 } from '@/constants/categories';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { CircularProgress } from '@mui/material';
 import ScrollToTop from '@/Components/ScrollToTop/ScrollToTop';
+import RefreshLoader from '@/Components/RefreshLoader/RefreshLoader';
 
 export function HomeContent() {
   const { items } = useCategories();
@@ -109,39 +109,8 @@ export function HomeContent() {
                 pullDownToRefresh={true}
                 pullDownToRefreshThreshold={60}
                 refreshFunction={refresh}
-                pullDownToRefreshContent={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: 60,
-                    }}
-                  >
-                    <CircularProgress
-                      variant="indeterminate"
-                      size={24}
-                      style={{ color: '#999' }}
-                    />
-                  </div>
-                }
-                releaseToRefreshContent={
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: 60,
-                    }}
-                  >
-                    <CircularProgress
-                      variant="indeterminate"
-                      color="primary"
-                      size={24}
-                      style={{ color: '#999' }}
-                    />
-                  </div>
-                }
+                pullDownToRefreshContent={<RefreshLoader />}
+                releaseToRefreshContent={<RefreshLoader primary />}
               >
                 {notices.map((notice: Notice, index) => (
                   <NoticeItem

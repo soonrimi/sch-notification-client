@@ -94,8 +94,9 @@
 
 .selection_circle {
   position: absolute;
-  right: -7px;
-  top: 20px;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .home_notice_hr {

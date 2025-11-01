@@ -9,11 +9,11 @@ import NoticeItem from '@/Components/Notice/NoticeItem';
 import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerService';
 import { mapCrawlPostToNotice } from '@/utils/Noticemappers';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { CircularProgress } from '@mui/material';
 import type { PageListResponse } from '@/api/models/PageListResponse';
 import type { Pageable } from '@/api/models/Pageable';
 import type { SearchRequestDto } from '@/api/models/SearchRequestDto';
 import ScrollToTop from '@/Components/ScrollToTop/ScrollToTop';
+import RefreshLoader from '@/Components/RefreshLoader/RefreshLoader';
 
 export default function Bookmark() {
   const [BookmarkDeleteMode, setBookmarkDeleteMode] = useState(false);
@@ -44,7 +44,11 @@ export default function Bookmark() {
     try {
       setLoading(true);
 
-      const pageable: Pageable = { page: pageNumber };
+      const pageable: Pageable = {
+        page: pageNumber,
+        size: 20,
+        sort: ['createdAt,DESC'],
+      };
       const requestBody: SearchRequestDto = { ids: bookmarkIds };
 
       const data: PageListResponse =
@@ -193,39 +197,8 @@ export default function Bookmark() {
               pullDownToRefresh={true}
               pullDownToRefreshThreshold={60}
               refreshFunction={refresh}
-              pullDownToRefreshContent={
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: 60,
-                  }}
-                >
-                  <CircularProgress
-                    variant="indeterminate"
-                    size={24}
-                    style={{ color: '#999' }}
-                  />
-                </div>
-              }
-              releaseToRefreshContent={
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: 60,
-                  }}
-                >
-                  <CircularProgress
-                    variant="indeterminate"
-                    color="primary"
-                    size={24}
-                    style={{ color: '#999' }}
-                  />
-                </div>
-              }
+              pullDownToRefreshContent={<RefreshLoader />}
+              releaseToRefreshContent={<RefreshLoader primary />}
             >
               {bookmarkedNotices.map((notice: Notice, index) => (
                 <NoticeItem

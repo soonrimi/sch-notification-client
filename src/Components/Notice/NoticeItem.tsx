@@ -29,7 +29,12 @@ export default function NoticeItem({
   currentCategory,
 }: NoticeItemProps) {
   const noticeContent = (
-    <div className={styles.home_notice_content}>
+    <div
+      className={styles.home_notice_content}
+      style={{
+        paddingRight: BookmarkDeleteMode ? '35px' : '21px',
+      }}
+    >
       <div className={styles.home_notice_body}>
         <div className={styles.home_notice_title}>{notice.title}</div>
 
@@ -62,7 +67,10 @@ export default function NoticeItem({
     </div>
   );
   const router = useRouter();
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
     if (BookmarkDeleteMode) {
       onSelectToggle?.(notice.id);
     } else {
