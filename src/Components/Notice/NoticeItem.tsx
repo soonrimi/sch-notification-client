@@ -16,6 +16,7 @@ interface NoticeItemProps {
   isSelectedForBookmarkDelete?: boolean;
   onSelectToggle?: (id: number) => void;
   hrefBuilder?: (id: number) => string;
+  currentCategory?: string; // 현재 선택된 카테고리
 }
 
 export default function NoticeItem({
@@ -25,6 +26,7 @@ export default function NoticeItem({
   isSelectedForBookmarkDelete = false,
   onSelectToggle,
   hrefBuilder = (id) => `/home?id=${encodeURIComponent(id)}`,
+  currentCategory,
 }: NoticeItemProps) {
   const noticeContent = (
     <div className={styles.home_notice_content}>
@@ -71,7 +73,11 @@ export default function NoticeItem({
           'homeScrollPosition',
           scrollContainer.scrollTop.toString()
         );
-        sessionStorage.setItem('homeCategory', notice.category);
+        // 현재 선택된 카테고리를 저장 (공지의 카테고리가 아님)
+        sessionStorage.setItem(
+          'homeCategory',
+          currentCategory || notice.category
+        );
       }
       router.push(hrefBuilder(notice.id));
     }

@@ -187,6 +187,7 @@ export function HomeContent() {
                     key={`${notice.id}-${index}`}
                     notice={notice}
                     isRead={false}
+                    currentCategory={category.name}
                   />
                 ))}
               </InfiniteScroll>
