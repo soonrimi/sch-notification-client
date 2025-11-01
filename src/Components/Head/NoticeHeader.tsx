@@ -14,7 +14,6 @@ export interface NoticeHeaderProps {
   noticeId: number;
   isBookmarked: boolean;
   onToggleBookmark: (id: number) => void;
-  isRead?: boolean;
 }
 
 export default function NoticeHeader({

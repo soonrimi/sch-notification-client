@@ -8,8 +8,8 @@ import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerSe
 import { mapCrawlPostToNotice } from '@/utils/Noticemappers';
 import type { Pageable } from '@/api/models/Pageable';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { CircularProgress } from '@mui/material';
 import styles from '../../home/Home.module.css';
+import RefreshLoader from '@/Components/RefreshLoader/RefreshLoader';
 
 export default function SearchResults() {
   const searchParams = useSearchParams();
@@ -137,22 +137,7 @@ export default function SearchResults() {
               scrollableTarget="search_result_content"
               pullDownToRefreshThreshold={60}
               refreshFunction={SearchReaultsRefresh}
-              pullDownToRefreshContent={
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: 60,
-                  }}
-                >
-                  <CircularProgress
-                    variant="indeterminate"
-                    size={24}
-                    style={{ color: '#999' }}
-                  />
-                </div>
-              }
+              pullDownToRefreshContent={<RefreshLoader />}
             >
               {results.map((notice: Notice, index) => (
                 <NoticeItem

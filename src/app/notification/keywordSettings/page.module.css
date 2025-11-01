@@ -6,7 +6,7 @@
   display: flex;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
-  border: 0.0625rem solid #EEEEEE;
+  border: 0.0625rem solid #eeeeee;
   border-radius: 0.8125rem;
   overflow: hidden;
   background-color: #fff;
@@ -25,7 +25,7 @@
 .resetBtn {
   border: none;
   background: none;
-  color: #50545F;
+  color: #50545f;
   font-size: 0.6875rem;
   font-weight: 400;
   cursor: pointer;
@@ -40,7 +40,7 @@
 .btn {
   border: none;
   background-color: #fff;
-  color: #50545F;
+  color: #50545f;
   font-size: 0.875rem;
   font-weight: 500;
   padding: 0.25rem 0.75rem;
@@ -51,7 +51,7 @@
   font-size: 0.7rem;
   padding-left: 0.2rem;
   margin-bottom: 1rem;
-  color: #50545F;
+  color: #50545f;
 }
 
 .includeBox {
@@ -83,7 +83,7 @@
 
 .chip {
   background-color: #ffffff;
-  color: #50545F;
+  color: #50545f;
   font-size: 0.8125rem;
   border-radius: 16px;
   padding: 0.25rem 0.5rem;
@@ -94,7 +94,7 @@
 }
 
 .chipDeleteIcon {
-  color: #50545F;
+  color: #50545f;
   font-weight: 400;
   cursor: pointer;
 }

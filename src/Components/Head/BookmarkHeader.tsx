@@ -51,7 +51,7 @@ export default function BookmarkHeader({
       </Stack>
 
       {/* 오른쪽 버튼 */}
-      <Stack direction="row" alignItems="center" spacing={-0.6}>
+      <Stack direction="row" alignItems="center">
         {BookmarkDeleteMode ? (
           <IconButton
             onClick={onSelectAll}
@@ -59,8 +59,7 @@ export default function BookmarkHeader({
               display: 'flex',
               flexDirection: 'column',
               color: iconColor,
-              position: 'relative',
-              right: '-13px',
+              marginRight: '-13px',
             }}
           >
             {selectedCount === totalCount && totalCount > 0 ? (
