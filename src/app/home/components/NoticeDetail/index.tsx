@@ -9,6 +9,7 @@ import { useBookmark } from '@/hooks/useBookmark';
 import { Category } from '@/constants/categories';
 import { formatUploadTime } from '@/utils/NoticeDate';
 import { AttachmentDrawer } from './AttachmentDrawer';
+import type { Attachment } from './types';
 
 interface NoticeDetailProps {
   id: string;
@@ -48,7 +49,11 @@ export function NoticeDetail({ id }: NoticeDetailProps) {
   if (!notice)
     return <Layout hideBottomNav>해당 공지를 찾을 수 없습니다.</Layout>;
 
-  const attachments = notice?.attachments ?? [];
+  // AttachmentResponse를 Attachment 타입으로 변환
+  const attachments: Attachment[] = (notice?.attachments ?? []).map((att) => ({
+    fileName: att.fileName,
+    fileUrl: att.fileUrl,
+  }));
 
   return (
     <>
