@@ -16,6 +16,7 @@ interface NoticeItemProps {
   isSelectedForBookmarkDelete?: boolean;
   onSelectToggle?: (id: number) => void;
   hrefBuilder?: (id: number) => string;
+  currentCategory?: string; // 현재 선택된 카테고리
 }
 
 export default function NoticeItem({
@@ -25,18 +26,15 @@ export default function NoticeItem({
   isSelectedForBookmarkDelete = false,
   onSelectToggle,
   hrefBuilder = (id) => `/home?id=${encodeURIComponent(id)}`,
+  currentCategory,
 }: NoticeItemProps) {
   const noticeContent = (
     <div className={styles.home_notice_content}>
       <div className={styles.home_notice_body}>
-        <div
-          className={`${styles.home_notice_title} ${isRead ? styles.read : ''}`}
-        >
-          {notice.title}
-        </div>
+        <div className={styles.home_notice_title}>{notice.title}</div>
 
         <div
-          className={`${styles.home_notice_detail} ${isRead ? styles.read : ''}`}
+          className={styles.home_notice_detail}
           dangerouslySetInnerHTML={{ __html: notice.detail ?? '' }}
         />
         <div className={styles.home_notice_info}>
@@ -68,6 +66,19 @@ export default function NoticeItem({
     if (BookmarkDeleteMode) {
       onSelectToggle?.(notice.id);
     } else {
+      // 현재 스크롤 위치와 카테고리 저장
+      const scrollContainer = document.getElementById('home_content');
+      if (scrollContainer) {
+        sessionStorage.setItem(
+          'homeScrollPosition',
+          scrollContainer.scrollTop.toString()
+        );
+        // 현재 선택된 카테고리를 저장 (공지의 카테고리가 아님)
+        sessionStorage.setItem(
+          'homeCategory',
+          currentCategory || notice.category
+        );
+      }
       router.push(hrefBuilder(notice.id));
     }
   };
