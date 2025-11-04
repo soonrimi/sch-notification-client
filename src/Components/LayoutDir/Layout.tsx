@@ -35,6 +35,7 @@ export default function Layout({
         height: '100vh',
         display: 'flex',
         flexDirection: 'column', // 조건부 적용
+        overflow: 'hidden',
       }}
     >
       {/* Header */}
