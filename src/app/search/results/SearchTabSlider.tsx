@@ -65,7 +65,7 @@ export default function SearchTabSlider({
   const handleTabClick = (tabId: TabType) => {
     // 탭 상태 업데이트 (슬라이더 인디케이터 이동)
     setActiveTab(tabId);
-    
+
     // URL 업데이트 (캘린더 포함)
     if (keyword) {
       const newScope = tabId === 'home' ? undefined : tabId;
@@ -76,12 +76,12 @@ export default function SearchTabSlider({
       }
       router.push(`/search/results?${queryParams.toString()}`);
     }
-    
+
     // 캘린더 탭은 콜백 호출하지 않음 (다른 팀원이 구현 예정)
     if (tabId === 'calendar') {
       return;
     }
-    
+
     // 콜백 함수 호출
     if (onTabChange) {
       onTabChange(tabId);
@@ -110,4 +110,3 @@ export default function SearchTabSlider({
     </div>
   );
 }
-

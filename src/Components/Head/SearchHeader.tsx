@@ -39,7 +39,14 @@ export default function SearchHeader({
       className={styles.header_wrapper}
       style={{ flexDirection: 'column', height: '100%' }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', width: '100%', padding: '8px 16px' }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          width: '100%',
+          padding: '8px 16px',
+        }}
+      >
         <IconButton onClick={onBack}>
           <ArrowBackIosIcon fontSize="small" sx={{ color: ' #858585' }} />
         </IconButton>
@@ -105,8 +112,19 @@ export default function SearchHeader({
         />
       </div>
       {scope !== undefined && (
-        <div style={{ display: 'flex', width: '100%', paddingBottom: '8px', backgroundColor: '#FFFFFF' }}>
-          <SearchTabSlider scope={scope} keyword={searchKeyword} onTabChange={onTabChange} />
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            paddingBottom: '8px',
+            backgroundColor: '#FFFFFF',
+          }}
+        >
+          <SearchTabSlider
+            scope={scope}
+            keyword={searchKeyword}
+            onTabChange={onTabChange}
+          />
         </div>
       )}
     </div>

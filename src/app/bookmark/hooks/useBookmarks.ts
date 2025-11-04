@@ -107,4 +107,3 @@ export function useBookmarks() {
     setBookmarkedNotices,
   };
 }
-

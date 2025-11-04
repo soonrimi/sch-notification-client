@@ -47,9 +47,10 @@ export default function Layout({
           height:
             headerProps?.pageType === 'home'
               ? HOME_HEADER_HEIGHT
-              : headerProps?.pageType === 'search' && headerProps?.scope !== undefined
-              ? SEARCH_HEADER_HEIGHT
-              : HEADER_HEIGHT,
+              : headerProps?.pageType === 'search' &&
+                  headerProps?.scope !== undefined
+                ? SEARCH_HEADER_HEIGHT
+                : HEADER_HEIGHT,
           flexShrink: 0,
         }}
       >

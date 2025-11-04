@@ -1,13 +1,12 @@
 .slider_container {
   width: 100%;
   padding: 3px 16px;
-
 }
 
 .slider_track {
   position: relative;
   display: flex;
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
   border-radius: 8px;
   width: fit-content;
 }
@@ -16,9 +15,11 @@
   position: absolute;
   left: 0;
   height: 100%;
-  background-color: #50545F;
+  background-color: #50545f;
   border-radius: 6px;
-  transition: transform 0.3s ease, width 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    width 0.3s ease;
   z-index: 1;
 }
 
@@ -32,7 +33,9 @@
   font-weight: 400;
   cursor: none;
   z-index: 2;
-  transition: color 0.3s ease, font-weight 0.3s ease;
+  transition:
+    color 0.3s ease,
+    font-weight 0.3s ease;
   border-radius: 6px;
   white-space: nowrap;
 }
@@ -41,4 +44,3 @@
   color: #ffffff;
   font-weight: 700;
 }
-

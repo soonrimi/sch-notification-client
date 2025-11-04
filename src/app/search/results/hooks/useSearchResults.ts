@@ -95,4 +95,3 @@ export function useSearchResults(keyword: string, scope: string | null) {
     refresh,
   };
 }
-

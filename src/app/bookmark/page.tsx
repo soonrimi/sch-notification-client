@@ -79,11 +79,15 @@ export default function Bookmark() {
             onClick={hasSelected ? deleteSelected : undefined}
           >
             <DeleteOutlineIcon
-              className={hasSelected ? styles.delete_icon : styles.delete_icon_disabled}
+              className={
+                hasSelected ? styles.delete_icon : styles.delete_icon_disabled
+              }
               sx={{ fontSize: 28 }}
             />
             <span
-              className={hasSelected ? styles.delete_text : styles.delete_text_disabled}
+              className={
+                hasSelected ? styles.delete_text : styles.delete_text_disabled
+              }
             >
               삭제
             </span>
