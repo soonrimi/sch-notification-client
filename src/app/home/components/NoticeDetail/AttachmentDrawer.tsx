@@ -9,7 +9,7 @@ import {
   IconButton,
   Button,
 } from '@mui/material';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { useSwipeable } from 'react-swipeable';
 import { FileButton } from './FileButton';
 import type { Attachment } from './types';
@@ -61,7 +61,7 @@ export function AttachmentDrawer({ attachments }: Props) {
             },
           }}
         >
-          <ArrowDownwardIcon
+          <FileDownloadOutlinedIcon
             sx={{
               fontSize: '1.8125rem',
               color: '#fff',

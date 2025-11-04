@@ -7,10 +7,12 @@ import type { Notice } from '@/types/notice';
 import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerService';
 import { mapCrawlPostToNotice } from '@/utils/Noticemappers';
 import type { Pageable } from '@/api/models/Pageable';
+import type { SearchRequestDto } from '@/api/models/SearchRequestDto';
+import type { PageListResponse } from '@/api/models/PageListResponse';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import styles from '../../home/Home.module.css';
 import RefreshLoader from '@/Components/RefreshLoader/RefreshLoader';
-
+import ScrollToTop from '@/Components/ScrollToTop/ScrollToTop';
 export default function SearchResults() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -26,21 +28,49 @@ export default function SearchResults() {
       setLoading(true);
       console.log(`Fetching page ${pageNumber}`);
 
-      const pageable: Pageable = { page: pageNumber };
-      const res = await CrawlPostControllerService.searchNotices(
-        keyword,
-        pageable.page,
-        20,
-        ['createdAt,DESC']
-      );
-      let notices = res.content?.map(mapCrawlPostToNotice) || [];
+      const pageable: Pageable = {
+        page: pageNumber,
+        size: 20,
+        sort: ['createdAt,DESC'],
+      };
 
-      console.log(`Received ${notices.length} notices for page ${pageNumber}`);
+      let res: PageListResponse;
 
       if (scope === 'bookmark') {
-        const saved = JSON.parse(localStorage.getItem('bookmarkedIds') || '[]');
-        notices = notices.filter((notice) => saved.includes(notice.id));
+        // 북마크 검색: searchNoticesByIds API 사용
+        // localStorage에서 북마크 IDs 가져오기
+        const savedBookmarks = JSON.parse(
+          localStorage.getItem('bookmarkedIds') || '[]'
+        ) as number[];
+
+        if (savedBookmarks.length === 0) {
+          setResults([]);
+          setHasMore(false);
+          setLoading(false);
+          return;
+        }
+
+        const requestBody: SearchRequestDto = {
+          keyword,
+          ids: savedBookmarks,
+        };
+        res = await CrawlPostControllerService.searchNoticesByIds(
+          pageable,
+          requestBody
+        );
+      } else {
+        // 일반 검색: searchNotices API 사용
+        res = await CrawlPostControllerService.searchNotices(
+          keyword,
+          pageable.page,
+          pageable.size,
+          pageable.sort
+        );
       }
+
+      const notices = res.content?.map(mapCrawlPostToNotice) || [];
+
+      console.log(`Received ${notices.length} notices for page ${pageNumber}`);
 
       if (pageNumber === 0) {
         // 첫 로드 시 기존 데이터를 덮어씀
@@ -119,8 +149,8 @@ export default function SearchResults() {
             boxSizing: 'border-box',
             overscrollBehavior: 'contain',
             overflow: 'auto',
-            height: '100vh',
-            paddingTop: 20,
+            height: '100%',
+            minHeight: 0,
           }}
         >
           {results.length === 0 && loading ? (
@@ -132,6 +162,7 @@ export default function SearchResults() {
               dataLength={results.length}
               next={loadMore}
               hasMore={hasMore}
+              scrollThreshold="120px"
               loader={<div className={styles.loading}>로딩중...</div>}
               pullDownToRefresh={true}
               scrollableTarget="search_result_content"
@@ -150,6 +181,8 @@ export default function SearchResults() {
           )}
         </div>
       </div>
+      {/* ScrollToTop - position above bottom nav height (48px) */}
+      <ScrollToTop scrollableTargetId="search_result_content" bottom={48} />
     </Layout>
   );
 }

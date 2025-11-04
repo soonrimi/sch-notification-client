@@ -181,38 +181,37 @@ export default function Bookmark() {
         )
       }
     >
-      <div className={styles.page_wrapper}>
-        <div id="bookmark_content" className={styles.page_content}>
-          {loading && bookmarkedNotices.length === 0 ? (
-            <div className={styles.loading}>로딩중...</div>
-          ) : bookmarkedNotices.length === 0 ? (
-            <div className={styles.no_notice}>북마크된 공지가 없습니다</div>
-          ) : (
-            <InfiniteScroll
-              dataLength={bookmarkedNotices.length}
-              next={loadMore}
-              hasMore={hasMore}
-              loader={<div className={styles.loading}>로딩중...</div>}
-              scrollableTarget="bookmark_content"
-              pullDownToRefresh={true}
-              pullDownToRefreshThreshold={60}
-              refreshFunction={refresh}
-              pullDownToRefreshContent={<RefreshLoader />}
-              releaseToRefreshContent={<RefreshLoader primary />}
-            >
-              {bookmarkedNotices.map((notice: Notice, index) => (
-                <NoticeItem
-                  key={`${notice.id}-${index}`}
-                  notice={notice}
-                  isRead={false}
-                  BookmarkDeleteMode={BookmarkDeleteMode}
-                  isSelectedForBookmarkDelete={selectedIds.includes(notice.id)}
-                  onSelectToggle={toggleSelect}
-                />
-              ))}
-            </InfiniteScroll>
-          )}
-        </div>
+      <div id="bookmark_content" className={styles.page_content}>
+        {loading && bookmarkedNotices.length === 0 ? (
+          <div className={styles.loading}>로딩중...</div>
+        ) : bookmarkedNotices.length === 0 ? (
+          <div className={styles.no_notice}>북마크된 공지가 없습니다</div>
+        ) : (
+          <InfiniteScroll
+            dataLength={bookmarkedNotices.length}
+            next={loadMore}
+            hasMore={hasMore}
+            scrollThreshold="120px"
+            loader={<div className={styles.loading}>로딩중...</div>}
+            scrollableTarget="bookmark_content"
+            pullDownToRefresh={true}
+            pullDownToRefreshThreshold={60}
+            refreshFunction={refresh}
+            pullDownToRefreshContent={<RefreshLoader />}
+            releaseToRefreshContent={<RefreshLoader primary />}
+          >
+            {bookmarkedNotices.map((notice: Notice, index) => (
+              <NoticeItem
+                key={`${notice.id}-${index}`}
+                notice={notice}
+                isRead={false}
+                BookmarkDeleteMode={BookmarkDeleteMode}
+                isSelectedForBookmarkDelete={selectedIds.includes(notice.id)}
+                onSelectToggle={toggleSelect}
+              />
+            ))}
+          </InfiniteScroll>
+        )}
       </div>
 
       {/* 스크롤 최상단 이동 버튼 */}

@@ -31,9 +31,9 @@ export default function NoticeHeader({
       justifyContent="space-between"
       sx={{
         px: 2,
-        height: 40,
+        width: '100%',
+        height: '100%',
         backgroundColor: '#ffffff',
-        marginTop: '10px',
       }}
     >
       {/* 왼쪽: 뒤로가기 + 제목 */}

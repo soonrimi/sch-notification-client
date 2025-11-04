@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import styles from '../../Home.module.css';
-import HomeHeaderCategorys from './HomeHeaderCategorys';
 import { useNotices } from './useNotices';
 import type { Notice } from '@/types/notice';
 import Layout from '@/Components/LayoutDir/Layout';
@@ -85,14 +84,17 @@ export function HomeContent() {
 
   return (
     <>
-      <Layout headerProps={{ pageType: 'home' }}>
+      <Layout
+        headerProps={{
+          pageType: 'home',
+          homeHeaderProps: {
+            category,
+            setCategory,
+            categories: categoriesForUI,
+          },
+        }}
+      >
         <div className={styles.home_content_wrapper}>
-          <HomeHeaderCategorys
-            category={category}
-            setCategory={setCategory}
-            categories={categoriesForUI}
-          />
-
           <div id="home_content" className={styles.home_content}>
             {notices.length === 0 && loading ? (
               <div className={styles.loading}>로딩중...</div>
@@ -104,6 +106,7 @@ export function HomeContent() {
                 dataLength={notices.length}
                 next={loadMore}
                 hasMore={hasMore}
+                scrollThreshold="120px"
                 loader={<div className={styles.loading}>로딩중...</div>}
                 scrollableTarget="home_content"
                 pullDownToRefresh={true}
