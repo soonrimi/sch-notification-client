@@ -181,9 +181,8 @@ export default function Bookmark() {
         )
       }
     >
-      <div className={styles.page_wrapper}>
-        <div id="bookmark_content" className={styles.page_content}>
-          {loading && bookmarkedNotices.length === 0 ? (
+      <div id="bookmark_content" className={styles.page_content}>
+      {loading && bookmarkedNotices.length === 0 ? (
             <div className={styles.loading}>로딩중...</div>
           ) : bookmarkedNotices.length === 0 ? (
             <div className={styles.no_notice}>북마크된 공지가 없습니다</div>
@@ -192,6 +191,7 @@ export default function Bookmark() {
               dataLength={bookmarkedNotices.length}
               next={loadMore}
               hasMore={hasMore}
+              scrollThreshold="120px"
               loader={<div className={styles.loading}>로딩중...</div>}
               scrollableTarget="bookmark_content"
               pullDownToRefresh={true}
@@ -213,7 +213,6 @@ export default function Bookmark() {
             </InfiniteScroll>
           )}
         </div>
-      </div>
 
       {/* 스크롤 최상단 이동 버튼 */}
       <ScrollToTop scrollableTargetId="bookmark_content" />

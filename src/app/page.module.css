@@ -55,24 +55,17 @@
   margin: 0 0 0 13px;
 }
 /* _________________________________________________________________________- */
-.page_wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-  padding-top: 5px;
-  padding-bottom: 93px;
-}
-
 .page_content {
   flex: 1 1 auto;
   display: flex;
+  flex-direction: column;
+  height: 100%;
   box-sizing: border-box;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+  padding-top: 5px;
+  padding-bottom: 48px;
 }
 
 .loading,

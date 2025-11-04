@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Fab } from '@mui/material';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 
 interface ScrollToTopProps {
   /** 스크롤 컨테이너의 ID */
@@ -65,24 +64,34 @@ export default function ScrollToTop({
   if (!showScrollTop) return null;
 
   return (
-    <Fab
+    <button
       onClick={scrollToTop}
-      sx={{
+      style={{
         position: 'fixed',
         bottom: bottom,
         right: right,
-        backgroundColor: '#fff',
-        color: '#333',
+        backgroundColor: '#F4F4F4',
         boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-        '&:hover': {
-          backgroundColor: '#f5f5f5',
-        },
+        border: 'none',
+        borderRadius: '8px',
+        width: '48px',
+        height: '48px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
         zIndex: 1000,
+        transition: 'background-color 0.2s',
       }}
-      size="medium"
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = '#E8E8E8';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = '#F4F4F4';
+      }}
       aria-label="맨 위로"
     >
-      <KeyboardArrowUpIcon />
-    </Fab>
+      <ArrowUpwardOutlinedIcon sx={{ color: '#4A4A4A' }} />
+    </button>
   );
 }

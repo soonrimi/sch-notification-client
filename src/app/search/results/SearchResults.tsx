@@ -12,7 +12,7 @@ import type { PageListResponse } from '@/api/models/PageListResponse';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import styles from '../../home/Home.module.css';
 import RefreshLoader from '@/Components/RefreshLoader/RefreshLoader';
-
+import ScrollToTop from '@/Components/ScrollToTop/ScrollToTop';
 export default function SearchResults() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -149,8 +149,8 @@ export default function SearchResults() {
             boxSizing: 'border-box',
             overscrollBehavior: 'contain',
             overflow: 'auto',
-            height: '100vh',
-            paddingTop: 20,
+            height: '100%',
+            minHeight: 0,
           }}
         >
           {results.length === 0 && loading ? (
@@ -162,6 +162,7 @@ export default function SearchResults() {
               dataLength={results.length}
               next={loadMore}
               hasMore={hasMore}
+              scrollThreshold="120px"
               loader={<div className={styles.loading}>로딩중...</div>}
               pullDownToRefresh={true}
               scrollableTarget="search_result_content"
@@ -171,7 +172,7 @@ export default function SearchResults() {
             >
               {results.map((notice: Notice, index) => (
                 <NoticeItem
-                  key={`${notice.id}-${index}`}
+                    key={`${notice.id}-${index}`}
                   notice={notice}
                   isRead={false}
                 />
@@ -180,6 +181,8 @@ export default function SearchResults() {
           )}
         </div>
       </div>
+      {/* ScrollToTop - position above bottom nav height (48px) */}
+      <ScrollToTop scrollableTargetId="search_result_content" bottom={48} />
     </Layout>
   );
 }
