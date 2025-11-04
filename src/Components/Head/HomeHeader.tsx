@@ -20,10 +20,27 @@ export default function HomeHeader({
   categories,
 }: HomeHeaderProps) {
   return (
-    <div className={styles.header_wrapper} style={{ flexDirection: 'column', height: '100%' }}>
-      <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ width: '100%', padding: '10px 16px' }}>
-        <Stack direction="row" alignItems="center" className={styles.header_right_home}>
-          <IconButton component={Link} href="/search" className={styles.click_no_effect} sx={{ p: 0 }}>
+    <div
+      className={styles.header_wrapper}
+      style={{ flexDirection: 'column', height: '100%' }}
+    >
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="flex-end"
+        sx={{ width: '100%', padding: '10px 16px' }}
+      >
+        <Stack
+          direction="row"
+          alignItems="center"
+          className={styles.header_right_home}
+        >
+          <IconButton
+            component={Link}
+            href="/search"
+            className={styles.click_no_effect}
+            sx={{ p: 0 }}
+          >
             <Image
               src="/icons/search_icon.png"
               alt="검색"
@@ -32,7 +49,12 @@ export default function HomeHeader({
               className={styles.icon_small}
             />
           </IconButton>
-          <IconButton component={Link} href="/settings" className={styles.click_no_effect} sx={{ p: 0 }}>
+          <IconButton
+            component={Link}
+            href="/settings"
+            className={styles.click_no_effect}
+            sx={{ p: 0 }}
+          >
             <SettingsIcon className={styles.icon_settings} />
           </IconButton>
         </Stack>

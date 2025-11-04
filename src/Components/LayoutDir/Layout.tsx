@@ -42,7 +42,10 @@ export default function Layout({
       <div
         className={styles.header_wrapper}
         style={{
-          height: headerProps?.pageType === 'home' ? HOME_HEADER_HEIGHT : HEADER_HEIGHT,
+          height:
+            headerProps?.pageType === 'home'
+              ? HOME_HEADER_HEIGHT
+              : HEADER_HEIGHT,
           flexShrink: 0,
         }}
       >

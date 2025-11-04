@@ -52,7 +52,11 @@ export default function BookmarkHeader({
       </Stack>
 
       {/* 오른쪽 버튼 - HomeHeader와 동일한 레이아웃/간격 */}
-      <Stack direction="row" alignItems="center" className={styles.header_right_home}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        className={styles.header_right_home}
+      >
         {BookmarkDeleteMode ? (
           <IconButton
             onClick={onSelectAll}

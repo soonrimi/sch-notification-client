@@ -95,7 +95,6 @@ export function HomeContent() {
         }}
       >
         <div className={styles.home_content_wrapper}>
-
           <div id="home_content" className={styles.home_content}>
             {notices.length === 0 && loading ? (
               <div className={styles.loading}>로딩중...</div>

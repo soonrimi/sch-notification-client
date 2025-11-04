@@ -35,14 +35,14 @@ export default function SearchResults() {
       };
 
       let res: PageListResponse;
-      
+
       if (scope === 'bookmark') {
         // 북마크 검색: searchNoticesByIds API 사용
         // localStorage에서 북마크 IDs 가져오기
         const savedBookmarks = JSON.parse(
           localStorage.getItem('bookmarkedIds') || '[]'
         ) as number[];
-        
+
         if (savedBookmarks.length === 0) {
           setResults([]);
           setHasMore(false);
@@ -172,7 +172,7 @@ export default function SearchResults() {
             >
               {results.map((notice: Notice, index) => (
                 <NoticeItem
-                    key={`${notice.id}-${index}`}
+                  key={`${notice.id}-${index}`}
                   notice={notice}
                   isRead={false}
                 />
