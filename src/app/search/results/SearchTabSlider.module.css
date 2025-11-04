@@ -1,0 +1,43 @@
+.slider_container {
+  width: 60%;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+.slider_track {
+  position: relative;
+  display: flex;
+  background-color: #F4F4F4;
+  border-radius: 8px;
+}
+
+.slider_indicator {
+  position: absolute;
+  left: 0;
+  height: 100%;
+  background-color: #50545F;
+  border-radius: 6px;
+  transition: transform 0.3s ease, width 0.3s ease;
+  z-index: 1;
+}
+
+.slider_tab {
+  position: relative;
+  flex: 1;
+  padding: 4px;
+  background: transparent;
+  border: none;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 14px;
+  font-weight: 400;
+  cursor: none;
+  z-index: 2;
+  transition: color 0.3s ease, font-weight 0.3s ease;
+  border-radius: 6px;
+}
+
+.slider_tab_active {
+  color: #ffffff;
+  font-weight: 700;
+}
+

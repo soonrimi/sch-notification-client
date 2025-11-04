@@ -8,6 +8,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import RefreshLoader from '@/Components/RefreshLoader/RefreshLoader';
 import ScrollToTop from '@/Components/ScrollToTop/ScrollToTop';
 import { useSearchResults } from './hooks/useSearchResults';
+import SearchTabSlider from './SearchTabSlider';
 import styles from './SearchResults.module.css';
 
 export default function SearchResults() {
@@ -41,6 +42,7 @@ export default function SearchResults() {
       }}
       hideBottomNav
     >
+      <SearchTabSlider scope={scope} />
       <div className={styles.container}>
         <div id="search_result_content" className={styles.content}>
           {results.length === 0 && loading ? (
