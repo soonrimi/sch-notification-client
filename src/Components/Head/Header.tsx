@@ -8,6 +8,7 @@ import SettingsHeader from './CategorySettingsHeader';
 import SearchHeader from './SearchHeader';
 import styles from './Header.module.css';
 import NotificationHeader from './NotificationHeader';
+import type { CategoryItem } from '@/contexts/CategoryContext';
 
 export interface BookmarkHeaderProps {
   BookmarkDeleteMode: boolean;
@@ -19,7 +20,14 @@ export interface BookmarkHeaderProps {
 }
 
 export type HeaderProps =
-  | { pageType: 'home' }
+  | {
+      pageType: 'home';
+      homeHeaderProps?: {
+        category: CategoryItem;
+        setCategory: React.Dispatch<React.SetStateAction<CategoryItem>>;
+        categories: CategoryItem[];
+      };
+    }
   | { pageType: 'bookmark'; bookmarkProps: BookmarkHeaderProps }
   | { pageType: 'calendar' }
   | {
@@ -57,7 +65,7 @@ export default function Header(props: HeaderProps) {
       ) : pageType === 'bookmark' && props.bookmarkProps ? (
         <BookmarkHeader {...props.bookmarkProps} />
       ) : pageType === 'home' ? (
-        <HomeHeader />
+        <HomeHeader {...(props.homeHeaderProps || {})} />
       ) : pageType === 'calendar' ? (
         <CalendarHeader />
       ) : pageType === 'mypage' ? (

@@ -32,11 +32,9 @@ export default function SearchHeader({
   return (
     <div className={styles.header_wrapper}>
       <IconButton onClick={onBack}>
-        <ArrowBackIosIcon fontSize="small" sx={{ color: '#333333' }} />
+        <ArrowBackIosIcon fontSize="small" sx={{ color: ' #858585' }} />
       </IconButton>
       <TextField
-        inputRef={inputRef}
-        placeholder="검색어를 입력하세요."
         value={searchKeyword}
         onChange={(e) => setSearchKeyword(e.target.value)}
         onKeyDown={(e) => {
@@ -53,7 +51,7 @@ export default function SearchHeader({
         size="small"
         fullWidth
         sx={{
-          backgroundColor: '#F9FAFB',
+          backgroundColor: '#F1F1F1',
           borderRadius: '0.625rem',
           '& .MuiOutlinedInput-notchedOutline': {
             border: 'none',
@@ -69,6 +67,12 @@ export default function SearchHeader({
           '& .MuiInputBase-input::placeholder': {
             fontSize: '0.8125rem',
             color: '#9CA3AF',
+          },
+        }}
+        slotProps={{
+          input: {
+            placeholder: '검색어를 입력하세요.',
+            ref: inputRef,
           },
         }}
         InputProps={{

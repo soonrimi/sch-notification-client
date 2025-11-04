@@ -30,7 +30,8 @@ export default function BookmarkHeader({
       justifyContent="space-between"
       sx={{
         px: 2,
-        height: 50,
+        width: '100%',
+        height: '100%',
         backgroundColor: '#ffffff',
       }}
     >
@@ -50,8 +51,12 @@ export default function BookmarkHeader({
         </Typography>
       </Stack>
 
-      {/* 오른쪽 버튼 */}
-      <Stack direction="row" alignItems="center" spacing={-0.6}>
+      {/* 오른쪽 버튼 - HomeHeader와 동일한 레이아웃/간격 */}
+      <Stack
+        direction="row"
+        alignItems="center"
+        className={styles.header_right_home}
+      >
         {BookmarkDeleteMode ? (
           <IconButton
             onClick={onSelectAll}
@@ -59,8 +64,7 @@ export default function BookmarkHeader({
               display: 'flex',
               flexDirection: 'column',
               color: iconColor,
-              position: 'relative',
-              right: '-13px',
+              p: 0,
             }}
           >
             {selectedCount === totalCount && totalCount > 0 ? (
@@ -80,6 +84,7 @@ export default function BookmarkHeader({
               onClick={() => {
                 router.push('/search?scope=bookmark');
               }}
+              sx={{ p: 0 }}
             >
               <Image
                 src="/icons/search_icon.png"
@@ -89,10 +94,8 @@ export default function BookmarkHeader({
                 className={styles.icon_small}
               />
             </IconButton>
-            <IconButton onClick={onToggleBookmarkDeleteMode}>
-              <DeleteOutlineIcon
-                sx={{ fontSize: 23.5, color: '#333333', marginRight: -1.1 }}
-              />
+            <IconButton onClick={onToggleBookmarkDeleteMode} sx={{ p: 0 }}>
+              <DeleteOutlineIcon sx={{ fontSize: 23.5, color: '#333333' }} />
             </IconButton>
           </>
         )}

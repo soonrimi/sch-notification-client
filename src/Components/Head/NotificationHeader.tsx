@@ -15,7 +15,8 @@ export default function NotificationHeader() {
       justifyContent="space-between"
       sx={{
         px: 2,
-        height: 50,
+        width: '100%',
+        height: '100%',
         backgroundColor: '#ffffff',
       }}
     >

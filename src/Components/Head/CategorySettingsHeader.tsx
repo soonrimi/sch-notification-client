@@ -25,8 +25,9 @@ export default function CategorySettingsHeader({
         justifyContent: 'space-between',
         alignItems: 'center',
         px: 2,
+        width: '100%',
+        height: '100%',
         backgroundColor,
-        height: 48,
       }}
     >
       <Box

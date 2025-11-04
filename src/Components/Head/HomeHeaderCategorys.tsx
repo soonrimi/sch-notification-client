@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import Stack from '@mui/material/Stack';
-import { CategoryItem } from '@/contexts/CategoryContext';
+import type { CategoryItem } from '@/contexts/CategoryContext';
 
 interface HomeHeaderCategorysProps {
   category: CategoryItem;
@@ -39,7 +39,11 @@ export default function HomeHeaderCategorys({
       direction="row"
       spacing={1}
       sx={{
-        position: 'relative',
+        position: 'fixed',
+        top: '45px',
+        left: 0,
+        right: 0,
+        zIndex: 999,
         backgroundColor: '#fff',
         overflowX: 'auto',
         flexWrap: 'nowrap',
