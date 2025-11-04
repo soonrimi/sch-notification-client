@@ -18,7 +18,7 @@ export default function SearchResults() {
   const scope = searchParams.get('scope');
   const { results, loading, hasMore, loadMore, refresh } = useSearchResults(
     keyword,
-    scope
+    scope === 'calendar' ? null : scope // 캘린더일 때는 검색 결과 조회하지 않음
   );
 
   const handleBackToSearchInput = () => {
@@ -45,7 +45,10 @@ export default function SearchResults() {
     >
       <div className={styles.container}>
         <div id="search_result_content" className={styles.content}>
-          {results.length === 0 && loading ? (
+          {scope === 'calendar' ? (
+            // 캘린더 탭 선택 시 빈 화면 (다른 팀원이 구현 예정)
+            null
+          ) : results.length === 0 && loading ? (
             <div className={styles.loading}>로딩중...</div>
           ) : results.length === 0 ? (
             <div className={styles.no_notice}>공지 없음</div>

@@ -7,7 +7,8 @@ import Layout from '@/Components/LayoutDir/Layout';
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const initialScope = searchParams?.get('scope') || 'all';
+  const initialScope = searchParams?.get('scope') || null;
+  const from = searchParams?.get('from') || null;
   const [searchKeyword, setSearchKeyword] = useState('');
   const [recentKeywords, setRecentKeywords] = useState<string[]>([]);
 
@@ -27,9 +28,13 @@ export default function SearchPage() {
     setRecentKeywords(newList);
     localStorage.setItem('recentSearch', JSON.stringify(newList));
 
-    router.push(
-      `/search/results?keyword=${encodeURIComponent(keyword)}&scope=${initialScope}`
-    );
+    // scope가 있으면 URL에 포함 (없으면 일반 검색)
+    const queryParams = new URLSearchParams();
+    queryParams.set('keyword', keyword);
+    if (initialScope) {
+      queryParams.set('scope', initialScope);
+    }
+    router.push(`/search/results?${queryParams.toString()}`);
   };
 
   const handleSelectRecent = (keyword: string) => handleSearch(keyword);
@@ -43,7 +48,14 @@ export default function SearchPage() {
     localStorage.removeItem('recentSearch');
   };
   const handleBack = () => {
-    router.back();
+    // from 파라미터에 따라 적절한 페이지로 이동
+    if (from === 'bookmark') {
+      router.push('/bookmark');
+    } else if (from === 'home') {
+      router.push('/home');
+    } else {
+      router.push('/home');
+    }
   };
 
   return (

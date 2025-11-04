@@ -51,6 +51,7 @@ export type HeaderProps =
       onSearch?: (keyword: string) => void;
       disableInput?: boolean;
       scope?: string | null;
+      onTabChange?: (tabId: 'home' | 'bookmark' | 'calendar') => void;
     }
   | { pageType: 'notification' };
 
@@ -81,6 +82,7 @@ export default function Header(props: HeaderProps) {
           onSearch={props.onSearch}
           disableInput={props.disableInput}
           scope={props.scope}
+          onTabChange={props.onTabChange}
         />
       ) : pageType === 'notification' ? (
         <NotificationHeader />

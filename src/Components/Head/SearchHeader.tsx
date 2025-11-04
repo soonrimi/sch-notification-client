@@ -13,6 +13,7 @@ interface SearchHeaderProps {
   onSearch?: (keyword: string) => void;
   disableInput?: boolean;
   scope?: string | null;
+  onTabChange?: (tabId: 'home' | 'bookmark' | 'calendar') => void;
 }
 
 export default function SearchHeader({
@@ -22,6 +23,7 @@ export default function SearchHeader({
   onSearch,
   disableInput = false,
   scope,
+  onTabChange,
 }: SearchHeaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -104,7 +106,7 @@ export default function SearchHeader({
       </div>
       {scope !== undefined && (
         <div style={{ display: 'flex', width: '100%', paddingBottom: '8px', backgroundColor: '#FFFFFF' }}>
-          <SearchTabSlider scope={scope} />
+          <SearchTabSlider scope={scope} keyword={searchKeyword} onTabChange={onTabChange} />
         </div>
       )}
     </div>

@@ -8,16 +8,22 @@ type TabType = 'home' | 'bookmark' | 'calendar';
 interface SearchTabSliderProps {
   initialTab?: TabType;
   scope?: string | null;
+  keyword?: string;
+  onTabChange?: (tabId: TabType) => void;
 }
 
 export default function SearchTabSlider({
   initialTab,
   scope,
+  keyword,
+  onTabChange,
 }: SearchTabSliderProps) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<TabType>(
-    scope === 'bookmark' ? 'bookmark' : initialTab || 'home'
-  );
+  const [activeTab, setActiveTab] = useState<TabType>(() => {
+    if (scope === 'bookmark') return 'bookmark';
+    if (scope === 'calendar') return 'calendar';
+    return initialTab || 'home';
+  });
   const sliderRef = useRef<HTMLDivElement>(null);
   const tabsRef = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -30,6 +36,11 @@ export default function SearchTabSlider({
   useEffect(() => {
     if (scope === 'bookmark') {
       setActiveTab('bookmark');
+    } else if (scope === 'calendar') {
+      setActiveTab('calendar');
+    } else {
+      // scope가 없거나 'all'이 아니면 홈 탭 선택
+      setActiveTab('home');
     }
   }, [scope]);
 
@@ -52,9 +63,29 @@ export default function SearchTabSlider({
   }, [activeTab]);
 
   const handleTabClick = (tabId: TabType) => {
+    // 탭 상태 업데이트 (슬라이더 인디케이터 이동)
     setActiveTab(tabId);
-    // 여기서 라우팅 로직 추가 가능
-    // 예: router.push(`/search/results?scope=${tabId}`);
+    
+    // URL 업데이트 (캘린더 포함)
+    if (keyword) {
+      const newScope = tabId === 'home' ? undefined : tabId;
+      const queryParams = new URLSearchParams();
+      queryParams.set('keyword', keyword);
+      if (newScope) {
+        queryParams.set('scope', newScope);
+      }
+      router.push(`/search/results?${queryParams.toString()}`);
+    }
+    
+    // 캘린더 탭은 콜백 호출하지 않음 (다른 팀원이 구현 예정)
+    if (tabId === 'calendar') {
+      return;
+    }
+    
+    // 콜백 함수 호출
+    if (onTabChange) {
+      onTabChange(tabId);
+    }
   };
 
   return (
