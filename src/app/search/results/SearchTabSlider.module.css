@@ -1,7 +1,7 @@
 .slider_container {
-  width: 60%;
-  border-radius: 8px;
-  padding: 8px 16px;
+  width: 100%;
+  padding: 3px 16px;
+
 }
 
 .slider_track {
@@ -9,6 +9,7 @@
   display: flex;
   background-color: #F4F4F4;
   border-radius: 8px;
+  width: fit-content;
 }
 
 .slider_indicator {
@@ -23,8 +24,7 @@
 
 .slider_tab {
   position: relative;
-  flex: 1;
-  padding: 4px;
+  padding: 5px 15px;
   background: transparent;
   border: none;
   color: rgba(0, 0, 0, 0.6);
@@ -34,6 +34,7 @@
   z-index: 2;
   transition: color 0.3s ease, font-weight 0.3s ease;
   border-radius: 6px;
+  white-space: nowrap;
 }
 
 .slider_tab_active {

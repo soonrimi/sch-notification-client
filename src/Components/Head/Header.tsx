@@ -50,6 +50,7 @@ export type HeaderProps =
       onBack: () => void;
       onSearch?: (keyword: string) => void;
       disableInput?: boolean;
+      scope?: string | null;
     }
   | { pageType: 'notification' };
 
@@ -79,6 +80,7 @@ export default function Header(props: HeaderProps) {
           onBack={props.onBack}
           onSearch={props.onSearch}
           disableInput={props.disableInput}
+          scope={props.scope}
         />
       ) : pageType === 'notification' ? (
         <NotificationHeader />

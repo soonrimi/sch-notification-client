@@ -39,10 +39,10 @@ export default function SearchResults() {
         onBack: handleBackToSearchInput,
         onSearch: handleSearch,
         disableInput: true,
+        scope,
       }}
       hideBottomNav
     >
-      <SearchTabSlider scope={scope} />
       <div className={styles.container}>
         <div id="search_result_content" className={styles.content}>
           {results.length === 0 && loading ? (
