@@ -82,7 +82,7 @@ export default function BookmarkHeader({
           <>
             <IconButton
               onClick={() => {
-                router.push('/search?scope=bookmark');
+                router.push('/search?scope=bookmark&from=bookmark');
               }}
               sx={{ p: 0 }}
             >

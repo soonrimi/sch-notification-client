@@ -1,107 +1,29 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import styles from '../page.module.css';
+import React, { useState } from 'react';
+import styles from './Bookmark.module.css';
 import Layout from '@/Components/LayoutDir/Layout';
 import type { Notice } from '@/types/notice';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import NoticeItem from '@/Components/Notice/NoticeItem';
-import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerService';
-import { mapCrawlPostToNotice } from '@/utils/Noticemappers';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import type { PageListResponse } from '@/api/models/PageListResponse';
-import type { Pageable } from '@/api/models/Pageable';
-import type { SearchRequestDto } from '@/api/models/SearchRequestDto';
 import ScrollToTop from '@/Components/ScrollToTop/ScrollToTop';
 import RefreshLoader from '@/Components/RefreshLoader/RefreshLoader';
+import { useBookmarks } from './hooks/useBookmarks';
 
 export default function Bookmark() {
   const [BookmarkDeleteMode, setBookmarkDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const [bookmarkedNotices, setBookmarkedNotices] = useState<Notice[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  const [bookmarkIds, setBookmarkIds] = useState<number[]>([]);
-
-  // 로컬스토리지에서 북마크 ID 가져오기
-  useEffect(() => {
-    const savedBookmarks = JSON.parse(
-      localStorage.getItem('bookmarkedIds') || '[]'
-    ) as number[];
-    setBookmarkIds(savedBookmarks);
-  }, []);
-
-  // 북마크 공지 불러오기
-  const fetchBookmarkedNotices = async (pageNumber: number) => {
-    if (bookmarkIds.length === 0) {
-      setBookmarkedNotices([]);
-      setHasMore(false);
-      setLoading(false);
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const pageable: Pageable = {
-        page: pageNumber,
-        size: 20,
-        sort: ['createdAt,DESC'],
-      };
-      const requestBody: SearchRequestDto = { ids: bookmarkIds };
-
-      const data: PageListResponse =
-        await CrawlPostControllerService.searchNoticesByIds(
-          pageable,
-          requestBody
-        );
-
-      const convertedNotices: Notice[] =
-        data.content?.map((raw) => {
-          const notice = mapCrawlPostToNotice(raw);
-          return {
-            ...notice,
-            upload_time: raw.createdAt ? new Date(raw.createdAt) : new Date(0),
-          };
-        }) || [];
-
-      if (pageNumber === 0) {
-        setBookmarkedNotices(convertedNotices);
-      } else {
-        setBookmarkedNotices((prev) => [...prev, ...convertedNotices]);
-      }
-
-      setHasMore(pageNumber + 1 < (data.totalPages ?? 1));
-      setPage(pageNumber);
-    } catch (err) {
-      console.warn('API 실패:', err);
-      setHasMore(false);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (bookmarkIds.length > 0) {
-      fetchBookmarkedNotices(0);
-    } else {
-      setLoading(false);
-      setBookmarkedNotices([]);
-    }
-  }, [bookmarkIds]);
-
-  const loadMore = () => {
-    if (hasMore && !loading) {
-      fetchBookmarkedNotices(page + 1);
-    }
-  };
-
-  // 당겨서 새로고침 시에만 강제 API 호출
-  const refresh = async () => {
-    if (loading) return;
-    await fetchBookmarkedNotices(0);
-  };
+  const {
+    bookmarkedNotices,
+    loading,
+    hasMore,
+    loadMore,
+    refresh,
+    bookmarkIds,
+    updateBookmarkIds,
+    setBookmarkedNotices,
+  } = useBookmarks();
 
   // 북마크 선택 관련
   const toggleSelect = (id: number) => {
@@ -120,8 +42,7 @@ export default function Bookmark() {
 
   const deleteSelected = () => {
     const updated = bookmarkIds.filter((id) => !selectedIds.includes(id));
-    localStorage.setItem('bookmarkedIds', JSON.stringify(updated));
-    setBookmarkIds(updated);
+    updateBookmarkIds(updated);
     setBookmarkedNotices((prev) =>
       prev.filter((n) => !selectedIds.includes(n.id))
     );
@@ -129,7 +50,7 @@ export default function Bookmark() {
     setBookmarkDeleteMode(false);
   };
 
-  const deleteColor = selectedIds.length > 0 ? '#333333' : '#A1A1A1';
+  const hasSelected = selectedIds.length > 0;
 
   return (
     <Layout
@@ -152,28 +73,21 @@ export default function Bookmark() {
       footerSlot={
         BookmarkDeleteMode && (
           <div
-            style={{
-              height: '48px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              cursor: selectedIds.length > 0 ? 'pointer' : 'default',
-            }}
-            onClick={selectedIds.length > 0 ? deleteSelected : undefined}
+            className={`${styles.delete_footer} ${
+              !hasSelected ? styles.delete_footer_disabled : ''
+            }`}
+            onClick={hasSelected ? deleteSelected : undefined}
           >
             <DeleteOutlineIcon
-              sx={{
-                fontSize: 28,
-                color: deleteColor,
-              }}
+              className={
+                hasSelected ? styles.delete_icon : styles.delete_icon_disabled
+              }
+              sx={{ fontSize: 28 }}
             />
             <span
-              style={{
-                fontSize: 10,
-                marginTop: -2,
-                color: deleteColor,
-              }}
+              className={
+                hasSelected ? styles.delete_text : styles.delete_text_disabled
+              }
             >
               삭제
             </span>
@@ -181,7 +95,7 @@ export default function Bookmark() {
         )
       }
     >
-      <div id="bookmark_content" className={styles.page_content}>
+      <div id="bookmark_content" className={styles.content}>
         {loading && bookmarkedNotices.length === 0 ? (
           <div className={styles.loading}>로딩중...</div>
         ) : bookmarkedNotices.length === 0 ? (
