@@ -8,7 +8,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
 import styles from './styles.module.css';
 
-import { CrawlPostControllerService } from '@/api';
+import { CrawlPostControllerService, SubscribeControllerService } from '@/api';
 import { mapCrawlPostToNotice } from '@/utils/Noticemappers';
 import type { Pageable } from '@/api/models/Pageable';
 import { BackendCategory, CATEGORY_LABELS } from '@/constants/categories';
