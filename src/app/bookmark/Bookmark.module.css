@@ -1,0 +1,51 @@
+.content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+  padding-top: 5px;
+  padding-bottom: 48px;
+}
+
+.loading,
+.no_notice {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 16px;
+  color: #555;
+}
+
+.delete_footer {
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.delete_footer_disabled {
+  cursor: default;
+}
+
+.delete_icon {
+  color: #333333;
+}
+
+.delete_icon_disabled {
+  color: #a1a1a1;
+}
+
+.delete_text {
+  font-size: 10px;
+  margin-top: -2px;
+  color: #333333;
+}
+
+.delete_text_disabled {
+  color: #a1a1a1;
+}
