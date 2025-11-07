@@ -19,15 +19,18 @@ export default function AdminPage() {
   const [notices, setNotices] = useState<InternalNoticeListResponse[]>([]);
 
   useEffect(() => {
+    if (adminToken == null) {
+      return;
+    }
     if (!adminToken) {
       push('/admin/login');
       return;
     }
 
-    AdminControllerService.getMyNotices().then((data) => {
+    AdminControllerService.getMyNotices(adminToken).then((data) => {
       setNotices(data);
     });
-  }, []);
+  }, [adminToken]);
 
   useEffect(() => {
     const t = setInterval(() => setTick((v) => v + 1), 1000);
