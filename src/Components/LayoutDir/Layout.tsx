@@ -4,7 +4,11 @@ import Header, { HeaderProps } from '@/Components/Head/Header';
 import BottomNav from '@/Components/Bottom/BottomNav';
 import styles from './Layout.module.css';
 
-const HEADER_HEIGHT = 45;
+export const HEADER_HEIGHT = 45;
+const CATEGORY_HEIGHT = 42;
+const HOME_HEADER_HEIGHT = HEADER_HEIGHT + CATEGORY_HEIGHT;
+const SEARCH_SLIDER_HEIGHT = 40; // 슬라이더 바 높이
+const SEARCH_HEADER_HEIGHT = HEADER_HEIGHT + SEARCH_SLIDER_HEIGHT;
 const BOTTOM_NAV_HEIGHT = 48;
 
 interface LayoutProps {
@@ -30,28 +34,57 @@ export default function Layout({
       className={styles.layout_container}
       style={{
         backgroundColor: backgroundColor || '#fff',
-        height: fullHeight ? '100vh' : 'auto', // 조건부 적용
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column', // 조건부 적용
+        overflow: 'hidden',
       }}
     >
       {/* Header */}
-      <div className={styles.header_wrapper} style={{ height: HEADER_HEIGHT }}>
+      <div
+        className={styles.header_wrapper}
+        style={{
+          height:
+            headerProps?.pageType === 'home'
+              ? HOME_HEADER_HEIGHT
+              : headerProps?.pageType === 'search' &&
+                  headerProps?.scope !== undefined
+                ? SEARCH_HEADER_HEIGHT
+                : HEADER_HEIGHT,
+          flexShrink: 0,
+        }}
+      >
         {headerProps && <Header {...headerProps} />}
       </div>
 
       {/* Main */}
-      <main
-        className={`
-          ${styles.main_scroll}
-          ${headerProps?.pageType === 'calendar' && styles.main_fixed}
-        )`}
+      <div
+        className={styles.main_wrapper}
         style={{
-          marginTop: HEADER_HEIGHT,
-          marginBottom: BOTTOM_NAV_HEIGHT,
-          backgroundColor: 'transparent',
+          flex: '1 1 auto',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          minHeight: 0,
         }}
       >
-        {children}
-      </main>
+        <main
+          className={`
+            ${styles.main_scroll}
+            ${headerProps?.pageType === 'calendar' && styles.main_fixed}
+          `}
+          style={{
+            flex: '1 1 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+            minHeight: 0,
+            backgroundColor: 'transparent',
+          }}
+        >
+          {children}
+        </main>
+      </div>
 
       {/* Footer Slot or Bottom Navigation */}
       {!(hideBottomNav && !footerSlot) && (
@@ -59,7 +92,7 @@ export default function Layout({
           className={styles.bottom_nav_wrapper}
           style={{
             height: BOTTOM_NAV_HEIGHT,
-            position: 'fixed',
+            flexShrink: 0,
           }}
         >
           {footerSlot ? footerSlot : <BottomNav />}

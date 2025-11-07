@@ -8,6 +8,7 @@ import type { Major } from '@/types/profile';
 import Grade from './Components/Grade';
 import Department from './Components/Department';
 import { STORAGE_KEY_USER_PROFILE } from '@/constants/localStorage';
+import { STORAGE_KEY_DEVICE_ID } from '@/constants/localStorage';
 
 export default function InitialSetup() {
   const { push } = useRouter();
@@ -56,7 +57,15 @@ export default function InitialSetup() {
       alert('학년/학과를 최소 1개 이상 선택해주세요.');
       return;
     }
+
+    let deviceId = localStorage.getItem(STORAGE_KEY_DEVICE_ID);
+    if (!deviceId) {
+      deviceId = crypto.randomUUID();
+      localStorage.setItem(STORAGE_KEY_DEVICE_ID, deviceId);
+    }
+
     const payload = {
+      device_id: deviceId,
       majors,
       createdAt: Date.now(),
     };

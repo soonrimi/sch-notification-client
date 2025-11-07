@@ -8,6 +8,7 @@ import SettingsHeader from './CategorySettingsHeader';
 import SearchHeader from './SearchHeader';
 import styles from './Header.module.css';
 import NotificationHeader from './NotificationHeader';
+import type { CategoryItem } from '@/contexts/CategoryContext';
 
 export interface BookmarkHeaderProps {
   BookmarkDeleteMode: boolean;
@@ -19,7 +20,14 @@ export interface BookmarkHeaderProps {
 }
 
 export type HeaderProps =
-  | { pageType: 'home' }
+  | {
+      pageType: 'home';
+      homeHeaderProps?: {
+        category: CategoryItem;
+        setCategory: React.Dispatch<React.SetStateAction<CategoryItem>>;
+        categories: CategoryItem[];
+      };
+    }
   | { pageType: 'bookmark'; bookmarkProps: BookmarkHeaderProps }
   | { pageType: 'calendar' }
   | {
@@ -42,6 +50,8 @@ export type HeaderProps =
       onBack: () => void;
       onSearch?: (keyword: string) => void;
       disableInput?: boolean;
+      scope?: string | null;
+      onTabChange?: (tabId: 'home' | 'bookmark' | 'calendar') => void;
     }
   | { pageType: 'notification' };
 
@@ -57,7 +67,7 @@ export default function Header(props: HeaderProps) {
       ) : pageType === 'bookmark' && props.bookmarkProps ? (
         <BookmarkHeader {...props.bookmarkProps} />
       ) : pageType === 'home' ? (
-        <HomeHeader />
+        <HomeHeader {...(props.homeHeaderProps || {})} />
       ) : pageType === 'calendar' ? (
         <CalendarHeader />
       ) : pageType === 'mypage' ? (
@@ -71,6 +81,8 @@ export default function Header(props: HeaderProps) {
           onBack={props.onBack}
           onSearch={props.onSearch}
           disableInput={props.disableInput}
+          scope={props.scope}
+          onTabChange={props.onTabChange}
         />
       ) : pageType === 'notification' ? (
         <NotificationHeader />
