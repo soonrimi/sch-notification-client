@@ -24,7 +24,7 @@ export default function AdminPage() {
       return;
     }
 
-    AdminControllerService.getMyNotices().then((data) => {
+    AdminControllerService.getMyNotices(adminToken).then((data) => {
       setNotices(data);
     });
   }, []);
