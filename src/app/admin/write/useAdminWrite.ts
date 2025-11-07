@@ -98,6 +98,11 @@ export function useAdminWrite() {
       alert('제목과 내용을 입력해주세요.');
       return;
     }
+    if (!adminToken) {
+      alert('관리자 토큰이 없습니다. 다시 로그인해주세요.');
+      push('/admin/login');
+      return;
+    }
     setSubmitting(true);
     try {
       await AdminControllerService.createInternalNotice(adminToken, {
