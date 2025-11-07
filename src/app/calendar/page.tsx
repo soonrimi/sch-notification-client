@@ -63,12 +63,8 @@ export default function Calendar() {
   }, []);
 
   useEffect(() => {
-    CalenderApiService.getAllCalenders({
-      page: 0,
-      size: 1000,
-      sort: [],
-    }).then((data) => {
-      setCalendar(data.content ?? []);
+    CalenderApiService.getAllCalenders().then((data) => {
+      setCalendar(data ?? []);
     });
   }, []);
 

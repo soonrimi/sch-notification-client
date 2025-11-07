@@ -21,7 +21,12 @@ type User = {
   >;
   departments: Department[];
   grades: Array<
-    'ALL_YEARS' | 'FIRST_YEAR' | 'SECOND_YEAR' | 'THIRD_YEAR' | 'FOURTH_YEAR'
+    | 'ALL_YEARS'
+    | 'FIRST_YEAR'
+    | 'SECOND_YEAR'
+    | 'THIRD_YEAR'
+    | 'FOURTH_YEAR'
+    | 'FIFTH_YEAR'
   >;
 } & AdminUserResponse;
 
@@ -73,7 +78,12 @@ export default function UserDetail({
   const [departments, setDepartments] = useState<Department[]>([]);
   const [grades, setGrades] = useState<
     Array<
-      'ALL_YEARS' | 'FIRST_YEAR' | 'SECOND_YEAR' | 'THIRD_YEAR' | 'FOURTH_YEAR'
+      | 'ALL_YEARS'
+      | 'FIRST_YEAR'
+      | 'SECOND_YEAR'
+      | 'THIRD_YEAR'
+      | 'FOURTH_YEAR'
+      | 'FIFTH_YEAR'
     >
   >([]);
 

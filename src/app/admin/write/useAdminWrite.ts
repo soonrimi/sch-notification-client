@@ -100,7 +100,7 @@ export function useAdminWrite() {
     }
     setSubmitting(true);
     try {
-      await AdminControllerService.createInternalNotice(adminToken, {
+      await AdminControllerService.createInternalNotice({
         internalNotice: {
           targetYear: targetYear,
           title: title.trim(),
