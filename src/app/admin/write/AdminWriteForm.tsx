@@ -225,6 +225,7 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
                   <MenuItem value={Year.SECOND_YEAR}>2학년</MenuItem>
                   <MenuItem value={Year.THIRD_YEAR}>3학년</MenuItem>
                   <MenuItem value={Year.FOURTH_YEAR}>4학년</MenuItem>
+                  <MenuItem value={Year.FIFTH_YEAR}>5학년</MenuItem>
                 </Select>
               </FormControl>
             </div>

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   Button,
   Stack,
@@ -19,17 +18,20 @@ export default function Login() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
+  const [otp, setOtp] = useState('');
 
-  const { push } = useRouter();
-  const { login } = useAdminInfo();
+  const { login, didSendOtp, verifyOTP } = useAdminInfo();
 
   const canSubmit = id.trim().length > 0 && password.trim().length > 0;
 
   function onSubmit(e?: React.FormEvent) {
     e?.preventDefault();
     if (!canSubmit) return;
+    if (didSendOtp) {
+      verifyOTP({ id, otp: Number(otp) });
+      return;
+    }
     login({ id, password });
-    push('/admin');
   }
 
   return (
@@ -46,6 +48,7 @@ export default function Login() {
           <TextField
             value={id}
             label="아이디"
+            disabled={didSendOtp}
             autoComplete="username"
             variant="filled"
             onChange={(e) => setId(e.target.value)}
@@ -63,8 +66,9 @@ export default function Login() {
 
           <TextField
             label="비밀번호"
-            type={showPw ? 'text' : 'password'}
             value={password}
+            disabled={didSendOtp}
+            type={showPw ? 'text' : 'password'}
             autoComplete="current-password"
             variant="filled"
             onChange={(e) => setPassword(e.target.value)}
@@ -91,6 +95,37 @@ export default function Login() {
             }}
           />
 
+          {didSendOtp && (
+            <TextField
+              label="OTP 코드"
+              type={showPw ? 'text' : 'password'}
+              value={otp}
+              autoComplete="current-password"
+              variant="filled"
+              onChange={(e) => setOtp(e.target.value)}
+              fullWidth
+              InputProps={{
+                disableUnderline: true,
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="비밀번호 표시"
+                      onClick={() => setShowPw((v) => !v)}
+                      edge="end"
+                    >
+                      {showPw ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+                sx: {
+                  borderRadius: 2,
+                  backgroundColor: 'rgba(0,0,0,0.04)',
+                  '&:hover': { backgroundColor: 'rgba(0,0,0,0.06)' },
+                  '&.Mui-focused': { backgroundColor: 'rgba(0,0,0,0.03)' },
+                },
+              }}
+            />
+          )}
           <Button
             type="submit"
             variant="contained"
@@ -114,7 +149,7 @@ export default function Login() {
               },
             }}
           >
-            로그인
+            {didSendOtp ? 'OTP 인증' : '로그인'}
           </Button>
         </Stack>
       </form>

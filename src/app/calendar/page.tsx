@@ -65,13 +65,8 @@ export default function Calendar() {
   const router = useRouter();
 
   useEffect(() => {
-    CalenderApiService.getAllCalenders({
-      page: 0,
-      size: 100,
-      sort: [],
-    }).then((data) => {
-      setCalendar(data.content ?? []);
-      console.log('캘린더 응답:', data);
+    CalenderApiService.getAllCalenders().then((data) => {
+      setCalendar(data ?? []);
     });
   }, []);
 
