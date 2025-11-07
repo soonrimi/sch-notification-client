@@ -38,7 +38,7 @@ export function useBookmarks() {
         size: 20,
         sort: ['createdAt,DESC'],
       };
-      const requestBody: SearchRequestDto = { ids: bookmarkIds };
+      const requestBody: SearchRequestDto = { ids: bookmarkIds, keyword: '' };
 
       const data: PageListResponse =
         await CrawlPostControllerService.searchNoticesByIds(

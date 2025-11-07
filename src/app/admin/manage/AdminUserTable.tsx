@@ -1,18 +1,19 @@
 import React from 'react';
-import { AdminUserResponse } from '@/api';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
+import Select from '@mui/material/Select';
+import { AdminUserResponse } from '@/api';
+import TableRow from '@mui/material/TableRow';
+import MenuItem from '@mui/material/MenuItem';
+import useAdminManage from './useAdminManage';
+import TextField from '@mui/material/TextField';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import TableContainer from '@mui/material/TableContainer';
+import InputAdornment from '@mui/material/InputAdornment';
 
 type Props = {
   users: AdminUserResponse[];
@@ -20,9 +21,6 @@ type Props = {
   setSearch: (v: string) => void;
   filterRole: string;
   setFilterRole: (v: string) => void;
-  selectedUser: AdminUserResponse | null;
-  setSelectedUser: (u: AdminUserResponse) => void;
-  setMode: (m: 'view') => void;
 };
 
 export default function AdminUserTable({
@@ -31,10 +29,8 @@ export default function AdminUserTable({
   setSearch,
   filterRole,
   setFilterRole,
-  selectedUser,
-  setSelectedUser,
-  setMode,
 }: Props) {
+  const { selectedUser, setSelectedUser, setMode } = useAdminManage();
   return (
     <Paper
       elevation={3}
@@ -113,7 +109,9 @@ export default function AdminUserTable({
                 <TableCell>{idx + 1}</TableCell>
                 <TableCell>{u.name}</TableCell>
                 <TableCell>{u.affiliation}</TableCell>
-                <TableCell>{u.departments?.join(', ')}</TableCell>
+                <TableCell>
+                  {u.departments?.map((d) => d.name).join(', ')}
+                </TableCell>
                 <TableCell>{/* 비고 정보 필요시 여기에 */}</TableCell>
               </TableRow>
             ))}
