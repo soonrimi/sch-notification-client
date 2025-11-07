@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { AdminControllerService } from '@/api';
 import { useNotification } from '@/Components/notification/useNotification';
 
-const adminJwt = atom<string>('');
+const adminJwt = atom<string | null>(null);
 
 export default function useAdminInfo() {
   const { push } = useRouter();
@@ -19,6 +19,7 @@ export default function useAdminInfo() {
   async function fetchAdminInfo() {
     if (adminToken) return;
     const token = localStorage.getItem('accessToken');
+    setAdminToken(token || '');
     if (!token) return;
   }
 
@@ -36,7 +37,7 @@ export default function useAdminInfo() {
       userId: id,
       otp,
     });
-    setAdminToken(data.token || '');
+    setAdminToken(data.token);
     localStorage.setItem('accessToken', data.token || '');
     push('/admin');
   }
