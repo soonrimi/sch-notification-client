@@ -9,6 +9,7 @@ import Grade from './Components/Grade';
 import Department from './Components/Department';
 import { STORAGE_KEY_USER_PROFILE } from '@/constants/localStorage';
 import { STORAGE_KEY_DEVICE_ID } from '@/constants/localStorage';
+import { UserProfileControllerService } from '@/api';
 
 export default function InitialSetup() {
   const { push } = useRouter();
@@ -52,7 +53,7 @@ export default function InitialSetup() {
     setMajors((prev) => prev.filter((_, i) => i !== idx));
   };
 
-  const handleStart = () => {
+  const handleStart = async () => {
     if (majors.length === 0) {
       alert('학년/학과를 최소 1개 이상 선택해주세요.');
       return;
@@ -65,12 +66,30 @@ export default function InitialSetup() {
     }
 
     const payload = {
-      device_id,
-      majors,
-      createdAt: Date.now(),
+      device: device_id,
+      department: majors.map((m) => m.name).join(', '),
+      grade: Number(majors[0]?.grade ?? 0),
     };
-    localStorage.setItem(STORAGE_KEY_USER_PROFILE, JSON.stringify(payload));
-    push('/home');
+
+    try {
+      await UserProfileControllerService.create(payload);
+
+      const localPayload = {
+        device_id,
+        majors,
+        createAt: Date.now(),
+      };
+
+      localStorage.setItem(
+        STORAGE_KEY_USER_PROFILE,
+        JSON.stringify(localPayload)
+      );
+
+      push('/home');
+    } catch (err) {
+      console.error('유저 프로필 등록 실패:', err);
+      alert('등록 중 오류가 발생하였습니다.');
+    }
   };
 
   return (
