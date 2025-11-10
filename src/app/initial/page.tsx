@@ -58,14 +58,14 @@ export default function InitialSetup() {
       return;
     }
 
-    let deviceId = localStorage.getItem(STORAGE_KEY_DEVICE_ID);
-    if (!deviceId) {
-      deviceId = crypto.randomUUID();
-      localStorage.setItem(STORAGE_KEY_DEVICE_ID, deviceId);
+    let device_id = localStorage.getItem(STORAGE_KEY_DEVICE_ID);
+    if (!device_id) {
+      device_id = crypto.randomUUID();
+      localStorage.setItem(STORAGE_KEY_DEVICE_ID, device_id);
     }
 
     const payload = {
-      device_id: deviceId,
+      device_id,
       majors,
       createdAt: Date.now(),
     };

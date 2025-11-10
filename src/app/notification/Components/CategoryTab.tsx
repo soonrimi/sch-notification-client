@@ -29,6 +29,11 @@ export default function CategoryTab() {
     const fetchSubscribedCategories = async () => {
       try {
         const deviceId = localStorage.getItem('device_id');
+        if (!deviceId) {
+          console.warn('device_id가 없습니다.');
+          return;
+        }
+
         //TODO: 백엔드 수정후 주석 제거
         // const response =
         //   await SubscribeControllerService.getByDeviceId(deviceId);
@@ -41,7 +46,7 @@ export default function CategoryTab() {
           localStorage.getItem('notify_categories') || '[]'
         );
 
-        setIncludeCount(subscribed.length);
+        setIncludeCount(activeCategories.length);
 
         let results: Notice[] = [];
         for (const cat of subscribed) {
