@@ -14,7 +14,7 @@ interface SettingsHeaderProps {
 export default function CategorySettingsHeader({
   title,
   onReset,
-  backgroundColor = '#f3f3f3ff',
+  backgroundColor = '#f7f7f7',
 }: SettingsHeaderProps) {
   const router = useRouter();
 
@@ -25,8 +25,9 @@ export default function CategorySettingsHeader({
         justifyContent: 'space-between',
         alignItems: 'center',
         px: 2,
+        width: '100%',
+        height: '100%',
         backgroundColor,
-        height: 48,
       }}
     >
       <Box

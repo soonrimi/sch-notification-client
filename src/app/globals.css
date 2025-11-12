@@ -3,18 +3,20 @@
   --foreground: #171717;
 }
 
-/*Todo 나중에 바꾸기 */
+/*Todo 나중에 바꾸기 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #ffffff;
     --foreground: #171717;
   }
 }
+*/
 
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+  height: 100%;
+  overflow: hidden; /* prevent page-level scroll; main area handles its own scroll */
 }
 
 body {

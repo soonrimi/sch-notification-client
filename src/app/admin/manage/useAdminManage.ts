@@ -1,12 +1,17 @@
-import { AdminControllerService, AdminUserResponse, Department } from '@/api';
+import { useEffect } from 'react';
 import { atom, useAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { AdminControllerService, AdminUserResponse, Department } from '@/api';
 
+const selectedUserAtom = atom<AdminUserResponse | null>(null);
 const adminUserListAtom = atom<AdminUserResponse[]>([]);
+const departmentListAtom = atom<Department[]>([]);
+const modeAtom = atom<'view' | 'add' | 'edit'>('view');
 
 export default function useAdminManage() {
+  const [mode, setMode] = useAtom(modeAtom);
+  const [selectedUser, setSelectedUser] = useAtom(selectedUserAtom);
   const [adminUserList, setAdminUserList] = useAtom(adminUserListAtom);
-  const [departmentList, setDepartmentList] = useState<Department[]>([]);
+  const [departmentList, setDepartmentList] = useAtom(departmentListAtom);
 
   useEffect(() => {
     if (adminUserList.length === 0) {
@@ -31,7 +36,6 @@ export default function useAdminManage() {
     updatedUser: AdminUserResponse,
     requestPassword: string
   ) {
-    // AdminUpdateRequest로 변환
     const data = await AdminControllerService.updateAdmin(updatedUser.id, {
       name: updatedUser.name,
       affiliation: updatedUser.affiliation,
@@ -52,7 +56,6 @@ export default function useAdminManage() {
   async function createAdminUser(
     newUser: AdminUserResponse & { password: string; registerPassword: string }
   ) {
-    // SignupRequest로 변환
     await AdminControllerService.register({
       userId: newUser.userId,
       password: newUser.password,
@@ -68,10 +71,14 @@ export default function useAdminManage() {
   }
 
   return {
+    selectedUser,
+    setSelectedUser,
+    departmentList,
     adminUserList,
     fetchAdminUsers,
     createAdminUser,
     updateAdminUser,
-    departmentList,
+    mode,
+    setMode,
   };
 }
