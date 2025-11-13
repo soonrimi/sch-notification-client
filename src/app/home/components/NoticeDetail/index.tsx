@@ -7,7 +7,7 @@ import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerSe
 import type { DetailResponse } from '@/api/models/DetailResponse';
 import { useBookmark } from '@/hooks/useBookmark';
 import { Category } from '@/constants/categories';
-import { formatUploadTime } from '@/utils/NoticeDate';
+import { formatAbsoluteDate } from '@/utils/NoticeDate';
 import { AttachmentDrawer } from './AttachmentDrawer';
 import type { Attachment } from './types';
 
@@ -150,7 +150,7 @@ export function NoticeDetail({ id }: NoticeDetailProps) {
             gap="1rem"
           >
             <span>{notice.writer ?? ''}</span>
-            <span>{formatUploadTime(notice.upload_time) ?? ''}</span>
+            <span>{formatAbsoluteDate(notice.upload_time) ?? ''}</span>
             <span>조회수 {notice.viewCount ?? 0}회</span>
           </Typography>
           <hr
