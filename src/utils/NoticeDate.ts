@@ -5,26 +5,30 @@ export function formatUploadTime(input: Date | string | null | undefined) {
   if (isNaN(date.getTime())) return '';
 
   const now = new Date();
-  let diffMs = now.getTime() - date.getTime(); 
+  let diffMs = now.getTime() - date.getTime();
 
   // 미래(시계 오차 등) 클램프
   if (diffMs < 0) diffMs = 0;
 
   const diffSeconds = Math.floor(diffMs / 1000);
   const diffMinutes = Math.floor(diffSeconds / 60);
-  const diffHours   = Math.floor(diffMinutes / 60);
-  const diffDays    = Math.floor(diffHours / 24);
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
 
   if (diffSeconds < 60) return `${Math.max(1, diffSeconds)}초 전`;
   if (diffMinutes < 60) return `${diffMinutes}분 전`;
-  if (diffHours   < 24) return `${diffHours}시간 전`;
-  if (diffDays    < 30) return `${diffDays}일 전`;
+  if (diffHours < 24) return `${diffHours}시간 전`;
+  if (diffDays < 30) return `${diffDays}일 전`;
 
-  const yNow = now.getFullYear(),  mNow = now.getMonth(),  dNow = now.getDate();
-  const y    = date.getFullYear(), m    = date.getMonth(), d    = date.getDate();
+  const yNow = now.getFullYear(),
+    mNow = now.getMonth(),
+    dNow = now.getDate();
+  const y = date.getFullYear(),
+    m = date.getMonth(),
+    d = date.getDate();
 
   let monthDiff = (yNow - y) * 12 + (mNow - m);
-  if (dNow < d) monthDiff -= 1;             // 말일 이슈/한달 미만 보정
+  if (dNow < d) monthDiff -= 1; // 말일 이슈/한달 미만 보정
   if (monthDiff < 1) return `${diffDays}일 전`;
   if (monthDiff < 12) return `${monthDiff}개월 전`;
 
