@@ -231,7 +231,10 @@ export function NoticeDetail({ id }: NoticeDetailProps) {
                         },
                       }}
                     >
-                      원본 URL 보러가기 {notice.contentImages && notice.contentImages.length > 1 ? `(${index + 1})` : ''}
+                      원본 URL 보러가기{' '}
+                      {notice.contentImages && notice.contentImages.length > 1
+                        ? `(${index + 1})`
+                        : ''}
                     </Typography>
                   </Box>
                 ))}

@@ -37,7 +37,10 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="순리미" />
-        <meta property="og:description" content="순천향대학교 공지사항을 확인하세요" />
+        <meta
+          property="og:description"
+          content="순천향대학교 공지사항을 확인하세요"
+        />
         {/* <meta property="og:image" content="/.png" /> */}
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
