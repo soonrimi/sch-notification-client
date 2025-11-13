@@ -28,7 +28,7 @@ const submittingAtom = atom(false);
 const categoryAtom = atom<CreateInternalNoticeRequest.category>(
   CreateInternalNoticeRequest.category.UNIVERSITY
 );
-const targetDepartmentListAtom = atom<Department[]>([]);
+const targetDepartmentListAtom = atom<number[]>([]);
 const targetYearAtom = atom<InternalNoticeListResponse.targetYear>(
   InternalNoticeListResponse.targetYear.ALL_YEARS
 );
@@ -111,7 +111,7 @@ export function useAdminWrite() {
           title: title.trim(),
           category: category,
           content: content.trim(),
-          targetDepartmentIds: targetDepartmentList.map((d) => d.id),
+          targetDepartmentIds: targetDepartmentList,
         },
         file: files.map((f) => f.file),
       });
