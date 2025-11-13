@@ -7,7 +7,7 @@ import { CrawlPostControllerService } from '@/api/services/CrawlPostControllerSe
 import type { DetailResponse } from '@/api/models/DetailResponse';
 import { useBookmark } from '@/hooks/useBookmark';
 import { Category } from '@/constants/categories';
-import { formatUploadTime } from '@/utils/NoticeDate';
+import { formatAbsoluteDate } from '@/utils/NoticeDate';
 import { AttachmentDrawer } from './AttachmentDrawer';
 import type { Attachment } from './types';
 
@@ -131,48 +131,117 @@ export function NoticeDetail({ id }: NoticeDetailProps) {
         }}
         hideBottomNav
       >
-        <Box sx={{ p: 3, pb: attachments.length > 0 ? '5rem' : 3 }}>
-          <Typography
-            variant="subtitle1"
-            fontWeight="600"
-            fontSize={19}
-            mb={1}
-            sx={{ lineHeight: 1.5, marginTop: 1 }}
-          >
-            {notice.title}
-          </Typography>
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            mb={1}
-            display="flex"
-            fontSize="0.8rem"
-            gap="1rem"
-          >
-            <span>{notice.writer ?? ''}</span>
-            <span>{formatUploadTime(notice.upload_time) ?? ''}</span>
-            <span>조회수 {notice.viewCount ?? 0}회</span>
-          </Typography>
-          <hr
-            style={{
-              position: 'absolute',
-              left: 0,
-              width: '100%',
-              border: 'none',
-              borderTop: '1px solid #242424',
-              transform: 'scaleY(0.3)',
-              marginTop: '0.1875rem',
-            }}
-          />
-          <Typography
-            variant="body2"
-            whiteSpace="pre-line"
-            mb={3}
-            mt={3.8}
-            fontSize="15px"
-            dangerouslySetInnerHTML={{ __html: notice.content ?? '' }}
-          />
-        </Box>
+        <div
+          style={{
+            flex: '1 1 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            overflowY: 'auto',
+            height: '100%',
+            minHeight: 0,
+          }}
+        >
+          <Box sx={{ p: '10px 23px', pb: attachments.length > 0 ? '5rem' : 3 }}>
+            <Typography
+              variant="subtitle1"
+              fontWeight="600"
+              fontSize={19}
+              mb={1}
+              sx={{ lineHeight: 1.5, marginTop: 1 }}
+            >
+              {notice.title}
+            </Typography>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              mb={1}
+              display="flex"
+              fontSize="0.8rem"
+              gap="1rem"
+            >
+              <span>{notice.writer ?? ''}</span>
+              <span>{formatAbsoluteDate(notice.upload_time) ?? ''}</span>
+              <span>조회수 {notice.viewCount ?? 0}회</span>
+            </Typography>
+            <hr
+              style={{
+                width: 'calc(100% + 48px)',
+                marginLeft: '-24px',
+                marginRight: '-24px',
+                border: 'none',
+                borderTop: '1px solid #242424',
+                transform: 'scaleY(0.2)',
+                marginTop: '0.1875rem',
+                marginBottom: 0,
+                padding: 0,
+              }}
+            />
+            <Typography
+              variant="body2"
+              sx={{
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word',
+                lineHeight: 1.8,
+                fontSize: '15px',
+                color: '#333',
+                mb: 3,
+                mt: 3.8,
+                '& p': {
+                  marginBottom: '1em',
+                  marginTop: 0,
+                },
+                '& br': {
+                  display: 'block',
+                  content: '""',
+                  marginTop: '0.5em',
+                },
+              }}
+              dangerouslySetInnerHTML={{ __html: notice.content ?? '' }}
+            />
+            {notice.contentImages && notice.contentImages.length > 0 && (
+              <Box sx={{ mt: 2, mb: 2 }}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontSize: '14px',
+                    color: '#666',
+                    mb: 1,
+                  }}
+                >
+                  이미지가 표시되지 않는 경우:
+                </Typography>
+                {notice.contentImages.map((imageUrl, index) => (
+                  <Box key={index} sx={{ mb: 1 }}>
+                    <Typography
+                      component="a"
+                      href={imageUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{
+                        display: 'inline-block',
+                        padding: '8px 16px',
+                        backgroundColor: '#f5f5f5',
+                        color: '#333',
+                        textDecoration: 'none',
+                        borderRadius: '4px',
+                        fontSize: '14px',
+                        border: '1px solid #ddd',
+                        '&:hover': {
+                          backgroundColor: '#e8e8e8',
+                        },
+                      }}
+                    >
+                      원본 URL 보러가기{' '}
+                      {notice.contentImages && notice.contentImages.length > 1
+                        ? `(${index + 1})`
+                        : ''}
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
+            )}
+          </Box>
+        </div>
       </Layout>
 
       {/* Layout 밖으로 이동 */}
