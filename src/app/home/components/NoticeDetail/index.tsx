@@ -53,7 +53,11 @@ export function NoticeDetail({ id }: NoticeDetailProps) {
         const data = await promise;
         console.log(`[NoticeDetail] 공지 ${id} 요청 성공`, data);
 
-        if (!isCancelled && currentId === id && requestRef.current === promise) {
+        if (
+          !isCancelled &&
+          currentId === id &&
+          requestRef.current === promise
+        ) {
           setNotice({
             ...data,
             upload_time: data.createdAt ? new Date(data.createdAt) : null,
@@ -62,7 +66,7 @@ export function NoticeDetail({ id }: NoticeDetailProps) {
           console.log(
             `[NoticeDetail] 상태 업데이트 취소됨 - isCancelled: ${isCancelled}, currentId: ${currentId}, id: ${id}, requestRef: ${
               requestRef.current === promise
-            }`,
+            }`
           );
         }
       } catch (err: unknown) {
@@ -117,7 +121,15 @@ export function NoticeDetail({ id }: NoticeDetailProps) {
     fileUrl: att.fileUrl,
   }));
 
-  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.svg'];
+  const imageExtensions = [
+    '.jpg',
+    '.jpeg',
+    '.png',
+    '.gif',
+    '.webp',
+    '.bmp',
+    '.svg',
+  ];
   const attachmentImage =
     notice.attachments?.find((att) => {
       if (!att.fileName || !att.fileUrl) return false;
@@ -140,7 +152,8 @@ export function NoticeDetail({ id }: NoticeDetailProps) {
     title: notice.title ?? '순천향대학교 공지사항',
     description,
     imageUrl: contentImage || attachmentImage || undefined,
-    url: shareUrl || (typeof window !== 'undefined' ? window.location.href : ''),
+    url:
+      shareUrl || (typeof window !== 'undefined' ? window.location.href : ''),
   };
 
   return (

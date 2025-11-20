@@ -51,9 +51,7 @@ export default function NoticeHeader({
       navigator.clipboard
         .writeText(url)
         .then(() => alert('링크가 복사되었습니다.'))
-        .catch(() =>
-          alert('링크 복사에 실패했습니다. 직접 공유해주세요.'),
-        );
+        .catch(() => alert('링크 복사에 실패했습니다. 직접 공유해주세요.'));
     } else {
       alert('브라우저가 링크 복사를 지원하지 않습니다. 직접 공유해주세요.');
     }

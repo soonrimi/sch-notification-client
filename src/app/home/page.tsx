@@ -15,10 +15,10 @@ interface HomePageProps {
 export const dynamic = 'force-dynamic';
 
 // 서버 사이드에서 메타데이터 생성
-export async function generateMetadata(
-  { searchParams }: HomePageProps
-): Promise<Metadata> {
-  const params = await searchParams;   // ✅ 반드시 await
+export async function generateMetadata({
+  searchParams,
+}: HomePageProps): Promise<Metadata> {
+  const params = await searchParams; // ✅ 반드시 await
   const id = params?.id;
 
   // id가 없으면 기본 메타데이터
@@ -116,7 +116,7 @@ function HomePageInner({ id }: { id?: string }) {
 }
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-  const params = await searchParams;  // ✅ 여기서도 await
+  const params = await searchParams; // ✅ 여기서도 await
   const id = params?.id;
 
   return (
