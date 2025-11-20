@@ -5,9 +5,9 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import styles from '../../app/home/Home.module.css';
 import { Notice } from '@/types/notice';
-import { CATEGORY_COLORS } from '@/constants/categories';
 import { formatUploadTime } from '@/utils/NoticeDate';
 import { useRouter } from 'next/navigation';
+import { useCategoryColors } from '@/contexts/CategoryColorContext';
 
 interface NoticeItemProps {
   notice: Notice;
@@ -28,14 +28,26 @@ export default function NoticeItem({
   hrefBuilder = (id) => `/home?id=${encodeURIComponent(id)}`,
   currentCategory,
 }: NoticeItemProps) {
+  const { categoryColors } = useCategoryColors();
   const noticeContent = (
     <div
-      className={styles.home_notice_content}
-      style={{
-        paddingRight: BookmarkDeleteMode ? '35px' : '21px',
-      }}
+      className={`${styles.home_notice_content} ${
+        BookmarkDeleteMode
+          ? styles.home_notice_content_padding_bookmark
+          : styles.home_notice_content_padding_normal
+      }`}
     >
       <div className={styles.home_notice_body}>
+        {currentCategory === '전체' && (
+          <div
+            className={styles.category_badge}
+            style={{
+              backgroundColor: categoryColors[notice.category] || '#000',
+            }}
+          >
+            {notice.category}
+          </div>
+        )}
         <div className={styles.home_notice_title}>{notice.title}</div>
 
         <div
@@ -43,24 +55,8 @@ export default function NoticeItem({
           dangerouslySetInnerHTML={{ __html: notice.detail ?? '' }}
         />
         <div className={styles.home_notice_info}>
-          <div
-            style={{
-              width: 30,
-              height: 17,
-              borderRadius: '999px',
-              fontSize: 10,
-              color: '#fff',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginRight: 5,
-              backgroundColor: CATEGORY_COLORS[notice.category] || '#000',
-            }}
-          >
-            {notice.category}
-          </div>
           <div className={styles.home_notice_upload_info}>
-            | {formatUploadTime(notice.upload_time)} | {notice.writer}
+            {notice.writer} · {formatUploadTime(notice.upload_time)}
           </div>
         </div>
       </div>
@@ -92,26 +88,18 @@ export default function NoticeItem({
   };
   return (
     <div
-      className={styles.home_notice}
+      className={`${styles.home_notice} ${styles.home_notice_cursor}`}
       style={{
         backgroundColor:
           BookmarkDeleteMode && isSelectedForBookmarkDelete
             ? '#bda10030'
             : 'transparent',
-        cursor: 'pointer',
       }}
       onClick={handleClick}
     >
-      <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+      <div className={styles.home_notice_wrapper}>
         {BookmarkDeleteMode && (
-          <div
-            style={{
-              width: 0,
-              marginRight: 0,
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
+          <div className={styles.bookmark_delete_wrapper}>
             {isSelectedForBookmarkDelete ? (
               <CheckCircleIcon
                 className={styles.selection_circle}
