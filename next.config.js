@@ -2,7 +2,7 @@ const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // output: 'export', // SSR/동적 메타데이터 지원을 위해 비활성화
   trailingSlash: true,
   images: {
     unoptimized: true,

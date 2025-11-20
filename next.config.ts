@@ -1,8 +1,8 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // Static export 설정 (GitHub Actions에서 out 폴더 생성용)
-  output: 'export',
+  // Static export 설정 제거 - 서버 사이드 렌더링 활성화 (카카오톡 공유 썸네일을 위해 필요)
+  // output: 'export',
   trailingSlash: true,
   images: {
     unoptimized: true,
