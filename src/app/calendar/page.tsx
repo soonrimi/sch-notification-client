@@ -65,14 +65,15 @@ export default function Calendar() {
   const router = useRouter();
 
   useEffect(() => {
-    CalenderApiService.getAllCalenders({
-      page: 0,
-      size: 100,
-      sort: [],
-    }).then((data) => {
-      setCalendar(data.content ?? []);
-      console.log('캘린더 응답:', data);
-    });
+    CalenderApiService.getAllCalenders()
+      .then((data) => {
+        setCalendar(data ?? []);
+        console.log('캘린더 응답:', data);
+      })
+      .catch((err) => {
+        console.error(err);
+        setCalendar([]);
+      });
   }, []);
 
   // 주간 최대 겹침 수 계산 함수
