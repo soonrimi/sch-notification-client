@@ -1,8 +1,7 @@
 'use client';
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from './page.module.css';
 import useCalendarCells, { CalendarCell } from './hooks/useCalendarCells';
-import EventItem from './Components/EventItem';
 import DayKor from './Components/DayKor';
 import dayjs, { Dayjs } from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
@@ -44,24 +43,6 @@ export default function Calendar() {
   const weeks = useCalendarCells(current);
   const [calendar, setCalendar] = useState<CalenderDto_Response[]>([]);
 
-  const eventsByYmd = useMemo(() => {
-    const map = new Map<string, CalenderDto_Response[]>();
-    for (const ev of calendar) {
-      const start = dayjs(ev.startDate);
-      const end = dayjs(ev.endDate ?? ev.startDate);
-      let cursor = start.startOf('day');
-      const last = end.startOf('day');
-
-      while (cursor.isSameOrBefore(last)) {
-        const key = cursor.format('YYYYMMDD');
-        if (!map.has(key)) map.set(key, []);
-        map.get(key)!.push(ev);
-        cursor = cursor.add(1, 'day');
-      }
-    }
-    return map;
-  }, [calendar]);
-
   const router = useRouter();
 
   useEffect(() => {
@@ -76,23 +57,45 @@ export default function Calendar() {
       });
   }, []);
 
-  // 주간 최대 겹침 수 계산 함수
-  function getMaxOverlap(
+  type LaidOutEvent = CalenderDto_Response & { lane: number };
+
+  function layoutWeekEvents(
     events: CalenderDto_Response[],
     weekStart: Dayjs,
     weekEnd: Dayjs
-  ) {
-    const days = Array(7).fill(0);
+  ): { placed: LaidOutEvent[]; maxLane: number } {
+    const normalized = events.map((ev) => {
+      const start = dayjs(ev.startDate).isBefore(weekStart)
+        ? weekStart
+        : dayjs(ev.startDate);
+      const endRaw = dayjs(ev.endDate ?? ev.startDate);
+      const end = endRaw.isAfter(weekEnd) ? weekEnd : endRaw;
+      return { ev, start, end };
+    });
 
-    for (const ev of events) {
-      const start = dayjs(ev.startDate);
-      const end = dayjs(ev.endDate ?? ev.startDate);
-      const startIdx = Math.max(0, start.diff(weekStart, 'day'));
-      const endIdx = Math.min(6, end.diff(weekStart, 'day'));
-      for (let i = startIdx; i <= endIdx; i++) days[i] += 1;
+    normalized.sort((a, b) => a.start.valueOf() - b.start.valueOf());
+
+    const laneLastEnd: Dayjs[] = [];
+    const placed: LaidOutEvent[] = [];
+
+    for (const item of normalized) {
+      let laneIndex = 0;
+
+      while (
+        laneIndex < laneLastEnd.length &&
+        laneLastEnd[laneIndex].isSameOrAfter(item.start, 'day')
+      ) {
+        laneIndex++;
+      }
+
+      laneLastEnd[laneIndex] = item.end;
+      placed.push({
+        ...item.ev,
+        lane: laneIndex,
+      });
     }
 
-    return Math.max(...days);
+    return { placed, maxLane: laneLastEnd.length || 1 };
   }
 
   return (
@@ -143,18 +146,23 @@ export default function Calendar() {
               const start = dayjs(ev.startDate);
               const end = dayjs(ev.endDate ?? ev.startDate);
               return (
-                end.isSameOrAfter(weekStart) && start.isSameOrBefore(weekEnd)
+                end.isSameOrAfter(weekStart, 'day') &&
+                start.isSameOrBefore(weekEnd, 'day')
               );
             });
 
-            const overlapCount = getMaxOverlap(weekEvents, weekStart, weekEnd);
+            const { placed, maxLane } = layoutWeekEvents(
+              weekEvents,
+              weekStart,
+              weekEnd
+            );
 
             return (
               <div
                 key={wIdx}
                 className={styles.calendar_body_line}
                 style={{
-                  paddingBottom: `${overlapCount * 24}px`, // 겹치는 만큼만 높이 늘리기
+                  paddingBottom: `${maxLane * 24}px`,
                 }}
               >
                 {row.map((cell: CalendarCell, idx: number) => (
@@ -168,30 +176,16 @@ export default function Calendar() {
                   </div>
                 ))}
 
-                {/* 주간 일정 */}
                 <div className={styles.week_events}>
-                  {Array.from({ length: 7 }).map((_, dayIdx) => {
-                    const day = weekStart.add(dayIdx, 'day');
-
-                    const dayEvents = weekEvents.filter((ev) => {
-                      const start = dayjs(ev.startDate);
-                      const end = dayjs(ev.endDate ?? ev.startDate);
-                      return (
-                        day.isSameOrAfter(start, 'day') &&
-                        day.isSameOrBefore(end, 'day')
-                      );
-                    });
-
-                    return dayEvents.map((ev, localIdx) => (
-                      <EventBar
-                        key={`${ev.id}-${dayIdx}-${localIdx}`}
-                        ev={ev}
-                        weekStart={weekStart}
-                        weekEnd={weekEnd}
-                        index={localIdx}
-                      />
-                    ));
-                  })}
+                  {placed.map((ev) => (
+                    <EventBar
+                      key={ev.id}
+                      ev={ev}
+                      weekStart={weekStart}
+                      weekEnd={weekEnd}
+                      index={ev.lane}
+                    />
+                  ))}
                 </div>
               </div>
             );

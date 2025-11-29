@@ -15,6 +15,7 @@
 
 /* EventBar.tsx */
 .event_bar {
+  align-self: start;
   border-radius: 6px;
   text-align: center;
   font-size: 0.8rem;
