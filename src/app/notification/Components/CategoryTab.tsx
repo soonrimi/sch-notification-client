@@ -1,5 +1,4 @@
 'use client';
-import { useCategories } from '@/contexts/CategoryContext';
 import type { Notice } from '@/types/notice';
 import NoticeItem from '@/Components/Notice/NoticeItem';
 import { useEffect, useState } from 'react';
@@ -10,51 +9,51 @@ import styles from './styles.module.css';
 
 import { CrawlPostControllerService, SubscribeControllerService } from '@/api';
 import { mapCrawlPostToNotice } from '@/utils/Noticemappers';
-import type { Pageable } from '@/api/models/Pageable';
-import { BackendCategory, CATEGORY_LABELS } from '@/constants/categories';
+import { BackendCategory } from '@/constants/categories';
+import { STORAGE_KEY_DEVICE_ID } from '@/constants/localStorage';
 
 export default function CategoryTab() {
-  const { items } = useCategories();
   const [notices, setNotices] = useState<Notice[]>([]);
   const [includeCount, setIncludeCount] = useState(0);
 
   useEffect(() => {
-    //구독하는 카테고리 개수 세기 위함
-    const saved = JSON.parse(localStorage.getItem('notify_categories') || '{}');
-    const activeCategories = Object.entries(saved)
-      .filter(([_, value]) => value)
-      .map(([key]) => key);
-    setIncludeCount(activeCategories.length);
-
     const fetchSubscribedCategories = async () => {
       try {
-        const deviceId = localStorage.getItem('device_id');
+        const deviceId = localStorage.getItem(STORAGE_KEY_DEVICE_ID);
         if (!deviceId) {
-          console.warn('device_id가 없습니다.');
+          console.warn('deviceId가 없습니다.');
           return;
         }
 
-        //TODO: 백엔드 수정후 주석 제거
-        // const response =
-        //   await SubscribeControllerService.getByDeviceId(deviceId);
-        // const subscribed =
-        //   response.categories
-        //     ?.filter((cat: any) => cat.subscribed)
-        //     .map((cat: any) => cat.name) || [];
-
-        const subscribed = JSON.parse(
-          localStorage.getItem('notify_categories') || '[]'
+        const saved = JSON.parse(
+          localStorage.getItem('notify_categories') || '{}'
         );
+        const localActiveCategories = Object.entries(saved)
+          .filter(([_, value]) => value)
+          .map(([key]) => key);
 
-        setIncludeCount(activeCategories.length);
+        setIncludeCount(localActiveCategories.length);
+
+        const response = await SubscribeControllerService.getByDevice(deviceId);
+
+        const subscribedBackendCats = response
+          .filter((item) => item.subscribed)
+          .map((item) => item.category)
+          .filter((cat): cat is string => !!cat) as BackendCategory[];
+
+        if (subscribedBackendCats.length > 0) {
+          setIncludeCount(subscribedBackendCats.length);
+        }
 
         let results: Notice[] = [];
-        for (const cat of subscribed) {
+
+        for (const backendCat of subscribedBackendCats) {
           const data = await CrawlPostControllerService.getNotices(
-            mapToApiCategory(cat),
+            backendCat,
             0,
             10
           );
+
           const converted =
             data.content?.map((raw) => ({
               ...mapCrawlPostToNotice(raw),
@@ -62,17 +61,19 @@ export default function CategoryTab() {
                 ? new Date(raw.createdAt)
                 : new Date(0),
             })) || [];
-          results = [...results, ...converted];
 
-          results.sort(
-            (a, b) => b.upload_time.getTime() - a.upload_time.getTime()
-          );
-          setNotices(results);
+          results = [...results, ...converted];
         }
+
+        results.sort(
+          (a, b) => b.upload_time.getTime() - a.upload_time.getTime()
+        );
+        setNotices(results);
       } catch (err) {
         console.error('알림 공지 불러오기 실패:', err);
       }
     };
+
     fetchSubscribedCategories();
   }, []);
 
@@ -90,12 +91,4 @@ export default function CategoryTab() {
       ))}
     </div>
   );
-}
-
-function mapToApiCategory(frontCategory: string): BackendCategory {
-  const entry = Object.entries(CATEGORY_LABELS).find(
-    ([, label]) => label === frontCategory
-  );
-  if (!entry) throw new Error(`Unknown category: ${frontCategory}`);
-  return entry[0] as BackendCategory;
 }
