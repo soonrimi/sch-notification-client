@@ -9,8 +9,7 @@ export default function KeywordSettings() {
   const [exclude, setExclude] = useState<string[]>([]);
   const [includeInput, setIncludeInput] = useState('');
   const [excludeInput, setExcludeInput] = useState('');
-  const [keywordId, setKeyWordId] = useState<number | null>(1);
-  // const [keywordId, setKeyWordId] = useState<number | null>(null);
+  const [keywordId, setKeyWordId] = useState<number | null>(null);
 
   useEffect(() => {
     const cached = JSON.parse(localStorage.getItem('keywords') || '{}');
@@ -19,31 +18,36 @@ export default function KeywordSettings() {
 
     const init = async () => {
       try {
-        let deviceId = localStorage.getItem('device_id');
+        const deviceId = localStorage.getItem('deviceId');
         if (!deviceId) {
-          console.warn('device_id가 없습니다.');
+          console.warn('deviceId가 없습니다.');
           return;
         }
 
-        //TODO: 백엔드 수정후 주석 제거
-        // // let myKeyword = await KeywordControllerService.getByDeviceId(deviceId);
+        let list = await KeywordControllerService.getByDeviceId(deviceId);
 
-        // // if (!myKeyword) {
-        // //   myKeyword = await KeywordControllerService.create2({
-        // //     device_id: deviceId,
-        // //     include: [],
-        // //     exclude: [],
-        // //   } as any);
-        // // }
+        let keyword: any;
+        if (!list || list.length === 0) {
+          keyword = await KeywordControllerService.create2({
+            deviceId: deviceId,
+            include: [],
+            exclude: [],
+          } as any);
+        } else {
+          keyword = list[0];
+        }
 
-        // setKeyWordId(myKeyword.id);
-        // setInclude(myKeyword.include || []);
-        // setExclude(myKeyword.exclude || []);
+        setKeyWordId(keyword.id);
+        setInclude(keyword.include || []);
+        setExclude(keyword.exclude || []);
 
-        // localStorage.setItem(
-        //   'keywords',
-        //   JSON.stringify({ include: myKeyword.include, exclude: myKeyword.exclude })
-        // );
+        localStorage.setItem(
+          'keywords',
+          JSON.stringify({
+            include: keyword.include || [],
+            exclude: keyword.exclude || [],
+          })
+        );
       } catch (err) {
         console.error('키워드 설정 불러오기 실패:', err);
       }

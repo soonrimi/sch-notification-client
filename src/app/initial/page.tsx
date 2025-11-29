@@ -59,14 +59,14 @@ export default function InitialSetup() {
       return;
     }
 
-    let device_id = localStorage.getItem(STORAGE_KEY_DEVICE_ID);
-    if (!device_id) {
-      device_id = crypto.randomUUID();
-      localStorage.setItem(STORAGE_KEY_DEVICE_ID, device_id);
+    let deviceId = localStorage.getItem(STORAGE_KEY_DEVICE_ID);
+    if (!deviceId) {
+      deviceId = crypto.randomUUID();
+      localStorage.setItem(STORAGE_KEY_DEVICE_ID, deviceId);
     }
 
     const payload = {
-      device: device_id,
+      device: deviceId,
       department: majors.map((m) => m.name).join(', '),
       grade: Number(majors[0]?.grade ?? 0),
     };
@@ -75,7 +75,7 @@ export default function InitialSetup() {
       await UserProfileControllerService.create(payload);
 
       const localPayload = {
-        device_id,
+        deviceId,
         majors,
         createAt: Date.now(),
       };
