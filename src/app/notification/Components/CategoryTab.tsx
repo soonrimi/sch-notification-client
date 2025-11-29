@@ -2,7 +2,7 @@
 import { useCategories } from '@/contexts/CategoryContext';
 import type { Notice } from '@/types/notice';
 import NoticeItem from '@/Components/Notice/NoticeItem';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -13,16 +13,10 @@ import { mapCrawlPostToNotice } from '@/utils/Noticemappers';
 import type { Pageable } from '@/api/models/Pageable';
 import { BackendCategory, CATEGORY_LABELS } from '@/constants/categories';
 
-export default function AlertTab() {
+export default function CategoryTab() {
   const { items } = useCategories();
   const [notices, setNotices] = useState<Notice[]>([]);
   const [includeCount, setIncludeCount] = useState(0);
-
-  const activeCategories = useMemo(() => {
-    return items
-      .filter((category) => category.notify)
-      .map((category) => category.name);
-  }, [items]);
 
   useEffect(() => {
     //구독하는 카테고리 개수 세기 위함
@@ -32,18 +26,35 @@ export default function AlertTab() {
       .map(([key]) => key);
     setIncludeCount(activeCategories.length);
 
-    //TODO: 새로 올라오는 공지들에 대한 api로 수정 필요
-    async function fetchAlertNotices() {
+    const fetchSubscribedCategories = async () => {
       try {
-        let results: Notice[] = [];
+        const deviceId = localStorage.getItem('device_id');
+        if (!deviceId) {
+          console.warn('device_id가 없습니다.');
+          return;
+        }
 
-        for (const cat of activeCategories) {
+        //TODO: 백엔드 수정후 주석 제거
+        // const response =
+        //   await SubscribeControllerService.getByDeviceId(deviceId);
+        // const subscribed =
+        //   response.categories
+        //     ?.filter((cat: any) => cat.subscribed)
+        //     .map((cat: any) => cat.name) || [];
+
+        const subscribed = JSON.parse(
+          localStorage.getItem('notify_categories') || '[]'
+        );
+
+        setIncludeCount(activeCategories.length);
+
+        let results: Notice[] = [];
+        for (const cat of subscribed) {
           const data = await CrawlPostControllerService.getNotices(
             mapToApiCategory(cat),
             0,
             10
           );
-
           const converted =
             data.content?.map((raw) => ({
               ...mapCrawlPostToNotice(raw),
@@ -51,29 +62,19 @@ export default function AlertTab() {
                 ? new Date(raw.createdAt)
                 : new Date(0),
             })) || [];
-
           results = [...results, ...converted];
+
+          results.sort(
+            (a, b) => b.upload_time.getTime() - a.upload_time.getTime()
+          );
+          setNotices(results);
         }
-
-        // 최신순 정렬
-        results.sort(
-          (a, b) => b.upload_time.getTime() - a.upload_time.getTime()
-        );
-
-        setNotices(results);
-        setIncludeCount(activeCategories.length);
       } catch (err) {
         console.error('알림 공지 불러오기 실패:', err);
       }
-    }
-
-    if (activeCategories.length > 0) {
-      fetchAlertNotices();
-    } else {
-      setNotices([]);
-      setIncludeCount(0);
-    }
-  }, [activeCategories]);
+    };
+    fetchSubscribedCategories();
+  }, []);
 
   return (
     <div>
