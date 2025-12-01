@@ -53,7 +53,7 @@ export function AttachmentDrawer({ attachments }: Props) {
             bgcolor: '#3182F7',
             width: '3.1rem',
             height: '3.1rem',
-            borderRadius: '30%',
+            borderRadius: '20%',
             zIndex: 1400, // Drawer보다 높게
             boxShadow: '0 4px 12px rgba(49, 130, 247, 0.4)',
             '&:hover': {
@@ -86,7 +86,7 @@ export function AttachmentDrawer({ attachments }: Props) {
         PaperProps={{
           sx: {
             margin: 1.4,
-            borderRadius: 6,
+            borderRadius: 3,
             display: 'flex',
             flexDirection: 'column',
             zIndex: 1300,
@@ -129,7 +129,7 @@ export function AttachmentDrawer({ attachments }: Props) {
 
           <Box sx={{ px: 3, pb: 2 }}>
             <Typography
-              fontSize={'1.0625rem'}
+              fontSize={'15px'}
               sx={{ color: '#4E555F', fontWeight: '550' }}
             >
               첨부파일
@@ -153,7 +153,6 @@ export function AttachmentDrawer({ attachments }: Props) {
           <Box
             sx={{
               display: 'flex',
-              justifyContent: 'center',
               alignItems: 'center',
               gap: '1rem',
               pb: 2,
@@ -165,12 +164,12 @@ export function AttachmentDrawer({ attachments }: Props) {
             <Button
               variant="contained"
               sx={{
+                flex: 1,
                 backgroundColor: '#E9EAEC',
                 color: '#4E555F',
-                borderRadius: '11px',
-                minWidth: '160px',
-                minHeight: '50px',
-                fontSize: '17px',
+                borderRadius: '6px',
+                minHeight: '40px',
+                fontSize: '15px',
                 fontWeight: '400',
               }}
               onClick={handleClose}
@@ -181,13 +180,13 @@ export function AttachmentDrawer({ attachments }: Props) {
               <Button
                 variant="contained"
                 sx={{
+                  flex: 1,
                   backgroundColor: '#3182F7',
                   color: 'white',
-                  borderRadius: '11px',
-                  minWidth: '160px',
-                  minHeight: '50px',
-                  fontSize: '17px',
-                  fontWeight: '400',
+                  borderRadius: '6px',
+                  minHeight: '40px',
+                  fontSize: '15px',
+                  fontWeight: '350',
                 }}
                 onClick={() => downloadAll(attachments)}
               >
