@@ -9,6 +9,7 @@ export function FileButton({ file }: { file: Attachment }) {
   return (
     <Button
       variant="outlined"
+      fullWidth
       sx={{
         justifyContent: 'flex-start',
         gap: 1,
@@ -23,7 +24,8 @@ export function FileButton({ file }: { file: Attachment }) {
       <Typography
         sx={{
           textAlign: 'left',
-          fontSize: '14px',
+          fontSize: '13px',
+          lineHeight: 1.3,
         }}
       >
         {file.fileName}
