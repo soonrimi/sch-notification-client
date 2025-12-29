@@ -8,35 +8,25 @@ import {
   Box,
   Button,
   TextField,
-  List,
-  ListItem,
-  ListItemText,
-  IconButton,
   CircularProgress,
   Alert,
   Stack,
   Select,
   MenuItem,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import RoomEditForm from './RoomEditForm';
 import { useKakaoChatRooms } from './useKakaoChatRooms';
 import { CreateInternalNoticeRequest, KakaoRoomInfoResponse } from '@/api';
+import RoomList from './RoonList';
 
 export default function KakaoChatAdminPage() {
   const {
-    rooms,
-    loading,
     error,
     addRoom,
-    removeRoom,
-    handleEditClick,
     roomName,
     setRoomName,
     targetYear,
     setTargetYear,
     adding,
-    editingId,
     departments,
     departmentsLoading,
     departmentsError,
@@ -44,81 +34,10 @@ export default function KakaoChatAdminPage() {
 
   // 필터 상태
   const [filterDepartment, setFilterDepartment] = React.useState<number>(0);
-  const [filterYear, setFilterYear] = React.useState<string>('전체');
-
-  // 필터링된 rooms
-  const filteredRooms = rooms.filter((room: KakaoRoomInfoResponse) => {
-    const matchDepartment =
-      filterDepartment === 0 || room.department?.id === filterDepartment;
-    const matchYear =
-      filterYear === '전체' || String(room.targetYear) === filterYear;
-    return matchDepartment && matchYear;
-  });
+  const [filterYear, setFilterYear] = React.useState<string>('ALL');
 
   // 선택된 학과 상태 (id)
   const [selectedDepartment, setSelectedDepartment] = React.useState<number>(0);
-
-  function getDepartmentName(departmentId: number | '') {
-    if (departmentId === '') return '전체';
-    const department = departments.find((dept) => dept.id === departmentId);
-    return department ? department.name : 'NULL';
-  }
-
-  function getYearName(year: CreateInternalNoticeRequest['targetYear']) {
-    switch (year) {
-      case CreateInternalNoticeRequest.targetYear.ALL_YEARS:
-        return '전체';
-      case CreateInternalNoticeRequest.targetYear.FIRST_YEAR:
-        return '1학년';
-      case CreateInternalNoticeRequest.targetYear.SECOND_YEAR:
-        return '2학년';
-      case CreateInternalNoticeRequest.targetYear.THIRD_YEAR:
-        return '3학년';
-      case CreateInternalNoticeRequest.targetYear.FOURTH_YEAR:
-        return '4학년';
-      default:
-        return '-';
-    }
-  }
-
-  function RoomList() {
-    if (loading) {
-      return <CircularProgress />;
-    }
-    return (
-      <List>
-        {filteredRooms.map((room: KakaoRoomInfoResponse) => (
-          <ListItem
-            key={room.id}
-            secondaryAction={
-              editingId !== room.id && (
-                <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  onClick={() => removeRoom(room.id!)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              )
-            }
-            onClick={() => {
-              if (editingId !== room.id) handleEditClick(room);
-            }}
-            sx={{ cursor: 'pointer' }}
-          >
-            {editingId === room.id ? (
-              <RoomEditForm />
-            ) : (
-              <ListItemText
-                primary={room.roomName}
-                secondary={`학년: ${getYearName(room.targetYear)} / 학과: ${getDepartmentName(room.department?.id || '')}`}
-              />
-            )}
-          </ListItem>
-        ))}
-      </List>
-    );
-  }
 
   return (
     <>
@@ -156,7 +75,12 @@ export default function KakaoChatAdminPage() {
             size="small"
             sx={{ minWidth: 100 }}
           >
-            <MenuItem value="ALL">전체 학년</MenuItem>
+            <MenuItem value="ALL">모두 보기</MenuItem>
+            <MenuItem
+              value={String(CreateInternalNoticeRequest.targetYear.ALL_YEARS)}
+            >
+              전체 학년
+            </MenuItem>
             <MenuItem
               value={String(CreateInternalNoticeRequest.targetYear.FIRST_YEAR)}
             >
@@ -216,7 +140,7 @@ export default function KakaoChatAdminPage() {
             size="small"
           >
             <MenuItem value={CreateInternalNoticeRequest.targetYear.ALL_YEARS}>
-              전체
+              전체 학년
             </MenuItem>
             <MenuItem value={CreateInternalNoticeRequest.targetYear.FIRST_YEAR}>
               1학년
@@ -248,7 +172,7 @@ export default function KakaoChatAdminPage() {
             {error}
           </Alert>
         )}
-        <RoomList />
+        <RoomList filterDepartment={filterDepartment} filterYear={filterYear} />
       </Box>
     </>
   );

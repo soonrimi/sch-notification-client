@@ -28,7 +28,7 @@ const submittingAtom = atom(false);
 const categoryAtom = atom<CreateInternalNoticeRequest.category>(
   CreateInternalNoticeRequest.category.UNIVERSITY
 );
-const targetDepartmentListAtom = atom<Department[]>([]);
+const targetDepartmentListAtom = atom<number[]>([]);
 const targetYearAtom = atom<InternalNoticeListResponse.targetYear>(
   InternalNoticeListResponse.targetYear.ALL_YEARS
 );
@@ -98,6 +98,11 @@ export function useAdminWrite() {
       alert('제목과 내용을 입력해주세요.');
       return;
     }
+    if (!adminToken) {
+      alert('관리자 토큰이 없습니다. 다시 로그인해주세요.');
+      push('/admin/login');
+      return;
+    }
     setSubmitting(true);
     try {
       await AdminControllerService.createInternalNotice(adminToken, {
@@ -106,7 +111,7 @@ export function useAdminWrite() {
           title: title.trim(),
           category: category,
           content: content.trim(),
-          targetDepartmentIds: targetDepartmentList.map((d) => d.id),
+          targetDepartmentIds: targetDepartmentList,
         },
         file: files.map((f) => f.file),
       });

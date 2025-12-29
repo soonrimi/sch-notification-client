@@ -94,8 +94,7 @@ export function useKakaoChatRooms() {
       await KakaoRoomInfoControllerService.createRoom({
         roomName,
         targetYear,
-        departmentId:
-          selectedDepartmentId === 0 ? undefined : selectedDepartmentId,
+        departmentId: selectedDepartmentId,
       });
       setRoomName('');
       setDepartmentId(0);

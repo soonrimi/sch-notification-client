@@ -37,7 +37,7 @@ export default function HomeHeader({
         >
           <IconButton
             component={Link}
-            href="/search"
+            href="/search?from=home"
             className={styles.click_no_effect}
             sx={{ p: 0 }}
           >

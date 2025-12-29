@@ -7,6 +7,8 @@ import styles from './Layout.module.css';
 export const HEADER_HEIGHT = 45;
 const CATEGORY_HEIGHT = 42;
 const HOME_HEADER_HEIGHT = HEADER_HEIGHT + CATEGORY_HEIGHT;
+const SEARCH_SLIDER_HEIGHT = 40; // 슬라이더 바 높이
+const SEARCH_HEADER_HEIGHT = HEADER_HEIGHT + SEARCH_SLIDER_HEIGHT;
 const BOTTOM_NAV_HEIGHT = 48;
 
 interface LayoutProps {
@@ -45,7 +47,10 @@ export default function Layout({
           height:
             headerProps?.pageType === 'home'
               ? HOME_HEADER_HEIGHT
-              : HEADER_HEIGHT,
+              : headerProps?.pageType === 'search' &&
+                  headerProps?.scope !== undefined
+                ? SEARCH_HEADER_HEIGHT
+                : HEADER_HEIGHT,
           flexShrink: 0,
         }}
       >
