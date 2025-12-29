@@ -210,34 +210,36 @@ export function NoticeDetail({ id }: NoticeDetailProps) {
                 >
                   이미지가 표시되지 않는 경우:
                 </Typography>
-                {notice.contentImages.map((imageUrl, index) => (
-                  <Box key={index} sx={{ mb: 1 }}>
-                    <Typography
-                      component="a"
-                      href={imageUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{
-                        display: 'inline-block',
-                        padding: '8px 16px',
-                        backgroundColor: '#f5f5f5',
-                        color: '#333',
-                        textDecoration: 'none',
-                        borderRadius: '4px',
-                        fontSize: '14px',
-                        border: '1px solid #ddd',
-                        '&:hover': {
-                          backgroundColor: '#e8e8e8',
-                        },
-                      }}
-                    >
-                      원본 URL 보러가기{' '}
-                      {notice.contentImages && notice.contentImages.length > 1
-                        ? `(${index + 1})`
-                        : ''}
-                    </Typography>
-                  </Box>
-                ))}
+                {notice.contentImages.map((imageUrl, index) => {
+                  const imageCount = notice.contentImages?.length ?? 0;
+                  return (
+                    <Box key={index} sx={{ mb: 1 }}>
+                      <Typography
+                        component="a"
+                        href={imageUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        sx={{
+                          display: 'inline-block',
+                          padding: '8px 16px',
+                          backgroundColor: '#f5f5f5',
+                          color: '#333',
+                          textDecoration: 'none',
+                          borderRadius: '4px',
+                          fontSize: '14px',
+                          border: '1px solid #ddd',
+                          cursor: 'pointer',
+                          '&:hover': {
+                            backgroundColor: '#e8e8e8',
+                          },
+                        }}
+                      >
+                        원본 URL 보러가기
+                        {imageCount > 1 ? ` (${index + 1})` : ''}
+                      </Typography>
+                    </Box>
+                  );
+                })}
               </Box>
             )}
           </Box>

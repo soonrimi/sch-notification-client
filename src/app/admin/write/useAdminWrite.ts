@@ -105,16 +105,19 @@ export function useAdminWrite() {
     }
     setSubmitting(true);
     try {
-      await AdminControllerService.createInternalNotice(adminToken, {
-        internalNotice: {
-          targetYear: targetYear,
-          title: title.trim(),
-          category: category,
-          content: content.trim(),
-          targetDepartmentIds: targetDepartmentList,
-        },
-        file: files.map((f) => f.file),
-      });
+      await AdminControllerService.createInternalNotice(
+        `Bearer ${adminToken}`,
+        {
+          internalNotice: {
+            targetYear: targetYear,
+            title: title.trim(),
+            category: category,
+            content: content.trim(),
+            targetDepartmentIds: targetDepartmentList,
+          },
+          file: files.map((f) => f.file),
+        }
+      );
       push('/admin');
     } finally {
       setSubmitting(false);
