@@ -8,7 +8,7 @@ export const PALETTE_COLORS: Record<string, string> = {
   초록: '#69B054',
   민트: '#60D2D2',
   하늘: '#81AAE8',
-  파랑: '#4D7AE1',
+  파랑: '#3182F6',
   연보라: '#B192E7',
   회색: '#A9A9A9',
 };

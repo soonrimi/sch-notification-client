@@ -28,7 +28,7 @@ export default function SearchTabSlider({
   const tabsRef = useRef<(HTMLButtonElement | null)[]>([]);
 
   const tabs: { id: TabType; label: string }[] = [
-    { id: 'home', label: '홈' },
+    { id: 'home', label: '전체' },
     { id: 'bookmark', label: '북마크' },
     { id: 'calendar', label: '캘린더' },
   ];
@@ -39,7 +39,7 @@ export default function SearchTabSlider({
     } else if (scope === 'calendar') {
       setActiveTab('calendar');
     } else {
-      // scope가 없거나 'all'이 아니면 홈 탭 선택
+      // scope가 없거나 'all'이 아니면 전제 탭 선택
       setActiveTab('home');
     }
   }, [scope]);

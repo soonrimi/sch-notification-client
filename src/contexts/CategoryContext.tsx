@@ -27,18 +27,24 @@ const CategoryContext = createContext<CategoryContextType | undefined>(
 
 export function CategoryProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CategoryItem[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    async function initCategories() {
+    function initCategories() {
       const defaultAll: CategoryItem = ALL_CATEGORY;
 
       // localStorage 확인 (카테고리 순서, 알림설정, 색상설정)
       const saved = localStorage.getItem('categories');
       if (saved) {
-        const parsed: CategoryItem[] = JSON.parse(saved);
-        const hasAll = parsed.some((c) => c.id === '전체');
-        setItems(hasAll ? parsed : [defaultAll, ...parsed]);
-        return;
+        try {
+          const parsed: CategoryItem[] = JSON.parse(saved);
+          const hasAll = parsed.some((c) => c.id === '전체');
+          setItems(hasAll ? parsed : [defaultAll, ...parsed]);
+          setIsInitialized(true);
+          return;
+        } catch {
+          // 파싱 실패 시 기본값 사용
+        }
       }
 
       try {
@@ -60,10 +66,18 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
         // fallback mock
         setItems([defaultAll]);
       }
+      setIsInitialized(true);
     }
 
     initCategories();
   }, []);
+
+  // items가 변경될 때마다 localStorage에 저장 (초기화 이후에만)
+  useEffect(() => {
+    if (isInitialized && items.length > 0) {
+      localStorage.setItem('categories', JSON.stringify(items));
+    }
+  }, [items, isInitialized]);
 
   return (
     <CategoryContext.Provider value={{ items, setItems }}>
