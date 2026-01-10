@@ -60,9 +60,9 @@ function ItemView({
       sx={{
         display: 'flex',
         alignItems: 'center',
-        py: 4,
+        py: 4.5,
         px: 1.5,
-        height: 53,
+        height: 65,
       }}
     >
       {/* 드래그 핸들 */}
@@ -90,10 +90,11 @@ function ItemView({
           justifyContent: 'space-between',
           alignItems: 'center',
           flex: 1,
-          backgroundColor: '#fff',
+          backgroundColor: item.visible ? '#fff' : '#EAEAEA',
           borderRadius: '7px',
           px: 1.5,
           py: 1,
+          height: 55,
         }}
       >
         {/* 왼쪽: 카테고리 배지 */}
@@ -363,15 +364,15 @@ export default function CategorySettingsPage() {
     >
       <div
         style={{
-          padding: '20px 20px 40px 40px',
-          fontSize: '15px',
+          padding: '0px 20px 0px 40px',
+          marginTop: 35,
+          fontSize: '1.125rem',
           height: '90px',
           boxSizing: 'border-box',
         }}
       >
-        카테고리 표시, 색상, 순서를 설정할 수 있습니다.
-        <br />
-        원하는 카테고리 공지만 확인할 수 있어요.
+        카테고리 순서와 색상을 바꾸거나,
+        <br />안 보이게 숨길 수 있어요
       </div>
 
       <div
