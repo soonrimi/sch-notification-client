@@ -59,101 +59,95 @@ function ItemView({
     <ListItem
       sx={{
         display: 'flex',
-        justifyContent: 'space-between',
-        p: 1.5,
-        backgroundColor: '#fff',
         alignItems: 'center',
+        py: 4,
+        px: 1.5,
+        height: 53,
       }}
     >
-      {/* 왼쪽: 카테고리 배지 */}
+      {/* 드래그 핸들 */}
       <Box
+        {...(dragHandleProps || {})}
         sx={{
-          display: 'inline-flex',
+          display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          px: 1.1,
-          height: 28,
-          borderRadius: '9999px',
-          fontSize: 15,
-          backgroundColor: item.visible
-            ? item.color || categoryColors[item.name] || '#000'
-            : '#ccc',
-          color: '#fff',
-          cursor: 'pointer',
+          padding: '6px',
+          borderRadius: 1,
+          cursor: 'grab',
+          touchAction: 'none',
+          WebkitTapHighlightColor: 'transparent',
         }}
       >
-        {item.name}
-        {item.id !== '전체' && onToggleActive && (
-          <IconButton
-            size="small"
-            onClick={() => onToggleActive(index!)}
-            sx={{
-              width: 20,
-              height: 20,
-              color: item.visible ? '#fff' : '#69B054',
-            }}
-          >
-            {item.visible ? (
-              <ClearIcon fontSize="small" />
-            ) : (
-              <AddIcon fontSize="small" />
-            )}
-          </IconButton>
-        )}
+        <IconButton size="small">
+          <DragHandleIcon sx={{ color: '#494949ff' }} />
+        </IconButton>
       </Box>
 
-      {/* 오른쪽: 색상, 알림, 드래그 핸들 */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <IconButton
-          onClick={onOpenColorPicker}
-          size="small"
-          disabled={!item.visible}
-          data-category={item.name}
-          sx={{ pointerEvents: 'auto' }}
-        >
-          <CircleIcon
-            sx={{
-              color: item.visible
-                ? item.color || categoryColors[item.name] || '#000'
-                : '#999',
-              fontSize: 19,
-            }}
-          />
-        </IconButton>
-
-        {/* 오른쪽: 알림 아이콘 */}
-        {onToggleNotify && item.id !== '전체' && (
-          <IconButton
-            onClick={() => onToggleNotify(index!)}
-            size="small"
-            disabled={!item.visible}
-          >
-            {item.notify ? (
-              <NotificationsIcon
-                sx={{ color: item.visible ? '#4d4d4dff' : '#999' }}
-              />
-            ) : (
-              <NotificationsOffIcon sx={{ color: '#999' }} />
-            )}
-          </IconButton>
-        )}
-
-        {/* 드래그 핸들 */}
+      {/* 메인 컨텐츠 박스 */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flex: 1,
+          backgroundColor: '#fff',
+          borderRadius: '7px',
+          px: 1.5,
+          py: 1,
+        }}
+      >
+        {/* 왼쪽: 카테고리 배지 */}
         <Box
-          {...(dragHandleProps || {})}
           sx={{
-            display: 'flex',
+            display: 'inline-flex',
             alignItems: 'center',
-            padding: '6px',
-            borderRadius: 1,
-            cursor: 'grab',
-            touchAction: 'none',
-            WebkitTapHighlightColor: 'transparent',
+            justifyContent: 'center',
+            px: 1.1,
+            height: 28,
+            fontSize: 17,
+            cursor: 'pointer',
           }}
         >
-          <IconButton size="small">
-            <DragHandleIcon sx={{ color: '#494949ff' }} />
-          </IconButton>
+          {item.name}
+        </Box>
+
+        {/* 오른쪽: 색상 */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          {item.id !== '전체' && (
+            <IconButton
+              onClick={onOpenColorPicker}
+              size="small"
+              disabled={!item.visible}
+              data-category={item.name}
+              sx={{ pointerEvents: 'auto' }}
+            >
+              <CircleIcon
+                sx={{
+                  color: item.visible
+                    ? item.color || categoryColors[item.name] || '#000'
+                    : '#999',
+                  fontSize: 22,
+                }}
+              />
+            </IconButton>
+          )}
+          {item.id !== '전체' && onToggleActive && (
+            <IconButton
+              size="small"
+              onClick={() => onToggleActive(index!)}
+              sx={{
+                width: 20,
+                height: 20,
+                color: item.visible ? '#494949ff' : '#3182F6',
+              }}
+            >
+              {item.visible ? (
+                <ClearIcon fontSize="small" />
+              ) : (
+                <AddIcon fontSize="medium" />
+              )}
+            </IconButton>
+          )}
         </Box>
       </Box>
     </ListItem>
@@ -293,22 +287,42 @@ export default function CategorySettingsPage() {
   };
 
   const handleToggleNotify = (index: number) => {
-    setItems((prev) =>
-      prev.map((it, i) => (i === index ? { ...it, notify: !it.notify } : it))
-    );
+    setItems((prev) => {
+      const newItems = prev.map((it, i) =>
+        i === index ? { ...it, notify: !it.notify } : it
+      );
+      localStorage.setItem('categories', JSON.stringify(newItems));
+      return newItems;
+    });
   };
 
   const handleToggleActive = (index: number) => {
     setItems((prev) => {
       const newItems = [...prev];
-      const toggled = { ...newItems[index], visible: !newItems[index].visible };
+      const newVisible = !newItems[index].visible;
+      const toggled = {
+        ...newItems[index],
+        visible: newVisible,
+        notify: newVisible,
+      };
       newItems.splice(index, 1);
+
       if (toggled.visible) {
-        const allIndex = newItems.findIndex((i) => i.id === '전체');
-        newItems.splice(allIndex + 1, 0, toggled);
+        let lastVisibleIndex = -1;
+        for (let i = 0; i < newItems.length; i++) {
+          if (newItems[i].visible) lastVisibleIndex = i;
+        }
+
+        if (lastVisibleIndex === -1) {
+          const allIndex = newItems.findIndex((i) => i.id === '전체');
+          lastVisibleIndex = allIndex !== -1 ? allIndex : -1;
+        }
+
+        newItems.splice(lastVisibleIndex + 1, 0, toggled);
       } else {
         newItems.push(toggled);
       }
+      localStorage.setItem('categories', JSON.stringify(newItems));
       return newItems;
     });
   };
@@ -322,11 +336,13 @@ export default function CategorySettingsPage() {
   const handleSelectColor = (color: string) => {
     if (!colorPickerCategory) return;
     setCategoryColor(colorPickerCategory, color);
-    setItems((prev) =>
-      prev.map((it) =>
+    setItems((prev) => {
+      const newItems = prev.map((it) =>
         it.name === colorPickerCategory ? { ...it, color } : it
-      )
-    );
+      );
+      localStorage.setItem('categories', JSON.stringify(newItems));
+      return newItems;
+    });
     setColorPickerAnchor(null);
     setColorPickerCategory(null);
   };
@@ -341,7 +357,7 @@ export default function CategorySettingsPage() {
         },
       }}
       hideBottomNav
-      backgroundColor="#f3f3f3ff"
+      backgroundColor="#f7f7f7"
       fullHeight
       style={{ overflow: 'hidden', fontSize: '18px' }}
     >
@@ -353,7 +369,7 @@ export default function CategorySettingsPage() {
           boxSizing: 'border-box',
         }}
       >
-        카테고리 표시, 색상, 알림, 순서를 설정할 수 있습니다.
+        카테고리 표시, 색상, 순서를 설정할 수 있습니다.
         <br />
         원하는 카테고리 공지만 확인할 수 있어요.
       </div>
@@ -361,9 +377,7 @@ export default function CategorySettingsPage() {
       <div
         style={{
           flex: 1,
-          borderTopLeftRadius: 30,
-          borderTopRightRadius: 30,
-          backgroundColor: '#fff',
+          backgroundColor: '#f7f7f7',
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -388,7 +402,6 @@ export default function CategorySettingsPage() {
                       onToggleActive={handleToggleActive}
                       onOpenColorPicker={handleOpenColorPicker}
                     />
-                    <hr style={{ color: '#414141ff', margin: 0 }} />
                   </React.Fragment>
                 ))}
               </List>

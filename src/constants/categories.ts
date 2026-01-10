@@ -13,8 +13,7 @@ export const CATEGORY_LABELS: Record<BackendCategory | 'ALL', string> = {
   PROMOTION: '홍보',
 };
 
-export const CATEGORY_COLORS: Record<Category, string> = {
-  전체: '#7986CC',
+export const CATEGORY_COLORS: Record<Category, string> = {  
   대학: '#69B054',
   학과: '#EA9E5A',
   학년: '#F17298',
