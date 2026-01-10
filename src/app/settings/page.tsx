@@ -19,6 +19,11 @@ import { STORAGE_KEY_USER_PROFILE } from '@/constants/localStorage';
 type Major = { name: string; grade: string };
 type Profile = { majors: Major[]; createdAt: number };
 
+declare global {
+  interface Window {
+    APP_VERSION?: string;
+  }
+}
 // 가나다 + 학년(1→4) 정렬
 const gradeRank: Record<string, number> = {
   '1학년': 1,
@@ -37,6 +42,8 @@ export default function SettingsPage() {
   const router = useRouter();
 
   const [profile, setProfile] = useState<Profile>();
+  const [appVersion, setAppVersion] = useState<string | null>(null);
+
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY_USER_PROFILE);
@@ -49,6 +56,8 @@ export default function SettingsPage() {
     } catch {
       /* ignore */
     }
+    const version = window.APP_VERSION;
+    setAppVersion(version ?? null);
   }, []);
 
   return (
@@ -136,6 +145,7 @@ export default function SettingsPage() {
           <Divider />
           <div className={styles.version}>
             <span className={styles.versionLabel}>앱 버전</span>
+            <div>{appVersion ? `v${appVersion}` : '-'}</div>
           </div>
         </List>
       </section>
