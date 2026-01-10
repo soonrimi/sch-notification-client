@@ -26,23 +26,35 @@ export function HomeContent() {
 
   useEffect(() => {
     if (items.length > 0) {
-      const filteredItems = items.filter((c) => c.id !== '전체');
-      setCategoriesForUI([allCategory, ...filteredItems]);
+      // items의 순서를 그대로 유지 (드래그로 변경한 순서 반영)
+      setCategoriesForUI(items);
     }
   }, [items]);
 
-  // 저장된 카테고리 복원
+  // 저장된 카테고리 복원 또는 첫 번째 카테고리 선택
   useEffect(() => {
-    const savedCategory = sessionStorage.getItem('homeCategory');
-    if (savedCategory && categoriesForUI.length > 1) {
-      const foundCategory = categoriesForUI.find(
-        (c) => c.name === savedCategory
-      );
-      if (foundCategory && foundCategory.id !== category.id) {
-        setCategory(foundCategory);
+    if (categoriesForUI.length > 0) {
+      const savedCategory = sessionStorage.getItem('homeCategory');
+      if (savedCategory && categoriesForUI.length > 1) {
+        // 저장된 카테고리가 있으면 복원 (뒤로가기 등으로 돌아왔을 때)
+        const foundCategory = categoriesForUI.find(
+          (c) => c.name === savedCategory && c.visible
+        );
+        if (foundCategory) {
+          setCategory(foundCategory);
+          return;
+        }
+      }
+
+      // 저장된 카테고리가 없거나 찾을 수 없으면 첫 번째 visible 카테고리 선택
+      // (새로고침하거나 처음 진입했을 때)
+      const firstVisibleCategory = categoriesForUI.find((c) => c.visible);
+      if (firstVisibleCategory && category.id !== firstVisibleCategory.id) {
+        setCategory(firstVisibleCategory);
       }
     }
-  }, [categoriesForUI]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoriesForUI]); // category를 의존성에 넣지 않음 (무한 루프 방지)
 
   function getBackendCategory(categoryId: string): ApiCategory {
     if (categoryId === '전체') return 'ALL';
@@ -57,6 +69,19 @@ export function HomeContent() {
   const { notices, loading, hasMore, loadMore, refresh } =
     useNotices(backendCategory);
 
+  // 비활성화된 카테고리 목록
+  const hiddenCategoryNames = items
+    .filter((item) => !item.visible && item.id !== '전체')
+    .map((item) => item.name);
+
+  // "전체" 카테고리일 때 비활성화된 카테고리의 공지 필터링
+  const filteredNotices =
+    category.id === '전체' && hiddenCategoryNames.length > 0
+      ? notices.filter(
+          (notice) => !hiddenCategoryNames.includes(notice.category)
+        )
+      : notices;
+
   // 스크롤 위치 복원
   useEffect(() => {
     const savedScrollPosition = sessionStorage.getItem('homeScrollPosition');
@@ -66,7 +91,7 @@ export function HomeContent() {
     if (
       savedScrollPosition &&
       savedCategory === category.name &&
-      notices.length > 0 &&
+      filteredNotices.length > 0 &&
       !loading
     ) {
       const scrollContainer = document.getElementById('home_content');
@@ -80,7 +105,7 @@ export function HomeContent() {
         }, 100);
       }
     }
-  }, [notices, loading, category.name]);
+  }, [filteredNotices, loading, category.name]);
 
   return (
     <>
@@ -96,14 +121,14 @@ export function HomeContent() {
       >
         <div className={styles.home_content_wrapper}>
           <div id="home_content" className={styles.home_content}>
-            {notices.length === 0 && loading ? (
+            {filteredNotices.length === 0 && loading ? (
               <div className={styles.loading}>로딩중...</div>
-            ) : notices.length === 0 ? (
+            ) : filteredNotices.length === 0 ? (
               <div className={styles.no_notice}>공지 없음</div>
             ) : (
               <InfiniteScroll
                 key={backendCategory}
-                dataLength={notices.length}
+                dataLength={filteredNotices.length}
                 next={loadMore}
                 hasMore={hasMore}
                 scrollThreshold="120px"
@@ -115,7 +140,7 @@ export function HomeContent() {
                 pullDownToRefreshContent={<RefreshLoader />}
                 releaseToRefreshContent={<RefreshLoader primary />}
               >
-                {notices.map((notice: Notice, index) => (
+                {filteredNotices.map((notice: Notice, index) => (
                   <NoticeItem
                     key={`${notice.id}-${index}`}
                     notice={notice}
