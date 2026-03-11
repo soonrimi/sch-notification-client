@@ -100,7 +100,7 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
       category,
       setCategory,
       handleSubmit,
-      setTargetDepartmentList, // 여기에 빠뜨렸던 부분을 추가했습니다!
+      setTargetDepartmentList,
     } = useAdminWrite();
 
     useImperativeHandle(
@@ -129,6 +129,12 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
     const handleYearChange = (e: SelectChangeEvent) => {
       setTargetYear(e.target.value as InternalNoticeListResponse.targetYear);
     };
+
+    function getDepartmentNameByIds(ids: number[]): string[] {
+      return departmentList
+        .filter((dept) => ids.includes(dept.id))
+        .map((dept) => dept.name);
+    }
 
     // ------ UI ------
     return (
@@ -183,7 +189,7 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
               multiple
               value={targetDepartmentList}
               onChange={(event) => {
-                const newValue = event.target.value as Department[];
+                const newValue = event.target.value as number[];
                 setTargetDepartmentList(newValue);
               }}
               renderValue={(selected) => (
@@ -191,12 +197,12 @@ export const AdminWriteForm = forwardRef<AdminWriteFormHandle>(
                   variant="outlined"
                   label="학과 선택"
                   placeholder="검색하여 학과 추가"
-                  value={selected.map((dept) => dept.name).join(', ')}
+                  value={getDepartmentNameByIds(selected).join(', ')}
                 />
               )}
             >
               {departmentList.map((dept) => (
-                <MenuItem key={dept.id} value={dept.name}>
+                <MenuItem key={dept.id} value={dept.id}>
                   {dept.name}
                 </MenuItem>
               ))}

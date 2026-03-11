@@ -28,7 +28,7 @@ const submittingAtom = atom(false);
 const categoryAtom = atom<CreateInternalNoticeRequest.category>(
   CreateInternalNoticeRequest.category.UNIVERSITY
 );
-const targetDepartmentListAtom = atom<Department[]>([]);
+const targetDepartmentListAtom = atom<number[]>([]);
 const targetYearAtom = atom<InternalNoticeListResponse.targetYear>(
   InternalNoticeListResponse.targetYear.ALL_YEARS
 );
@@ -105,16 +105,19 @@ export function useAdminWrite() {
     }
     setSubmitting(true);
     try {
-      await AdminControllerService.createInternalNotice(adminToken, {
-        internalNotice: {
-          targetYear: targetYear,
-          title: title.trim(),
-          category: category,
-          content: content.trim(),
-          targetDepartmentIds: targetDepartmentList.map((d) => d.id),
-        },
-        file: files.map((f) => f.file),
-      });
+      await AdminControllerService.createInternalNotice(
+        `Bearer ${adminToken}`,
+        {
+          internalNotice: {
+            targetYear: targetYear,
+            title: title.trim(),
+            category: category,
+            content: content.trim(),
+            targetDepartmentIds: targetDepartmentList,
+          },
+          file: files.map((f) => f.file),
+        }
+      );
       push('/admin');
     } finally {
       setSubmitting(false);

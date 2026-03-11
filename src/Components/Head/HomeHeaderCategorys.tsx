@@ -23,12 +23,12 @@ export default function HomeHeaderCategorys({
   function getButtonStyles(item: CategoryItem, selected: boolean) {
     return selected
       ? {
-          border: `1px solid ${item.color}`,
-          backgroundColor: item.color,
+          border: 'none',
+          backgroundColor: '#3182F6',
           color: '#fff',
         }
       : {
-          border: '1px solid #6b6b6b',
+          border: 'none',
           backgroundColor: '#fff',
           color: '#000',
         };
@@ -63,12 +63,19 @@ export default function HomeHeaderCategorys({
               minWidth: 0,
               padding: '0 12px',
               height: 32,
-              borderRadius: '9999px',
+              borderRadius: '8px',
               fontSize: 15,
+              fontWeight: 400,
               flexShrink: 0,
               textTransform: 'none',
               justifyContent: 'center',
               alignItems: 'center',
+              '&.MuiButton-outlined': {
+                border: 'none',
+              },
+              '&.MuiButton-contained': {
+                border: 'none',
+              },
               ...getButtonStyles(item, category.id === item.id),
             }}
             aria-pressed={category.id === item.id}
@@ -83,7 +90,7 @@ export default function HomeHeaderCategorys({
         sx={{
           minWidth: 50,
           height: 32,
-          borderRadius: '9999px',
+          borderRadius: '8px',
           padding: '6px 0 0 0',
           background: 'none',
           border: 'none',
