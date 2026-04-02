@@ -7,6 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import Stack from '@mui/material/Stack';
 import type { CategoryItem } from '@/contexts/CategoryContext';
 import type { Major } from '@/types/profile';
+import styles from './HomeHeaderCategorys.module.css';
 
 interface HomeHeaderCategorysProps {
   category: CategoryItem;
@@ -31,6 +32,8 @@ export default function HomeHeaderCategorys({
     null
   );
   const containerRef = useRef<HTMLDivElement>(null);
+  const departmentSliderRef = useRef<HTMLDivElement>(null);
+  const departmentTabsRef = useRef<(HTMLButtonElement | null)[]>([]);
 
   const userDepartments = Array.from(new Set(majors.map((m) => m.name)));
 
@@ -40,19 +43,29 @@ export default function HomeHeaderCategorys({
     }
   }, [showDepartments, onHeightChange]);
 
-  function getButtonStyles(item: CategoryItem, selected: boolean) {
-    return selected
-      ? {
-          border: 'none',
-          backgroundColor: '#3182F6',
-          color: '#fff',
+  useLayoutEffect(() => {
+    if (showDepartments && departmentSliderRef.current && departmentTabsRef.current) {
+      const allDepts = ['전체', ...userDepartments];
+      const activeIndex = allDepts.findIndex((dept) => dept === selectedDepartment);
+      const activeButton = departmentTabsRef.current[activeIndex];
+
+      if (activeButton) {
+        const buttonRect = activeButton.getBoundingClientRect();
+        const containerRect = departmentSliderRef.current.getBoundingClientRect();
+
+        const left = buttonRect.left - containerRect.left;
+        const width = buttonRect.width;
+
+        const indicator = departmentSliderRef.current.querySelector(
+          `.${styles.slider_indicator}`
+        ) as HTMLElement;
+        if (indicator) {
+          indicator.style.transform = `translateX(${left}px)`;
+          indicator.style.width = `${width}px`;
         }
-      : {
-          border: 'none',
-          backgroundColor: '#fff',
-          color: '#000',
-        };
-  }
+      }
+    }
+  }, [selectedDepartment, showDepartments, userDepartments]);
 
   const handleCategoryClick = (item: CategoryItem) => {
     setCategory(item);
@@ -60,10 +73,14 @@ export default function HomeHeaderCategorys({
       if (userDepartments.length > 1) {
         const next = !showDepartments;
         setShowDepartments(next);
+        if (next) {
+          setSelectedDepartment('전체');
+        }
         onDepartmentPanelChange?.(next);
       }
     } else {
       setShowDepartments(false);
+      setSelectedDepartment(null);
       onDepartmentPanelChange?.(false);
     }
   };
@@ -116,11 +133,14 @@ export default function HomeHeaderCategorys({
                 alignItems: 'center',
                 '&.MuiButton-outlined': {
                   border: 'none',
+                  backgroundColor: '#fff',
+                  color: '#000',
                 },
                 '&.MuiButton-contained': {
                   border: 'none',
+                  backgroundColor: '#3182F6',
+                  color: '#fff',
                 },
-                ...getButtonStyles(item, category.id === item.id),
               }}
               aria-pressed={category.id === item.id}
             >
@@ -147,78 +167,42 @@ export default function HomeHeaderCategorys({
       </Stack>
 
       {showDepartments && (
-        <Stack
-          direction="row"
-          spacing={1}
-          sx={{
-            marginTop: 1,
-            overflowX: 'auto',
-            flexWrap: 'nowrap',
+        <div
+          ref={departmentSliderRef}
+          className={styles.slider_track}
+          style={{
+            marginTop: 8,
+            overflow: 'auto',
             WebkitOverflowScrolling: 'touch',
-            '&::-webkit-scrollbar': { display: 'none' },
           }}
         >
-          <Button
-            key="전체"
-            variant={selectedDepartment === '전체' ? 'contained' : 'outlined'}
-            onClick={() => handleDepartmentClick('전체')}
-            sx={{
-              minWidth: 0,
-              padding: '0 12px',
-              height: 32,
-              borderRadius: '8px',
-              fontSize: 15,
-              fontWeight: 400,
-              flexShrink: 0,
-              textTransform: 'none',
-              justifyContent: 'center',
-              alignItems: 'center',
-              '&.MuiButton-outlined': {
-                border: 'none',
-              },
-              '&.MuiButton-contained': {
-                border: 'none',
-              },
-              ...getButtonStyles(
-                { id: '전체', name: '전체' } as CategoryItem,
-                selectedDepartment === '전체'
-              ),
+          <div className={styles.slider_indicator} />
+          <button
+            ref={(el) => {
+              departmentTabsRef.current[0] = el;
             }}
+            className={`${styles.slider_tab} ${
+              selectedDepartment === '전체' ? styles.slider_tab_active : ''
+            }`}
+            onClick={() => handleDepartmentClick('전체')}
           >
             전체
-          </Button>
-          {userDepartments.map((dept) => (
-            <Button
+          </button>
+          {userDepartments.map((dept, index) => (
+            <button
               key={dept}
-              variant={selectedDepartment === dept ? 'contained' : 'outlined'}
-              onClick={() => handleDepartmentClick(dept)}
-              sx={{
-                minWidth: 0,
-                padding: '0 12px',
-                height: 32,
-                borderRadius: '8px',
-                fontSize: 15,
-                fontWeight: 400,
-                flexShrink: 0,
-                textTransform: 'none',
-                justifyContent: 'center',
-                alignItems: 'center',
-                '&.MuiButton-outlined': {
-                  border: 'none',
-                },
-                '&.MuiButton-contained': {
-                  border: 'none',
-                },
-                ...getButtonStyles(
-                  { id: dept, name: dept } as CategoryItem,
-                  selectedDepartment === dept
-                ),
+              ref={(el) => {
+                departmentTabsRef.current[index + 1] = el;
               }}
+              className={`${styles.slider_tab} ${
+                selectedDepartment === dept ? styles.slider_tab_active : ''
+              }`}
+              onClick={() => handleDepartmentClick(dept)}
             >
               {dept}
-            </Button>
+            </button>
           ))}
-        </Stack>
+        </div>
       )}
     </Stack>
   );
