@@ -44,14 +44,21 @@ export default function HomeHeaderCategorys({
   }, [showDepartments, onHeightChange]);
 
   useLayoutEffect(() => {
-    if (showDepartments && departmentSliderRef.current && departmentTabsRef.current) {
+    if (
+      showDepartments &&
+      departmentSliderRef.current &&
+      departmentTabsRef.current
+    ) {
       const allDepts = ['전체', ...userDepartments];
-      const activeIndex = allDepts.findIndex((dept) => dept === selectedDepartment);
+      const activeIndex = allDepts.findIndex(
+        (dept) => dept === selectedDepartment
+      );
       const activeButton = departmentTabsRef.current[activeIndex];
 
       if (activeButton) {
         const buttonRect = activeButton.getBoundingClientRect();
-        const containerRect = departmentSliderRef.current.getBoundingClientRect();
+        const containerRect =
+          departmentSliderRef.current.getBoundingClientRect();
 
         const left = buttonRect.left - containerRect.left;
         const width = buttonRect.width;
