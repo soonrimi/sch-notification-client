@@ -26,6 +26,8 @@ export type HeaderProps =
         category: CategoryItem;
         setCategory: React.Dispatch<React.SetStateAction<CategoryItem>>;
         categories: CategoryItem[];
+        onCategoryHeaderHeightChange?: (height: number) => void;
+        onDepartmentPanelChange?: (open: boolean) => void;
       };
     }
   | { pageType: 'bookmark'; bookmarkProps: BookmarkHeaderProps }

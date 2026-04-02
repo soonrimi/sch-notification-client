@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import Header, { HeaderProps } from '@/Components/Head/Header';
 import BottomNav from '@/Components/Bottom/BottomNav';
 import styles from './Layout.module.css';
@@ -30,13 +30,38 @@ export default function Layout({
   fullHeight = false,
 }: LayoutProps) {
   return (
+    <LayoutContent
+      children={children}
+      headerProps={headerProps}
+      hideBottomNav={hideBottomNav}
+      footerSlot={footerSlot}
+      backgroundColor={backgroundColor}
+      fullHeight={fullHeight}
+    />
+  );
+}
+
+function LayoutContent({
+  children,
+  headerProps,
+  hideBottomNav,
+  footerSlot,
+  backgroundColor,
+  fullHeight = false,
+}: LayoutProps) {
+  const [isDepartmentPanelOpen, setIsDepartmentPanelOpen] = useState(false);
+
+  const handleDepartmentPanelChange = (open: boolean) => {
+    setIsDepartmentPanelOpen(open);
+  };
+  return (
     <div
       className={styles.layout_container}
       style={{
         backgroundColor: backgroundColor || '#fff',
         height: '100vh',
         display: 'flex',
-        flexDirection: 'column', // 조건부 적용
+        flexDirection: 'column',
         overflow: 'hidden',
       }}
     >
@@ -54,7 +79,19 @@ export default function Layout({
           flexShrink: 0,
         }}
       >
-        {headerProps && <Header {...headerProps} />}
+        {headerProps && (
+          <Header
+            {...(headerProps.pageType === 'home'
+              ? {
+                  ...headerProps,
+                  homeHeaderProps: {
+                    ...((headerProps as any).homeHeaderProps || {}),
+                    onDepartmentPanelChange: handleDepartmentPanelChange,
+                  },
+                }
+              : headerProps)}
+          />
+        )}
       </div>
 
       {/* Main */}
@@ -66,6 +103,7 @@ export default function Layout({
           flexDirection: 'column',
           overflow: 'hidden',
           minHeight: 0,
+          marginTop: isDepartmentPanelOpen ? '35px' : '0px',
         }}
       >
         <main

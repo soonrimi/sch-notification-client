@@ -1,24 +1,42 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Stack, IconButton } from '@mui/material';
 import Image from 'next/image';
 import SettingsIcon from '@mui/icons-material/Settings';
 import styles from './Header.module.css';
 import Link from 'next/link';
 import type { CategoryItem } from '@/contexts/CategoryContext';
+import type { Major } from '@/types/profile';
+import { STORAGE_KEY_USER_PROFILE } from '@/constants/localStorage';
 import HomeHeaderCategorys from './HomeHeaderCategorys';
 
 interface HomeHeaderProps {
   category?: CategoryItem;
   setCategory?: React.Dispatch<React.SetStateAction<CategoryItem>>;
   categories?: CategoryItem[];
+  onCategoryHeaderHeightChange?: (height: number) => void;
+  onDepartmentPanelChange?: (open: boolean) => void;
 }
 
 export default function HomeHeader({
   category,
   setCategory,
   categories,
+  onCategoryHeaderHeightChange,
+  onDepartmentPanelChange,
 }: HomeHeaderProps) {
+  const [majors, setMajors] = useState<Major[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY_USER_PROFILE);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      const restored: Major[] = Array.isArray(parsed?.majors)
+        ? parsed.majors
+        : [];
+      setMajors(restored);
+    }
+  }, []);
   return (
     <div
       className={styles.header_wrapper}
@@ -65,6 +83,9 @@ export default function HomeHeader({
           category={category}
           setCategory={setCategory}
           categories={categories}
+          majors={majors}
+          onHeightChange={onCategoryHeaderHeightChange}
+          onDepartmentPanelChange={onDepartmentPanelChange}
         />
       )}
     </div>
