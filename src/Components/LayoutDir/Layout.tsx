@@ -31,13 +31,14 @@ export default function Layout({
 }: LayoutProps) {
   return (
     <LayoutContent
-      children={children}
       headerProps={headerProps}
       hideBottomNav={hideBottomNav}
       footerSlot={footerSlot}
       backgroundColor={backgroundColor}
       fullHeight={fullHeight}
-    />
+    >
+      {children}
+    </LayoutContent>
   );
 }
 
@@ -84,10 +85,12 @@ function LayoutContent({
             {...(headerProps.pageType === 'home'
               ? {
                   ...headerProps,
-                  homeHeaderProps: {
-                    ...((headerProps as any).homeHeaderProps || {}),
-                    onDepartmentPanelChange: handleDepartmentPanelChange,
-                  },
+                  homeHeaderProps: headerProps.homeHeaderProps
+                    ? {
+                        ...headerProps.homeHeaderProps,
+                        onDepartmentPanelChange: handleDepartmentPanelChange,
+                      }
+                    : undefined,
                 }
               : headerProps)}
           />
