@@ -27,43 +27,42 @@ export default function HomeHeaderCategorys({
   onDepartmentPanelChange,
 }: HomeHeaderCategorysProps) {
   const router = useRouter();
-  const [showDepartments, setShowDepartments] = useState(false);
-  const [selectedDepartment, setSelectedDepartment] = useState<string | null>(
-    null
-  );
+  const [showSubItems, setShowSubItems] = useState(false);
+  const [selectedSubItem, setSelectedSubItem] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const departmentSliderRef = useRef<HTMLDivElement>(null);
-  const departmentTabsRef = useRef<(HTMLButtonElement | null)[]>([]);
+  const subItemSliderRef = useRef<HTMLDivElement>(null);
+  const subItemTabsRef = useRef<(HTMLButtonElement | null)[]>([]);
 
   const userDepartments = Array.from(new Set(majors.map((m) => m.name)));
+  const userGradeLabels = Array.from(
+    new Set(majors.map((m) => `${m.name} ${m.grade}`))
+  );
+
+  const getSubItems = (item: CategoryItem) => {
+    if (item.name === '학과') return userDepartments;
+    if (item.name === '학년') return userGradeLabels;
+    return [];
+  };
 
   useLayoutEffect(() => {
     if (containerRef.current && onHeightChange) {
       onHeightChange(containerRef.current.offsetHeight);
     }
-  }, [showDepartments, onHeightChange]);
+  }, [showSubItems, onHeightChange]);
 
   useLayoutEffect(() => {
-    if (
-      showDepartments &&
-      departmentSliderRef.current &&
-      departmentTabsRef.current
-    ) {
-      const allDepts = ['전체', ...userDepartments];
-      const activeIndex = allDepts.findIndex(
-        (dept) => dept === selectedDepartment
+    if (showSubItems && subItemSliderRef.current && subItemTabsRef.current) {
+      const allSubItems = ['전체', ...getSubItems(category)];
+      const activeIndex = allSubItems.findIndex(
+        (subItem) => subItem === selectedSubItem
       );
-      const activeButton = departmentTabsRef.current[activeIndex];
+      const activeButton = subItemTabsRef.current[activeIndex];
 
       if (activeButton) {
-        const buttonRect = activeButton.getBoundingClientRect();
-        const containerRect =
-          departmentSliderRef.current.getBoundingClientRect();
+        const left = activeButton.offsetLeft;
+        const width = activeButton.offsetWidth;
 
-        const left = buttonRect.left - containerRect.left;
-        const width = buttonRect.width;
-
-        const indicator = departmentSliderRef.current.querySelector(
+        const indicator = subItemSliderRef.current.querySelector(
           `.${styles.slider_indicator}`
         ) as HTMLElement;
         if (indicator) {
@@ -72,29 +71,33 @@ export default function HomeHeaderCategorys({
         }
       }
     }
-  }, [selectedDepartment, showDepartments, userDepartments]);
+  }, [
+    selectedSubItem,
+    showSubItems,
+    category,
+    userDepartments,
+    userGradeLabels,
+  ]);
 
   const handleCategoryClick = (item: CategoryItem) => {
+    const subItems = getSubItems(item);
+    const isSameCategory = item.id === category.id;
+    const shouldOpen =
+      subItems.length > 1 && (!showSubItems || !isSameCategory);
+
     setCategory(item);
-    if (item.name === '학과') {
-      if (userDepartments.length > 1) {
-        const next = !showDepartments;
-        setShowDepartments(next);
-        if (next) {
-          setSelectedDepartment('전체');
-        }
-        onDepartmentPanelChange?.(next);
-      }
-    } else {
-      setShowDepartments(false);
-      setSelectedDepartment(null);
-      onDepartmentPanelChange?.(false);
-    }
+    setShowSubItems(shouldOpen);
+    setSelectedSubItem(shouldOpen ? '전체' : null);
+    onDepartmentPanelChange?.(shouldOpen);
   };
 
-  const handleDepartmentClick = (dept: string) => {
-    setSelectedDepartment(dept);
+  const handleSubItemClick = (subItem: string) => {
+    setSelectedSubItem(subItem);
   };
+
+  const activeSubItems = getSubItems(category);
+
+  const showSubPanel = showSubItems && activeSubItems.length > 1;
 
   return (
     <Stack
@@ -107,10 +110,7 @@ export default function HomeHeaderCategorys({
         right: 0,
         zIndex: 999,
         backgroundColor: '#fff',
-        overflowX: 'auto',
         padding: '5px 20px 5px 16px',
-        WebkitOverflowScrolling: 'touch',
-        '&::-webkit-scrollbar': { display: 'none' },
       }}
     >
       <Stack
@@ -118,6 +118,9 @@ export default function HomeHeaderCategorys({
         spacing={1}
         sx={{
           flexWrap: 'nowrap',
+          overflowX: 'auto',
+          WebkitOverflowScrolling: 'touch',
+          '&::-webkit-scrollbar': { display: 'none' },
         }}
       >
         {categories
@@ -173,9 +176,9 @@ export default function HomeHeaderCategorys({
         </Button>
       </Stack>
 
-      {showDepartments && (
+      {showSubPanel && (
         <div
-          ref={departmentSliderRef}
+          ref={subItemSliderRef}
           className={styles.slider_track}
           style={{
             marginTop: 8,
@@ -186,27 +189,27 @@ export default function HomeHeaderCategorys({
           <div className={styles.slider_indicator} />
           <button
             ref={(el) => {
-              departmentTabsRef.current[0] = el;
+              subItemTabsRef.current[0] = el;
             }}
             className={`${styles.slider_tab} ${
-              selectedDepartment === '전체' ? styles.slider_tab_active : ''
+              selectedSubItem === '전체' ? styles.slider_tab_active : ''
             }`}
-            onClick={() => handleDepartmentClick('전체')}
+            onClick={() => handleSubItemClick('전체')}
           >
             전체
           </button>
-          {userDepartments.map((dept, index) => (
+          {activeSubItems.map((subItem, index) => (
             <button
-              key={dept}
+              key={subItem}
               ref={(el) => {
-                departmentTabsRef.current[index + 1] = el;
+                subItemTabsRef.current[index + 1] = el;
               }}
               className={`${styles.slider_tab} ${
-                selectedDepartment === dept ? styles.slider_tab_active : ''
+                selectedSubItem === subItem ? styles.slider_tab_active : ''
               }`}
-              onClick={() => handleDepartmentClick(dept)}
+              onClick={() => handleSubItemClick(subItem)}
             >
-              {dept}
+              {subItem}
             </button>
           ))}
         </div>
