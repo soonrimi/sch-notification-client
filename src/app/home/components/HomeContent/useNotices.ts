@@ -18,7 +18,9 @@ export function useNotices(
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const [departmentIdMap, setDepartmentIdMap] = useState<Record<string, number>>({});
+  const [departmentIdMap, setDepartmentIdMap] = useState<
+    Record<string, number>
+  >({});
   const { cache, setCache } = useContext(NoticesContext)!;
 
   const cacheKey =
@@ -33,10 +35,13 @@ export function useNotices(
       let nameToId = departmentIdMap;
       if (Object.keys(nameToId).length === 0) {
         const departments = await AdminControllerService.getAllDepartment();
-        nameToId = departments.reduce<Record<string, number>>((acc, department) => {
-          acc[department.name] = department.id;
-          return acc;
-        }, {});
+        nameToId = departments.reduce<Record<string, number>>(
+          (acc, department) => {
+            acc[department.name] = department.id;
+            return acc;
+          },
+          {}
+        );
         setDepartmentIdMap(nameToId);
       }
 
@@ -50,7 +55,12 @@ export function useNotices(
   };
 
   const fetchNotices = async (pageNumber: number, ignoreCache = false) => {
-    if (pageNumber === 0 && !ignoreCache && cacheKey && cache[cacheKey]?.length) {
+    if (
+      pageNumber === 0 &&
+      !ignoreCache &&
+      cacheKey &&
+      cache[cacheKey]?.length
+    ) {
       setNotices(cache[cacheKey]!);
       setHasMore(true);
       setPage(0);
@@ -84,10 +94,11 @@ export function useNotices(
         const departmentIds = await getDepartmentIds(departmentNames);
 
         if (departmentIds.length > 0) {
-          data = await CrawlPostControllerService.getInitializedNoticesByDepartment(
-            pageable,
-            departmentIds
-          );
+          data =
+            await CrawlPostControllerService.getInitializedNoticesByDepartment(
+              pageable,
+              departmentIds
+            );
         } else {
           data = await CrawlPostControllerService.getNotices(
             selectedCategory as CreateInternalNoticeRequest.category,
@@ -120,10 +131,7 @@ export function useNotices(
       } else {
         setNotices((prev) => [...prev, ...convertedNotices]);
         if (cacheKey) {
-          setCache(cacheKey, [
-            ...(cache[cacheKey] || []),
-            ...convertedNotices,
-          ]);
+          setCache(cacheKey, [...(cache[cacheKey] || []), ...convertedNotices]);
         }
       }
 

@@ -25,7 +25,9 @@ export function HomeContent() {
   const [categoriesForUI, setCategoriesForUI] = useState<CategoryItem[]>([
     allCategory,
   ]);
-  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(
+    null
+  );
   const [userMajors, setUserMajors] = useState<Major[]>([]);
 
   useEffect(() => {
