@@ -28,6 +28,7 @@ export type HeaderProps =
         categories: CategoryItem[];
         onCategoryHeaderHeightChange?: (height: number) => void;
         onDepartmentPanelChange?: (open: boolean) => void;
+        onDepartmentSubItemChange?: (subItem: string | null) => void;
       };
     }
   | { pageType: 'bookmark'; bookmarkProps: BookmarkHeaderProps }

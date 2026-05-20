@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useLayoutEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,6 +14,8 @@ interface HomeHeaderCategorysProps {
   setCategory: React.Dispatch<React.SetStateAction<CategoryItem>>;
   categories: CategoryItem[];
   majors: Major[];
+  selectedSubItem?: string | null;
+  onSubItemChange?: (subItem: string | null) => void;
   onHeightChange?: (height: number) => void;
   onDepartmentPanelChange?: (open: boolean) => void;
 }
@@ -23,13 +25,23 @@ export default function HomeHeaderCategorys({
   setCategory,
   categories,
   majors,
+  selectedSubItem: selectedSubItemProp,
+  onSubItemChange,
   onHeightChange,
   onDepartmentPanelChange,
 }: HomeHeaderCategorysProps) {
   const router = useRouter();
   const [showSubItems, setShowSubItems] = useState(false);
-  const [selectedSubItem, setSelectedSubItem] = useState<string | null>(null);
+  const [selectedSubItem, setSelectedSubItem] = useState<string | null>(
+    selectedSubItemProp ?? null
+  );
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (selectedSubItemProp !== undefined) {
+      setSelectedSubItem(selectedSubItemProp);
+    }
+  }, [selectedSubItemProp]);
   const subItemSliderRef = useRef<HTMLDivElement>(null);
   const subItemTabsRef = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -87,12 +99,15 @@ export default function HomeHeaderCategorys({
 
     setCategory(item);
     setShowSubItems(shouldOpen);
-    setSelectedSubItem(shouldOpen ? '전체' : null);
+    const nextSubItem = shouldOpen ? '전체' : null;
+    setSelectedSubItem(nextSubItem);
+    onSubItemChange?.(nextSubItem);
     onDepartmentPanelChange?.(shouldOpen);
   };
 
   const handleSubItemClick = (subItem: string) => {
     setSelectedSubItem(subItem);
+    onSubItemChange?.(subItem);
   };
 
   const activeSubItems = getSubItems(category);

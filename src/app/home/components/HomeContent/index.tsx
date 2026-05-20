@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import styles from '../../Home.module.css';
 import { useNotices } from './useNotices';
 import type { Notice } from '@/types/notice';
+import type { Major } from '@/types/profile';
 import Layout from '@/Components/LayoutDir/Layout';
 import { useCategories, CategoryItem } from '@/contexts/CategoryContext';
 import NoticeItem from '@/Components/Notice/NoticeItem';
@@ -12,6 +13,7 @@ import {
   ApiCategory,
   CATEGORY_LABELS,
 } from '@/constants/categories';
+import { STORAGE_KEY_USER_PROFILE } from '@/constants/localStorage';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ScrollToTop from '@/Components/ScrollToTop/ScrollToTop';
 import RefreshLoader from '@/Components/RefreshLoader/RefreshLoader';
@@ -23,6 +25,8 @@ export function HomeContent() {
   const [categoriesForUI, setCategoriesForUI] = useState<CategoryItem[]>([
     allCategory,
   ]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
+  const [userMajors, setUserMajors] = useState<Major[]>([]);
 
   useEffect(() => {
     if (items.length > 0) {
@@ -66,8 +70,31 @@ export function HomeContent() {
   }
 
   const backendCategory = getBackendCategory(category.id);
-  const { notices, loading, hasMore, loadMore, refresh } =
-    useNotices(backendCategory);
+
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY_USER_PROFILE);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed?.majors)) {
+          setUserMajors(parsed.majors);
+        }
+      } catch {
+        // ignore invalid profile data
+      }
+    }
+  }, []);
+
+  const userDepartmentNames = useMemo(
+    () => Array.from(new Set(userMajors.map((major) => major.name))),
+    [userMajors]
+  );
+
+  const { notices, loading, hasMore, loadMore, refresh } = useNotices(
+    backendCategory,
+    selectedSubCategory,
+    userDepartmentNames
+  );
 
   // 비활성화된 카테고리 목록
   const hiddenCategoryNames = items
@@ -116,6 +143,7 @@ export function HomeContent() {
             category,
             setCategory,
             categories: categoriesForUI,
+            onDepartmentSubItemChange: setSelectedSubCategory,
           },
         }}
       >

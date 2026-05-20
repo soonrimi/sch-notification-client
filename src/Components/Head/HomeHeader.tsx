@@ -16,6 +16,7 @@ interface HomeHeaderProps {
   categories?: CategoryItem[];
   onCategoryHeaderHeightChange?: (height: number) => void;
   onDepartmentPanelChange?: (open: boolean) => void;
+  onDepartmentSubItemChange?: (subItem: string | null) => void;
 }
 
 export default function HomeHeader({
@@ -24,6 +25,7 @@ export default function HomeHeader({
   categories,
   onCategoryHeaderHeightChange,
   onDepartmentPanelChange,
+  onDepartmentSubItemChange,
 }: HomeHeaderProps) {
   const [majors, setMajors] = useState<Major[]>([]);
 
@@ -86,6 +88,7 @@ export default function HomeHeader({
           majors={majors}
           onHeightChange={onCategoryHeaderHeightChange}
           onDepartmentPanelChange={onDepartmentPanelChange}
+          onSubItemChange={onDepartmentSubItemChange}
         />
       )}
     </div>
