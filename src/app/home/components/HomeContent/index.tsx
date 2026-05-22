@@ -95,7 +95,8 @@ export function HomeContent() {
   const { notices, loading, hasMore, loadMore, refresh } = useNotices(
     backendCategory,
     selectedSubCategory,
-    userDepartmentNames
+    userDepartmentNames,
+    userMajors
   );
 
   // 비활성화된 카테고리 목록
