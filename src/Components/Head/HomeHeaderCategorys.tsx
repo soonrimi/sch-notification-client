@@ -197,36 +197,37 @@ export default function HomeHeaderCategorys({
           className={styles.slider_track}
           style={{
             marginTop: 8,
-            overflow: 'auto',
             WebkitOverflowScrolling: 'touch',
           }}
         >
-          <div className={styles.slider_indicator} />
-          <button
-            ref={(el) => {
-              subItemTabsRef.current[0] = el;
-            }}
-            className={`${styles.slider_tab} ${
-              selectedSubItem === '전체' ? styles.slider_tab_active : ''
-            }`}
-            onClick={() => handleSubItemClick('전체')}
-          >
-            전체
-          </button>
-          {activeSubItems.map((subItem, index) => (
+          <div className={styles.slider_inner}>
+            <div className={styles.slider_indicator} />
             <button
-              key={subItem}
               ref={(el) => {
-                subItemTabsRef.current[index + 1] = el;
+                subItemTabsRef.current[0] = el;
               }}
               className={`${styles.slider_tab} ${
-                selectedSubItem === subItem ? styles.slider_tab_active : ''
+                selectedSubItem === '전체' ? styles.slider_tab_active : ''
               }`}
-              onClick={() => handleSubItemClick(subItem)}
+              onClick={() => handleSubItemClick('전체')}
             >
-              {subItem}
+              전체
             </button>
-          ))}
+            {activeSubItems.map((subItem, index) => (
+              <button
+                key={subItem}
+                ref={(el) => {
+                  subItemTabsRef.current[index + 1] = el;
+                }}
+                className={`${styles.slider_tab} ${
+                  selectedSubItem === subItem ? styles.slider_tab_active : ''
+                }`}
+                onClick={() => handleSubItemClick(subItem)}
+              >
+                {subItem}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </Stack>

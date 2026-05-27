@@ -1,11 +1,6 @@
 .slider_track {
   position: relative;
-  display: flex;
-  flex-wrap: nowrap;
-  background-color: #f4f4f4;
-  border-radius: 8px;
   width: 100%;
-  gap: 0;
   overflow-x: auto;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
@@ -13,6 +8,17 @@
 
 .slider_track::-webkit-scrollbar {
   display: none;
+}
+
+.slider_inner {
+  position: relative;
+  display: inline-flex;
+  width: auto;
+  min-width: max-content;
+  flex-wrap: nowrap;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  gap: 0;
 }
 
 .slider_indicator {
