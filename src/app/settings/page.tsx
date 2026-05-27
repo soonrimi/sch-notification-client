@@ -44,6 +44,34 @@ export default function SettingsPage() {
   const [profile, setProfile] = useState<Profile>();
   const [appVersion, setAppVersion] = useState<string | null>(null);
 
+  const TAP_LIMIT = 5;
+  const TAP_INTERVAL = 1500;
+
+  const [tapCount, setTapCount] = useState(0);
+  const [lastTapTime, setLastTapTime] = useState<number | null>(null);
+
+  const handleVersionClick = () => {
+    const now = Date.now();
+
+    setTapCount((prev) => {
+      if (!lastTapTime || now - lastTapTime > TAP_INTERVAL) {
+        setLastTapTime(now);
+        return 1;
+      }
+
+      const next = prev + 1;
+
+      if (next >= TAP_LIMIT) {
+        window.location.href = 'https://notification.iubns.net';
+        setLastTapTime(null);
+        return 0;
+      }
+
+      setLastTapTime(now);
+      return next;
+    });
+  };
+
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY_USER_PROFILE);
@@ -143,7 +171,7 @@ export default function SettingsPage() {
             />
           </ListItemButton>
           <Divider />
-          <div className={styles.version}>
+          <div className={styles.version} onClick={handleVersionClick}>
             <span className={styles.versionLabel}>앱 버전</span>
             <div>{appVersion ? `v${appVersion}` : '-'}</div>
           </div>
