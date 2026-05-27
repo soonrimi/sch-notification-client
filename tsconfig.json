@@ -10,9 +10,8 @@
     "incremental": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "jsx": "preserve",
-    "baseUrl": ".",
     "isolatedModules": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
@@ -26,7 +25,7 @@
       }
     ],
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./src/*"],
       "@axios": ["./config/axios.ts"]
     },
     "resolveJsonModule": true

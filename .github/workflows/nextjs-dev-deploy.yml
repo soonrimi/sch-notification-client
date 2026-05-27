@@ -36,6 +36,6 @@ jobs:
           remote-user: ${{ secrets.SERVER_USER }}
           remote-password: ${{ secrets.SERVER_PASSWORD }}
           remote-path: /var/www/notification
-          remote-port: 22
+          remote-port: 2222
           local-path: out
           sync: full
