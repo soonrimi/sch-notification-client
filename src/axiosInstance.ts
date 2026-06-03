@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useNotification } from './Components/notification/useNotification';
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || '/api',
+  // baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || '/api',
   timeout: 10000,
 });
 
