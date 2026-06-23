@@ -2,40 +2,115 @@
 import { useState, useEffect } from 'react';
 import Layout from '@/Components/LayoutDir/Layout';
 import styles from './page.module.css';
+import { KeywordControllerService } from '@/api/services/KeywordControllerService';
 
 export default function KeywordSettings() {
   const [include, setInclude] = useState<string[]>([]);
   const [exclude, setExclude] = useState<string[]>([]);
   const [includeInput, setIncludeInput] = useState('');
   const [excludeInput, setExcludeInput] = useState('');
+  const [keywordId, setKeyWordId] = useState<number | null>(null);
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('keywords') || '{}');
-    setInclude(saved.include || []);
-    setExclude(saved.exclude || []);
+    const cached = JSON.parse(localStorage.getItem('keywords') || '{}');
+    setInclude(cached.include || []);
+    setExclude(cached.exclude || []);
+
+    const init = async () => {
+      try {
+        const deviceId = localStorage.getItem('deviceId');
+        if (!deviceId) {
+          console.warn('deviceId가 없습니다.');
+          return;
+        }
+
+        let list = await KeywordControllerService.getByDeviceId(deviceId);
+
+        let keyword: any;
+        if (!list || list.length === 0) {
+          keyword = await KeywordControllerService.create2({
+            deviceId: deviceId,
+            include: [],
+            exclude: [],
+          } as any);
+        } else {
+          keyword = list[0];
+        }
+
+        setKeyWordId(keyword.id);
+        setInclude(keyword.include || []);
+        setExclude(keyword.exclude || []);
+
+        localStorage.setItem(
+          'keywords',
+          JSON.stringify({
+            include: keyword.include || [],
+            exclude: keyword.exclude || [],
+          })
+        );
+      } catch (err) {
+        console.error('키워드 설정 불러오기 실패:', err);
+      }
+    };
+
+    init();
   }, []);
 
-  const save = (newInclude: string[], newExclude: string[]) => {
+  const save = async (newInclude: string[], newExclude: string[]) => {
     localStorage.setItem(
       'keywords',
       JSON.stringify({ include: newInclude, exclude: newExclude })
     );
+
+    if (!keywordId) return;
+    try {
+      await KeywordControllerService.update2(keywordId, {
+        include: newInclude,
+        exclude: newExclude,
+      } as any);
+      setInclude(newInclude);
+      setExclude(newExclude);
+    } catch (err) {
+      console.error('키워드 저장 실패:', err);
+    }
+  };
+
+  const addInclude = async (value: string) => {
+    if (!value.trim() || include.includes(value.trim()) || !keywordId) return;
+    const newInclude = [...include, value.trim()];
+
+    localStorage.setItem(
+      'keywords',
+      JSON.stringify({ include: newInclude, exclude })
+    );
     setInclude(newInclude);
-    setExclude(newExclude);
-  };
-
-  const addInclude = (value: string) => {
-    if (!value.trim()) return;
-    if (include.includes(value.trim())) return;
-    save([...include, value.trim()], exclude);
     setIncludeInput('');
+
+    try {
+      await KeywordControllerService.patchInclude(keywordId, newInclude);
+      setInclude(newInclude);
+      setIncludeInput('');
+    } catch (err) {
+      console.error('포함 키워드 추가 실패:', err);
+    }
   };
 
-  const addExclude = (value: string) => {
-    if (!value.trim()) return;
-    if (exclude.includes(value.trim())) return;
-    save(include, [...exclude, value.trim()]);
+  const addExclude = async (value: string) => {
+    if (!value.trim() || exclude.includes(value.trim()) || !keywordId) return;
+    const newExclude = [...exclude, value.trim()];
+
+    localStorage.setItem(
+      'keywords',
+      JSON.stringify({ include, exclude: newExclude })
+    );
+    setExclude(newExclude);
     setExcludeInput('');
+
+    try {
+      await KeywordControllerService.patchExclude(keywordId, newExclude);
+    } catch (err) {
+      console.error('제외 키워드 추가 실패:', err);
+    }
   };
 
   const resetInclude = () => save([], exclude);

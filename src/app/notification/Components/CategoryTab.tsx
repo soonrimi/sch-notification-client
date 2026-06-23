@@ -1,8 +1,7 @@
 'use client';
-import { useCategories } from '@/contexts/CategoryContext';
 import type { Notice } from '@/types/notice';
 import NoticeItem from '@/Components/Notice/NoticeItem';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -10,36 +9,47 @@ import styles from './styles.module.css';
 
 import { CrawlPostControllerService, SubscribeControllerService } from '@/api';
 import { mapCrawlPostToNotice } from '@/utils/Noticemappers';
-import type { Pageable } from '@/api/models/Pageable';
-import { BackendCategory, CATEGORY_LABELS } from '@/constants/categories';
+import { BackendCategory } from '@/constants/categories';
+import { STORAGE_KEY_DEVICE_ID } from '@/constants/localStorage';
 
-export default function AlertTab() {
-  const { items } = useCategories();
+export default function CategoryTab() {
   const [notices, setNotices] = useState<Notice[]>([]);
   const [includeCount, setIncludeCount] = useState(0);
 
-  const activeCategories = useMemo(() => {
-    return items
-      .filter((category) => category.notify)
-      .map((category) => category.name);
-  }, [items]);
-
   useEffect(() => {
-    //구독하는 카테고리 개수 세기 위함
-    const saved = JSON.parse(localStorage.getItem('notify_categories') || '{}');
-    const activeCategories = Object.entries(saved)
-      .filter(([_, value]) => value)
-      .map(([key]) => key);
-    setIncludeCount(activeCategories.length);
-
-    //TODO: 새로 올라오는 공지들에 대한 api로 수정 필요
-    async function fetchAlertNotices() {
+    const fetchSubscribedCategories = async () => {
       try {
+        const deviceId = localStorage.getItem(STORAGE_KEY_DEVICE_ID);
+        if (!deviceId) {
+          console.warn('deviceId가 없습니다.');
+          return;
+        }
+
+        const saved = JSON.parse(
+          localStorage.getItem('notify_categories') || '{}'
+        );
+        const localActiveCategories = Object.entries(saved)
+          .filter(([_, value]) => value)
+          .map(([key]) => key);
+
+        setIncludeCount(localActiveCategories.length);
+
+        const response = await SubscribeControllerService.getByDevice(deviceId);
+
+        const subscribedBackendCats = response
+          .filter((item) => item.subscribed)
+          .map((item) => item.category)
+          .filter((cat): cat is string => !!cat) as BackendCategory[];
+
+        if (subscribedBackendCats.length > 0) {
+          setIncludeCount(subscribedBackendCats.length);
+        }
+
         let results: Notice[] = [];
 
-        for (const cat of activeCategories) {
+        for (const backendCat of subscribedBackendCats) {
           const data = await CrawlPostControllerService.getNotices(
-            mapToApiCategory(cat),
+            backendCat,
             0,
             10
           );
@@ -55,25 +65,17 @@ export default function AlertTab() {
           results = [...results, ...converted];
         }
 
-        // 최신순 정렬
         results.sort(
           (a, b) => b.upload_time.getTime() - a.upload_time.getTime()
         );
-
         setNotices(results);
-        setIncludeCount(activeCategories.length);
       } catch (err) {
         console.error('알림 공지 불러오기 실패:', err);
       }
-    }
+    };
 
-    if (activeCategories.length > 0) {
-      fetchAlertNotices();
-    } else {
-      setNotices([]);
-      setIncludeCount(0);
-    }
-  }, [activeCategories]);
+    fetchSubscribedCategories();
+  }, []);
 
   return (
     <div>
@@ -89,12 +91,4 @@ export default function AlertTab() {
       ))}
     </div>
   );
-}
-
-function mapToApiCategory(frontCategory: string): BackendCategory {
-  const entry = Object.entries(CATEGORY_LABELS).find(
-    ([, label]) => label === frontCategory
-  );
-  if (!entry) throw new Error(`Unknown category: ${frontCategory}`);
-  return entry[0] as BackendCategory;
 }

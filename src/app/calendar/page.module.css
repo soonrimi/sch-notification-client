@@ -102,6 +102,8 @@
   position: absolute;
   grid-auto-rows: min-content;
   overflow: visible;
+  align-items: start;
+  grid-auto-rows: auto;
 }
 
 .bar {
